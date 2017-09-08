@@ -1,0 +1,8 @@
+# file extensions
+*.ini
+*.py[cdo]
+*.csv
+
+# dev sources
+threatkb.py
+crawlerlib.py

@@ -1,0 +1,125 @@
+import urlparse
+import ipaddress
+
+class Artifact:
+    """Base class"""
+
+    def __init__(self, artifact, reference_link, reference_text=None):
+        self.artifact = artifact
+        self.reference_link = reference_link
+        self.reference_text = reference_text or ''
+
+    def __unicode__(self):
+        return unicode(self.artifact)
+
+    def __str__(self):
+        return self.__unicode__().encode('utf-8')
+
+
+class URL(Artifact):
+    """URL artifact abstraction, unicode-safe"""
+
+    def __unicode__(self):
+        """Always returns deobfuscated url"""
+        url = self.artifact
+
+        # urlparse expects a scheme, make sure one exists
+        if '//' not in url:
+            url = 'http://' + url
+        
+        parsed = urlparse.urlparse(url)
+
+        # Note: ParseResult._replace is a public member, this is safe
+        if parsed.scheme not in ['http', 'https', 'ftp']:
+            parsed = parsed._replace(scheme='http')
+
+        # Fix example[.]com, but keep RFC 2732 URLs intact
+        if not self.is_ipv6():
+            parsed = parsed._replace(netloc=parsed.netloc.replace('[', '').replace(']', ''))
+
+        return unicode(parsed.geturl())
+
+    def is_obfuscated(self):
+        """Boolean: is an obfuscated URL"""
+        return self.__unicode__() != unicode(self.artifact)
+
+    def is_ipv4(self):
+        """Boolean: URL network location is an IPv4 address, not a domain"""
+        parsed = urlparse.urlparse(self.artifact)
+
+        try:
+            ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '')))
+        except ValueError:
+            return False
+
+        return True
+
+    def is_ipv6(self):
+        """Boolean: URL network location is an IPv6 address, not a domain"""
+        parsed = urlparse.urlparse(self.artifact)
+
+        # Handle RFC 2732 IPv6 URLs with and without port, as well as non-RFC IPv6 URLs
+        if ']:' in parsed.netloc:
+            ipv6 = ':'.join(parsed.netloc.split(':')[:-1])
+        else:
+            ipv6 = parsed.netloc
+
+        try:
+            ipaddress.IPv6Address(unicode(ipv6.replace('[', '').replace(']', '')))
+        except ValueError:
+            return False
+
+        return True
+
+    def is_ip(self):
+        """Boolean: URL network location is an IP address, not a domain"""
+        return self.is_ipv4() or self.is_ipv6()
+
+    def domain(self):
+        """Deobfuscated domain; undefined behavior if self.is_ip()"""
+        return urlparse.urlparse(self.__unicode__()).netloc.split(':')[0]
+
+    def deobfuscated(self):
+        """Named method for clarity, same as unicode(my_url_object)"""
+        return self.__unicode__()
+
+
+class IPAddress(Artifact):
+    """IP address artifact abstraction
+    
+    Use version and ipaddress() for processing."""
+
+    def __unicode__(self):
+        """Always returns deobfuscated IP"""
+        return unicode(self.artifact.replace('[', '').replace(']', '').split('/')[0].split(':')[0].split(' ')[0])
+
+    @property
+    def version(self):
+        """Returns 4, 6, or None"""
+        try:
+            return ipaddress.IPv4Address(self.__unicode__()).version
+        except ValueError:
+            try:
+                return ipaddress.IPv6Address(self.__unicode__()).version
+            except ValueError:
+                return None
+
+    def ipaddress(self):
+        """Return ipaddress.IPv4Address or ipaddress.IPv6Address object, or raise ValueError"""
+        version = self.version
+        if version == 4:
+            return ipaddress.IPv4Address(self.__unicode__())
+        elif version == 6:
+            return ipaddress.IPv6Address(self.__unicode__())
+        else:
+            raise ValueError(u"Invalid IP address '{ip}'".format(ip=self.artifact))
+
+
+class Domain(Artifact):
+    """Domain artifact abstraction"""
+    pass
+
+
+class YaraSignature(Artifact):
+    """Yara signature artifact abstraction"""
+    pass
