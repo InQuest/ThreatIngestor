@@ -10,11 +10,13 @@ import operators.threatkb
 import operators.csv
 
 SOURCE_MAP = {
+    # Add new source plugins here
     'twitter': sources.twitter.Twitter,
     'rss': sources.rss.RSS,
 }
 
 OPERATOR_MAP = {
+    # Add new operator plugins here
     'threatkb': operators.threatkb.ThreatKB,
     'csv': operators.csv.CSV,
 }

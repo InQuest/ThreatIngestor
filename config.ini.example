@@ -1,0 +1,34 @@
+[main]
+daemon = false
+sleep = 900
+
+[source:twitter-myfeed]
+module = twitter
+saved_state = 
+# https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+token = 
+token_key = 
+con_secret_key = 
+con_secret = 
+# https://dev.twitter.com/rest/reference/get/lists/statuses
+owner_screen_name = myusername
+slug = mylist
+
+[source:myiocfeed]
+module = rss
+saved_state = 
+url = https://example.com/rss.xml
+feed_type = messy
+
+[operator:csv]
+# Write artifacts to a CSV file
+module = csv
+filename = output.csv
+
+[operator:mythreatkb]
+# Send artifacts to a ThreatKB instance
+module = threatkb
+url = http://mythreatkb
+email = a@a.a
+password = password
+state = Inbox

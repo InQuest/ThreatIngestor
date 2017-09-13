@@ -2,7 +2,9 @@ class Operator:
     """Base class, see method documentation"""
 
     def __init__(self):
-        """Override with the same signature
+        """Args should be url, auth, etc, whatever is needed to set up the object.
+        
+        Set self.artifact_types to a list of Artifacts supported by the plugin.
             
         Example:
         

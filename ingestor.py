@@ -3,7 +3,7 @@ import time
 
 from config import Config
 
-class Importer:
+class Ingestor:
 
     def __init__(self, config_file):
         self.config = Config(config_file)
@@ -35,5 +35,5 @@ if __name__ == "__main__":
         print("You must specify a config file")
         sys.exit(1)
 
-    app = Importer(sys.argv[1])
+    app = Ingestor(sys.argv[1])
     app.run()
