@@ -19,9 +19,9 @@ class RSS(Source):
 
         artifacts = []
         for item in feed['items']:
-            #FIXME
-            if item['published'] <= saved_state:
-                return saved_state, artifacts
+            # only new items
+            if item['published_parsed'] <= feedparser._parse_date(saved_state):
+                continue
 
             soup = bs4.BeautifulSoup(item['content'][0]['value'], 'html.parser')
 
@@ -36,5 +36,7 @@ class RSS(Source):
                 # default: self.feed_type == 'messy'
                 text = soup.get_text()
                 artifacts += self.process_element(text, self.url)
+
+            saved_state = item['published']
 
         return saved_state, artifacts

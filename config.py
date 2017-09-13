@@ -75,4 +75,4 @@ class Config:
         """Return saved_state for a given source"""
         # refresh the config
         self.config.read(self.filename)
-        self.config.get(source, 'saved_state')
+        return self.config.get(source, 'saved_state')
