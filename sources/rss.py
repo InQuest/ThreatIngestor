@@ -20,10 +20,14 @@ class RSS(Source):
         artifacts = []
         for item in feed['items']:
             # only new items
-            if item['published_parsed'] <= feedparser._parse_date(saved_state):
+            published_parsed = item.get('published_parsed') or item.get('updated_parsed')
+            if published_parsed <= feedparser._parse_date(saved_state):
                 continue
 
-            soup = bs4.BeautifulSoup(item['content'][0]['value'], 'html.parser')
+            try:
+                soup = bs4.BeautifulSoup(item['content'][0]['value'], 'html.parser')
+            except KeyError:
+                soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
 
             text = ''
             if self.feed_type == 'afterioc':
@@ -37,6 +41,6 @@ class RSS(Source):
                 text = soup.get_text()
                 artifacts += self.process_element(text, self.url)
 
-            saved_state = item['published']
+            saved_state = item.get('published') or item.get('updated')
 
         return saved_state, artifacts
