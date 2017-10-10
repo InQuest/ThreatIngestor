@@ -153,6 +153,47 @@ module = exampleoperator
 my_required_arg = Some value
 ```
 
+### Artifacts
+
+Each configured source will be scraped and run through a series of pre- and
+post-processors and regex searches to extract specific artifacts. The following
+artifacts are currently supported:
+
+* Domain
+* IPAddress
+* URL
+* YaraSignature
+
+Depending on the source type and feed type (see Usage section above), the
+content of the sources will be parsed differently. For example, for both
+Twitter and "messy" RSS feeds, we run the same processors to extract only
+"obfuscated" URLs and domains, based on commonly occuring obfuscation patterns.
+Any "word" with a dot surrounded with square brackets `[.]` we will attempt to
+parse as a URL. Anything with a protocol specifier `://` will be picked up as a
+URL automatically by the regex. All URLs are also stripped down and their
+domains are included in the domain list. To ensure we only pick up obfuscated
+URLs, we run a series of postprocessors (e.g. replace `[.]` with `.`, replace
+`hxxp` with `http`, etc) and compare the result to the original; any that
+differ are considered obfuscated and included in the output list. For "clean"
+RSS feeds, we include all URLs, even if they aren't obfuscated in the source.
+This allows us to ignore e.g. `http://t.co/` links in Tweets, and legitimate
+non-C2 links in blog posts, while still picking up a majority of C2 mentions,
+however inconsistent their obfuscation methods may be.
+
+Below are some examples of URLs / domains that would be picked up by our
+filters:
+
+```
+badguys[.]com
+hxxp://badguys.com/bad/url
+badguys[.]com/bad/url
+tcp://badguys[.]com:8989/bad
+```
+
+Similar rules are followed for IP addresses. Note that loopback and private
+addresses are automatically excluded from the output list, to help narrow down
+the output to valid C2 hits.
+
 ## Contributing
 
 Issues and pull requests are welcomed. Please keep Python code PEP8 compliant.
