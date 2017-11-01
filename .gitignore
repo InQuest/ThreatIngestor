@@ -2,7 +2,10 @@
 *.ini
 *.py[cdo]
 *.csv
+*.err
+*.log
 
 # dev sources
 threatkb.py
 crawlerlib.py
+.virtualenv
