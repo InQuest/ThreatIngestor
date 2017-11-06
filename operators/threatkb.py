@@ -40,7 +40,7 @@ class ThreatKB(Operator):
                     'domain_name': str(domain),
                     'match_type': '',
                     'reference_link': domain.reference_link,
-                    'reference_text': domain.reference_text,
+                    'description': domain.reference_text,
                     'expiration_type': '',
                     'state': {'state': self.state},
                     'tags': [],
@@ -61,7 +61,7 @@ class ThreatKB(Operator):
             self.api.create('c2ips', {
                     'ip': str(ipaddress),
                     'reference_link': ipaddress.reference_link,
-                    'reference_text': ipaddress.reference_text,
+                    'description': ipaddress.reference_text,
                     'expiration_type': '',
                     'state': {'state': self.state},
                     'asn': '',
