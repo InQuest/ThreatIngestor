@@ -44,6 +44,8 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.URL('example[dot]com', '').deobfuscated(), 'http://example.com')
         self.assertEquals(artifacts.URL('192[.]168[dot]0[.]1', '').deobfuscated(), 'http://192.168.0.1')
         self.assertEquals(artifacts.URL('http://example[.com/', '').deobfuscated(), 'http://example.com/')
+        self.assertEquals(artifacts.URL('http://example.com/ test', '').deobfuscated(), 'http://example.com/ test')
+        self.assertEquals(artifacts.URL('http://example.com test /test', '').deobfuscated(), 'http://example.com/test')
         self.assertEquals(artifacts.URL('http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').deobfuscated(),
                                         'http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path')
 
@@ -67,6 +69,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.URL('http://example[.]com/[.].com', '').domain(), 'example.com')
         self.assertEquals(artifacts.URL('tcp://example[.]com:80/', '').domain(), 'example.com')
         self.assertEquals(artifacts.URL('example[.]com/', '').domain(), 'example.com')
+        self.assertEquals(artifacts.URL('example[.]com test', '').domain(), 'example.com')
 
     def test_ipaddress_parsing(self):
         # str

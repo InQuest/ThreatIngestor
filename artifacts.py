@@ -50,7 +50,7 @@ class URL(Artifact):
 
         # Fix example[.]com, but keep RFC 2732 URLs intact
         if not self.is_ipv6():
-            parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').replace(']', ''))
+            parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').replace(']', '').split()[0])
 
         return unicode(parsed.geturl())
 
