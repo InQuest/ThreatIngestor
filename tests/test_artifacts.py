@@ -41,10 +41,25 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.URL('tcp://example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('hxxp://example[dot]com/', '').deobfuscated(), 'http://example.com/')
+        self.assertEquals(artifacts.URL('example[dot]com', '').deobfuscated(), 'http://example.com')
+        self.assertEquals(artifacts.URL('192[.]168[dot]0[.]1', '').deobfuscated(), 'http://192.168.0.1')
         self.assertEquals(artifacts.URL('http://example[.com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').deobfuscated(),
                                         'http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path')
 
+    def test_is_obfuscated(self):
+        self.assertFalse(artifacts.URL('example.com', '').is_obfuscated())
+        self.assertFalse(artifacts.URL('http://example.com', '').is_obfuscated())
+        self.assertFalse(artifacts.URL('http://example.com/[.', '').is_obfuscated())
+        self.assertFalse(artifacts.URL('http://192.168.0.1', '').is_obfuscated())
+        self.assertFalse(artifacts.URL('192.168.0.1', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('hxxp://example.com', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('http://example[.]com', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('hxxp://example[.]com', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('example[.]com', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('http://example[dot]com', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('http://192[.]168[.]0[.]1', '').is_obfuscated())
+        self.assertTrue(artifacts.URL('192[.]168[.]0[.]1', '').is_obfuscated())
 
     def test_url_domain_parsing(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').domain(), 'example.com')
@@ -60,6 +75,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(str(artifacts.IPAddress('192.168.0.1:9090', '')), '192.168.0.1')
         self.assertEquals(str(artifacts.IPAddress('192.168.0.1:9090/url', '')), '192.168.0.1')
         self.assertEquals(str(artifacts.IPAddress('192[.]168[.]0[.]1:9090/url', '')), '192.168.0.1')
+        self.assertNotEquals(str(artifacts.IPAddress('192[.]188[dot]0[.]1:9090/url', '')), '192.168.0.1')
         # ipaddress
         self.assertEquals(artifacts.IPAddress('192[.]168[.]0[.]1', '').ipaddress(), ipaddress.IPv4Address(u'192.168.0.1'))
         self.assertEquals(artifacts.IPAddress('192.168.0.1/some/url', '').ipaddress(), ipaddress.IPv4Address(u'192.168.0.1'))

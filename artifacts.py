@@ -41,9 +41,12 @@ class URL(Artifact):
 
         parsed = urlparse.urlparse(url)
 
+        # Handle URLs with no scheme / obfuscated scheme
         # Note: ParseResult._replace is a public member, this is safe
         if parsed.scheme not in ['http', 'https', 'ftp']:
             parsed = parsed._replace(scheme='http')
+            url = parsed.geturl().replace('http:///', 'http://')
+            parsed = urlparse.urlparse(url)
 
         # Fix example[.]com, but keep RFC 2732 URLs intact
         if not self.is_ipv6():
@@ -53,7 +56,7 @@ class URL(Artifact):
 
     def is_obfuscated(self):
         """Boolean: is an obfuscated URL"""
-        return self.__unicode__() != unicode(self.artifact)
+        return self.__unicode__() != unicode(self._get_clean_url())
 
     def is_ipv4(self):
         """Boolean: URL network location is an IPv4 address, not a domain"""
