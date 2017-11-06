@@ -18,7 +18,7 @@ class RSS(Source):
         feed = feedparser.parse(self.url)
 
         artifacts = []
-        for item in feed['items']:
+        for item in list(reversed(feed['items'])):
             # only new items
             published_parsed = item.get('published_parsed') or item.get('updated_parsed')
             if published_parsed <= feedparser._parse_date(saved_state):
