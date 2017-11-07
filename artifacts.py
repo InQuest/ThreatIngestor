@@ -56,6 +56,10 @@ class URL(Artifact):
         if not self.is_ipv6():
             parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').replace(']', '').split()[0])
 
+        # fix unicode obfuscation
+        if u'\u30fb' in parsed.netloc:
+            parsed = parsed._replace(netloc=parsed.netloc.replace(u'\u30fb', '.'))
+
         return unicode(parsed.geturl())
 
     def is_obfuscated(self):
