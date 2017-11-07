@@ -32,14 +32,14 @@ class RSS(Source):
             text = ''
             if self.feed_type == 'afterioc':
                 text = soup.get_text(separator=' ').split(AFTERIOC)[-1]
-                artifacts += self.process_element(text, self.url, include_nonobfuscated=True)
+                artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
             elif self.feed_type == 'clean':
                 text = soup.get_text(separator=' ')
-                artifacts += self.process_element(text, self.url, include_nonobfuscated=True)
+                artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
             else:
                 # default: self.feed_type == 'messy'
                 text = soup.get_text(separator=' ')
-                artifacts += self.process_element(text, self.url)
+                artifacts += self.process_element(text, item.get('link') or self.url)
 
             saved_state = item.get('published') or item.get('updated')
 
