@@ -27,11 +27,11 @@ class ThreatKB(Operator):
     def handle_domain(self, domain):
         """Handle a single domain"""
         existing = self.api.get('c2dns')
-        if str(domain) in [dns['domain_name'] for dns in existing]:
+        if str(domain) in [dns['domain_name'].encode('utf-8') for dns in existing]:
             # post comment
             self.api.create('comments', {
                     'comment': u"{c}\n\n{u}".format(c=domain.reference_text, u=domain.reference_link),
-                    'entity_id': [dns['id'] for dns in existing if dns['domain_name'] == str(domain)][0],
+                    'entity_id': [dns['id'] for dns in existing if dns['domain_name'].encode('utf-8') == str(domain)][:1],
                     'entity_type': 2,
                 })
         else:
