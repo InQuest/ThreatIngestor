@@ -48,6 +48,8 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.URL('http://example.com test /test', '').deobfuscated(), 'http://example.com/test')
         self.assertEquals(artifacts.URL('http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').deobfuscated(),
                                         'http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path')
+        self.assertEquals(artifacts.URL('http://example.com[/]test', '').deobfuscated(), 'http://example.com/test')
+        self.assertEquals(artifacts.URL('http://[example.com', '').deobfuscated(), 'http://example.com')
 
     def test_is_obfuscated(self):
         self.assertFalse(artifacts.URL('example.com', '').is_obfuscated())

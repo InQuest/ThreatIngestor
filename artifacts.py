@@ -26,8 +26,12 @@ class URL(Artifact):
         # fix ipv6 parsing exception
         if '[.' in url and '[.]' not in url:
             url = url.replace('[.', '[.]')
-        elif '.]' in url and '[.]' not in url:
+        if '.]' in url and '[.]' not in url:
             url = url.replace('.]', '[.]')
+        if '[/]' in url:
+            url = url.replace('[/]', '/')
+        if '[' in url and ']' not in url:
+            url = url.replace('[', '')
 
         # urlparse expects a scheme, make sure one exists
         if '//' not in url:
