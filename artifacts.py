@@ -33,6 +33,13 @@ class URL(Artifact):
         if '[' in url and ']' not in url:
             url = url.replace('[', '')
 
+        try:
+            urlparse.urlparse(url)
+        except ValueError:
+            # last resort on ipv6 fail
+            url = url.replace('[', '').replace(']', '')
+            urlparse.urlparse(url)
+
         # urlparse expects a scheme, make sure one exists
         if '//' not in url:
             url = 'http://' + url
