@@ -62,7 +62,8 @@ class URL(Artifact):
         # Fix example[.]com, but keep RFC 2732 URLs intact
         if not self.is_ipv6():
             parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').\
-                                                   replace(']', '').replace('(', '').replace(')', '').split()[0])
+                                                   replace(']', '').replace('(', '').replace(')', '').\
+                                                   replace(',', '.').split()[0])
 
         # fix unicode obfuscation
         if u'\u30fb' in parsed.netloc:
@@ -79,7 +80,7 @@ class URL(Artifact):
         parsed = urlparse.urlparse(self._get_clean_url())
 
         try:
-            ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '')))
+            ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.')))
         except ValueError:
             return False
 

@@ -16,6 +16,7 @@ class TestArtifacts(unittest.TestCase):
 
     def test_url_ipv4(self):
         self.assertTrue(artifacts.URL('http://192.168.0.1', '').is_ipv4())
+        self.assertTrue(artifacts.URL('http://192,168,0,1', '').is_ipv4())
         self.assertTrue(artifacts.URL('http://192.168.0.1:80/path', '').is_ipv4())
         self.assertTrue(artifacts.URL('http://192[.]168[.]0[.]1:80/path', '').is_ipv4())
         self.assertTrue(artifacts.URL('192[.]168[.]0[.]1:80/path', '').is_ipv4())
@@ -52,6 +53,8 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.URL('http://example.com[/]test', '').deobfuscated(), 'http://example.com/test')
         self.assertEquals(artifacts.URL('http://[example.com', '').deobfuscated(), 'http://example.com')
         self.assertEquals(artifacts.URL(u'http://example\u30fbcom', '').deobfuscated(), 'http://example.com')
+        self.assertEquals(artifacts.URL('http://192,168,0,1', '').deobfuscated(), 'http://192.168.0.1')
+        self.assertEquals(artifacts.URL('http://example,com/', '').deobfuscated(), 'http://example.com/')
 
     def test_is_obfuscated(self):
         self.assertFalse(artifacts.URL('example.com', '').is_obfuscated())
@@ -70,6 +73,7 @@ class TestArtifacts(unittest.TestCase):
     def test_is_domain(self):
         # valid
         self.assertTrue(artifacts.URL('example.com', '').is_domain())
+        self.assertTrue(artifacts.URL('example,com', '').is_domain())
         self.assertTrue(artifacts.URL('http://example.com', '').is_domain())
         self.assertTrue(artifacts.URL('example[.]com', '').is_domain())
         self.assertTrue(artifacts.URL('http://example[dot]com', '').is_domain())
