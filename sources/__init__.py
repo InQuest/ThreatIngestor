@@ -53,7 +53,7 @@ class Source:
                 artifact_list.append(artifact)
 
                 # do domain collection in the same pass
-                if not artifact.is_ip():
+                if artifact.is_domain():
                     artifact_list.append(artifacts.Domain(artifact.domain(), reference_link, reference_text))
 
         # collect IPs

@@ -43,7 +43,7 @@ class URL(Artifact):
         # urlparse expects a scheme, make sure one exists
         if '//' not in url:
             url = 'http://' + url
-        
+
         return url
 
     def __unicode__(self):
@@ -110,6 +110,10 @@ class URL(Artifact):
         """Deobfuscated domain; undefined behavior if self.is_ip()"""
         return urlparse.urlparse(self.__unicode__()).netloc.split(':')[0]
 
+    def is_domain(self):
+        """Boolean: URL network location might be a valid domain"""
+        return not self.is_ip() and len(self.domain()) > 3 and '.' in self.domain()[1:-1] and all([x.isalnum() or x in '-.' for x in self.domain()])
+
     def deobfuscated(self):
         """Named method for clarity, same as unicode(my_url_object)"""
         return self.__unicode__()
@@ -117,7 +121,7 @@ class URL(Artifact):
 
 class IPAddress(Artifact):
     """IP address artifact abstraction
-    
+
     Use version and ipaddress() for processing."""
 
     def __unicode__(self):
