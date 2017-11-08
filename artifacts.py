@@ -61,7 +61,8 @@ class URL(Artifact):
 
         # Fix example[.]com, but keep RFC 2732 URLs intact
         if not self.is_ipv6():
-            parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').replace(']', '').split()[0])
+            parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').\
+                                                   replace(']', '').replace('(', '').replace(')', '').split()[0])
 
         # fix unicode obfuscation
         if u'\u30fb' in parsed.netloc:
@@ -112,7 +113,8 @@ class URL(Artifact):
 
     def is_domain(self):
         """Boolean: URL network location might be a valid domain"""
-        return not self.is_ip() and len(self.domain()) > 3 and '.' in self.domain()[1:-1] and all([x.isalnum() or x in '-.' for x in self.domain()])
+        return not self.is_ip() and len(self.domain()) > 3 and '.' in self.domain()[1:-1] and \
+               all([str.isalnum(x.encode('utf-8')) or x in '-.' for x in self.domain()])
 
     def deobfuscated(self):
         """Named method for clarity, same as unicode(my_url_object)"""

@@ -36,6 +36,7 @@ class TestArtifacts(unittest.TestCase):
     def test_url_deobfuscation(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('http://example[.]com/', '').deobfuscated(), 'http://example.com/')
+        self.assertEquals(artifacts.URL('http://example(.)com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('http://example[.]com/[.]', '').deobfuscated(), 'http://example.com/[.]')
         self.assertEquals(artifacts.URL('hxxp://example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEquals(artifacts.URL('tcp://example[.]com/', '').deobfuscated(), 'http://example.com/')
@@ -65,6 +66,25 @@ class TestArtifacts(unittest.TestCase):
         self.assertTrue(artifacts.URL('http://example[dot]com', '').is_obfuscated())
         self.assertTrue(artifacts.URL('http://192[.]168[.]0[.]1', '').is_obfuscated())
         self.assertTrue(artifacts.URL('192[.]168[.]0[.]1', '').is_obfuscated())
+
+    def test_is_domain(self):
+        # valid
+        self.assertTrue(artifacts.URL('example.com', '').is_domain())
+        self.assertTrue(artifacts.URL('http://example.com', '').is_domain())
+        self.assertTrue(artifacts.URL('example[.]com', '').is_domain())
+        self.assertTrue(artifacts.URL('http://example[dot]com', '').is_domain())
+        self.assertTrue(artifacts.URL('http://exa-mple.com', '').is_domain())
+        self.assertTrue(artifacts.URL('http://ex4mple.com', '').is_domain())
+        self.assertTrue(artifacts.URL(u'http://example\u30fbcom', '').is_domain())
+        # invalid
+        self.assertFalse(artifacts.URL('http://192[.]168[.]0[.]1', '').is_domain())
+        self.assertFalse(artifacts.URL('192.168.0.1', '').is_domain())
+        self.assertFalse(artifacts.URL('AAAAA', '').is_domain())
+        self.assertFalse(artifacts.URL('+example.tld+', '').is_domain())
+        self.assertFalse(artifacts.URL('85', '').is_domain())
+        self.assertFalse(artifacts.URL(u'exa\u30f2ple.com', '').is_domain())
+        self.assertFalse(artifacts.URL('_____', '').is_domain())
+        self.assertFalse(artifacts.URL('_____.tld', '').is_domain())
 
     def test_url_domain_parsing(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').domain(), 'example.com')
