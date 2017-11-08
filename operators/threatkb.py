@@ -13,7 +13,7 @@ class ThreatKB(Operator):
         self.state = state
         self.api = threatkb.ThreatKB(url, email, password)
 
-        self.artifact_types = [artifacts.Domain, artifacts.IPAddress, artifacts.YaraSignature]
+        self.artifact_types = [artifacts.Domain, artifacts.IPAddress, artifacts.YARASignature]
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
@@ -21,7 +21,7 @@ class ThreatKB(Operator):
             self.handle_domain(artifact)
         elif isinstance(artifact, artifacts.IPAddress):
             self.handle_ipaddress(artifact)
-        elif isinstance(artifact, artifacts.YaraSignature):
+        elif isinstance(artifact, artifacts.YARASignature):
             self.handle_yarasignature(artifact)
 
     def handle_domain(self, domain):
@@ -52,5 +52,10 @@ class ThreatKB(Operator):
             })
 
     def handle_yarasignature(self, yarasignature):
-        """Handle a single Yara signature"""
-        pass
+        """Handle a single YARA signature"""
+        self.api.create('import', {
+                'autocommit': 1,
+                'import_text': yarasignature.encode('utf-8'),
+                'shared_reference': yarasignature.reference_link,
+                'shared_state': {'state': self.state},
+            })

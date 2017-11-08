@@ -151,6 +151,6 @@ class Domain(Artifact):
     pass
 
 
-class YaraSignature(Artifact):
-    """Yara signature artifact abstraction"""
+class YARASignature(Artifact):
+    """YARA signature artifact abstraction"""
     pass
