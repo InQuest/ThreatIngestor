@@ -186,8 +186,13 @@ filters:
 ```
 badguys[.]com
 hxxp://badguys.com/bad/url
-badguys[.]com/bad/url
 tcp://badguys[.]com:8989/bad
+http://badguys(.)com
+http://badguys[dot]com
+http://badguys,com
+http://badguys・com
+http://badguys[.com
+http://<strong>bad</strong>guys.com
 ```
 
 Similar rules are followed for IP addresses. Note that loopback and private
