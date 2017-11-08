@@ -91,6 +91,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertFalse(artifacts.URL('_____', '').is_domain())
         self.assertFalse(artifacts.URL('_____.tld', '').is_domain())
         self.assertFalse(artifacts.URL('http://example.com\\bad.doc', '').is_domain())
+        self.assertFalse(artifacts.URL('x.x.x.x', '').is_domain())
 
     def test_url_domain_parsing(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').domain(), 'example.com')
