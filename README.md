@@ -2,13 +2,14 @@
 
 An extendable tool to extract and aggregate IOCs from threat feeds.
 
-Designed for use with [InQuest ThreatKB](https://github.com/InQuest/ThreatKB).
+Designed for use with [InQuest ThreatKB](https://github.com/InQuest/ThreatKB),
+but can be used without it.
 
 ## Overview
 
 ThreatIngestor can be configured to watch Twitter lists, RSS feeds, or other
-sources, extract meaningful information such as C2 IPs and domains, and send
-that information to another system for analysis.
+sources, extract meaningful information such as C2 IPs and domains and YARA
+signatures, and send that information to another system for analysis.
 
 ## Installation
 
