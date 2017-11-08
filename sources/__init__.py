@@ -31,7 +31,9 @@ class Source:
         # enable detection of some extra obfuscated urls
         matches = re.findall(r'[^/\w.\[\]-]([\w-]+\[\.\]\w+)[\W\b]', content)
         for match in set(matches):
-            content = content.replace(match, 'hxxp://{u}'.format(u=match))
+            if not ']https' in match:
+                # special case for broken tweets
+                content = content.replace(match, 'hxxp://{u}'.format(u=match))
 
         artifact_list = []
 
