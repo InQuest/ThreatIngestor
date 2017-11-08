@@ -86,6 +86,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertFalse(artifacts.URL('AAAAA', '').is_domain())
         self.assertFalse(artifacts.URL('+example.tld+', '').is_domain())
         self.assertFalse(artifacts.URL('85', '').is_domain())
+        self.assertFalse(artifacts.URL('85.85', '').is_domain())
         self.assertFalse(artifacts.URL(u'exa\u30f2ple.com', '').is_domain())
         self.assertFalse(artifacts.URL('_____', '').is_domain())
         self.assertFalse(artifacts.URL('_____.tld', '').is_domain())

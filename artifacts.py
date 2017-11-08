@@ -115,7 +115,8 @@ class URL(Artifact):
     def is_domain(self):
         """Boolean: URL network location might be a valid domain"""
         return not self.is_ip() and len(self.domain()) > 3 and '.' in self.domain()[1:-1] and \
-               all([str.isalnum(x.encode('utf-8')) or x in '-.' for x in self.domain()])
+               all([str.isalnum(x.encode('utf-8')) or x in '-.' for x in self.domain()]) and \
+               self.domain()[-1].isalpha()
 
     def deobfuscated(self):
         """Named method for clarity, same as unicode(my_url_object)"""
