@@ -29,6 +29,13 @@ class RSS(Source):
             except KeyError:
                 soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
 
+            # do some preprocessing to remove common obfuscation methods
+            [x.unwrap() for x in soup.find_all('strong')]
+            [x.unwrap() for x in soup.find_all('b')]
+            [x.unwrap() for x in soup.find_all('em')]
+            [x.unwrap() for x in soup.find_all('i')]
+            soup = bs4.BeautifulSoup(unicode(soup), 'html.parser')
+
             text = ''
             if self.feed_type == 'afterioc':
                 text = soup.get_text(separator=' ').split(AFTERIOC)[-1]
