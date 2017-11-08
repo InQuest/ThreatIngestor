@@ -80,6 +80,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertTrue(artifacts.URL('http://exa-mple.com', '').is_domain())
         self.assertTrue(artifacts.URL('http://ex4mple.com', '').is_domain())
         self.assertTrue(artifacts.URL(u'http://example\u30fbcom', '').is_domain())
+        self.assertTrue(artifacts.URL('short.is', '').is_domain())
         # invalid
         self.assertFalse(artifacts.URL('http://192[.]168[.]0[.]1', '').is_domain())
         self.assertFalse(artifacts.URL('192.168.0.1', '').is_domain())
@@ -92,6 +93,8 @@ class TestArtifacts(unittest.TestCase):
         self.assertFalse(artifacts.URL('_____.tld', '').is_domain())
         self.assertFalse(artifacts.URL('http://example.com\\bad.doc', '').is_domain())
         self.assertFalse(artifacts.URL('x.x.x.x', '').is_domain())
+        self.assertFalse(artifacts.URL('tooshor.t', '').is_domain())
+        self.assertFalse(artifacts.URL('tooshor.', '').is_domain())
 
     def test_url_domain_parsing(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').domain(), 'example.com')
