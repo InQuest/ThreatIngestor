@@ -6,7 +6,7 @@ python:
   - "3.4"
   - "3.5"
 install:
-  - "pip install -r requirements.txt"
+  - "pip install -r requirements-testing.txt"
   - "pip install coveralls"
   - "pip install codacy-coverage"
 script:
