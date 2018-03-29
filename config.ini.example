@@ -32,3 +32,15 @@ url = http://mythreatkb
 email = a@a.a
 password = password
 state = Inbox
+
+[operator:inquest-threatcrawler]
+module = sqs
+aws_access_key_id = MY_KEY
+aws_secret_access_key = MY_SECRET
+aws_region = MY_REGION
+queue_name = research-crawl-queue
+domain = {domain}
+url = {url}
+source_type = url
+download_path = /var/crawler/clean
+source_type_tags = dir,clean

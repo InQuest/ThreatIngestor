@@ -55,6 +55,11 @@ And the following operators:
 
 * ThreatKB
 * CSV file
+* Amazon SQS
+
+The Amazon SQS operator was designed for use with the InQuest Threat Crawler,
+but can be used out of the box to send non-IP-based URLs to any SQS queue, or
+modified as needed to suit your use case.
 
 ### Source Plugins
 

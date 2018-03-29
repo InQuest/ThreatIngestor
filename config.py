@@ -8,6 +8,7 @@ import sources.twitter
 import sources.rss
 import operators.threatkb
 import operators.csv
+import operators.sqs
 
 SOURCE_MAP = {
     # Add new source plugins here
@@ -19,6 +20,7 @@ OPERATOR_MAP = {
     # Add new operator plugins here
     'threatkb': operators.threatkb.ThreatKB,
     'csv': operators.csv.CSV,
+    'sqs': operators.sqs.SQS,
 }
 
 INTERNAL_OPTIONS = [

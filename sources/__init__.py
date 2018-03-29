@@ -34,6 +34,7 @@ class Source:
             if not ']https' in match:
                 # special case for broken tweets
                 content = content.replace(match, 'hxxp://{u}'.format(u=match))
+        content = content.replace(' [.] ', '[.]')
 
         artifact_list = []
 
