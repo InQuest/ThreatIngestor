@@ -2,7 +2,7 @@
 daemon = false
 sleep = 900
 
-[source:twitter-myfeed]
+[source:twitter-inquest-c2-list]
 module = twitter
 saved_state = 
 # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
@@ -13,6 +13,28 @@ con_secret =
 # https://dev.twitter.com/rest/reference/get/lists/statuses
 owner_screen_name = InQuest
 slug = c2-feed
+
+[source:twitter-open-directory]
+module = twitter
+saved_state = 
+# https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+token = 
+token_key = 
+con_secret_key = 
+con_secret = 
+# https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
+q = "open directory" #malware
+
+[source:twitter-inquest-timeline]
+module = twitter
+saved_state = 
+# https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+token = 
+token_key = 
+con_secret_key = 
+con_secret = 
+# https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
+screen_name = InQuest
 
 [source:myiocfeed]
 module = rss
