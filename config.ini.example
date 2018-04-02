@@ -42,5 +42,5 @@ queue_name = research-crawl-queue
 domain = {domain}
 url = {url}
 source_type = url
-download_path = /var/crawler/clean
-source_type_tags = dir,clean
+download_path = /var/crawler/inestor
+source_type_tags = dir
