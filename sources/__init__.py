@@ -1,5 +1,8 @@
 import re
-import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+     from urlparse import urlparse
 
 import crawlerlib
 
@@ -48,7 +51,7 @@ class Source:
             artifact = artifacts.URL(url, reference_link, reference_text)
 
             # dump urls that appear to have the same domain as reference_url
-            if artifact.domain() == urlparse.urlparse(reference_link).netloc:
+            if artifact.domain() == urlparse(reference_link).netloc:
                 continue
 
             if artifact.is_obfuscated() or include_nonobfuscated:

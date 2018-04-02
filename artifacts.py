@@ -1,5 +1,8 @@
-import urlparse
 import ipaddress
+try:
+    from urllib.parse import urlparse
+except ImportError:
+     from urlparse import urlparse
 
 class Artifact:
     """Base class"""
@@ -34,11 +37,11 @@ class URL(Artifact):
             url = url.replace('[', '')
 
         try:
-            urlparse.urlparse(url)
+            urlparse(url)
         except ValueError:
             # last resort on ipv6 fail
             url = url.replace('[', '').replace(']', '')
-            urlparse.urlparse(url)
+            urlparse(url)
 
         # urlparse expects a scheme, make sure one exists
         if '//' not in url:
@@ -50,14 +53,14 @@ class URL(Artifact):
         """Always returns deobfuscated url"""
         url = self._get_clean_url()
 
-        parsed = urlparse.urlparse(url)
+        parsed = urlparse(url)
 
         # Handle URLs with no scheme / obfuscated scheme
         # Note: ParseResult._replace is a public member, this is safe
         if parsed.scheme not in ['http', 'https', 'ftp']:
             parsed = parsed._replace(scheme='http')
             url = parsed.geturl().replace('http:///', 'http://')
-            parsed = urlparse.urlparse(url)
+            parsed = urlparse(url)
 
         # Fix example[.]com, but keep RFC 2732 URLs intact
         if not self.is_ipv6():
@@ -77,7 +80,7 @@ class URL(Artifact):
 
     def is_ipv4(self):
         """Boolean: URL network location is an IPv4 address, not a domain"""
-        parsed = urlparse.urlparse(self._get_clean_url())
+        parsed = urlparse(self._get_clean_url())
 
         try:
             ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.')))
@@ -89,7 +92,7 @@ class URL(Artifact):
     def is_ipv6(self):
         """Boolean: URL network location is an IPv6 address, not a domain"""
         # fix urlparse exception
-        parsed = urlparse.urlparse(self._get_clean_url())
+        parsed = urlparse(self._get_clean_url())
 
         # Handle RFC 2732 IPv6 URLs with and without port, as well as non-RFC IPv6 URLs
         if ']:' in parsed.netloc:
@@ -110,7 +113,7 @@ class URL(Artifact):
 
     def domain(self):
         """Deobfuscated domain; undefined behavior if self.is_ip()"""
-        return urlparse.urlparse(self.__unicode__()).netloc.split(':')[0]
+        return urlparse(self.__unicode__()).netloc.split(':')[0]
 
     def is_domain(self):
         """Boolean: URL network location might be a valid domain"""
