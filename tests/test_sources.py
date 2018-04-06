@@ -1,56 +1,102 @@
 import unittest
 
-import httpretty
-
-import sources.rss
-import sources.twitter
+import sources
+import artifacts
 
 
-class TestRSS(unittest.TestCase):
-
-    RSS_CONTENT = """
-        <?xml version="1.0" encoding="utf-8"?>
-        <rss version="2.0" xml:base="https://www.rss.mock"  xmlns:dc="http://purl.org/dc/elements/1.1/">
-        <channel>
-         <title>Mock Cybersecurity</title>
-         <link>https://www.rss.mock</link>
-         <description></description>
-         <language>en</language>
-        <item>
-         <title>A Title</title>
-         <link>https://www.rss.mock/a/url</link>
-         <description>A word. hxxp://example.net/bad/another
-         </description>
-         <pubDate>Thu, 10 Oct 2017 17:00:00 +0000</pubDate>
-         <dc:creator>Mock Testerman</dc:creator>
-         <guid isPermaLink="false">1010 at https://www.rss.mock</guid>
-        </item>
-        <item>
-         <title>Some Title</title>
-         <link>https://www.rss.mock/some/url</link>
-         <description>Some words. hxxp://example.com/bad/url
-         </description>
-         <pubDate>Thu, 01 Oct 2017 17:00:00 +0000</pubDate>
-         <dc:creator>Mock Testerman</dc:creator>
-         <guid isPermaLink="false">1000 at https://www.rss.mock</guid>
-        </item>
-        </channel>
-        </rss>
-    """
+class TestSources(unittest.TestCase):
 
     def setUp(self):
-        self.rss = sources.rss.RSS('http://rss.mock/rss.xml', 'messy')
+        # patch init
+        self.orig_init = sources.Source.__init__
+        sources.Source.__init__ = lambda x: None
+        self.source = sources.Source()
 
-    @httpretty.activate
-    def test_smoke_rss_parsing(self):
-        httpretty.register_uri(httpretty.GET, "http://rss.mock/rss.xml",
-                body=self.RSS_CONTENT)
+    def tearDown(self):
+        # unpatch init
+        sources.Source.__init__ = self.orig_init
 
-        saved_state, artifacts = self.rss.run(None)
+    def test_init_raises_not_implemented(self):
+        with self.assertRaises(NotImplementedError):
+            self.orig_init(self.source)
 
-        self.assertEquals(saved_state, u'Thu, 10 Oct 2017 17:00:00 +0000')
-        self.assertEquals(len(artifacts), 4)
-        self.assertIn('example.com', [str(x) for x in artifacts])
-        self.assertIn('example.net', [str(x) for x in artifacts])
-        self.assertIn('http://example.com/bad/url', [str(x) for x in artifacts])
-        self.assertIn('http://example.net/bad/another', [str(x) for x in artifacts])
+    def test_run_raises_not_implemented(self):
+        with self.assertRaises(NotImplementedError):
+            self.source.run(None)
+
+    def test_truncate_length_is_respected(self):
+        orig_truncate = sources.TRUNCATE_LENGTH
+        sources.TRUNCATE_LENGTH = 15
+        content = '123.45.67.89 0 12.33.45.67 890'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(artifact_list[0].reference_text, content[:15] + '...')
+
+        sources.TRUNCATE_LENGTH = 8
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(artifact_list[0].reference_text, content[:8] + '...')
+
+        sources.TRUNCATE_LENGTH = orig_truncate
+
+    def test_content_is_preprocessed(self):
+        content = 'blah[.]com/test and test [.] com'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertIn('http://blah.com/test', [str(x) for x in artifact_list])
+        self.assertIn('blah.com', [str(x) for x in artifact_list])
+        self.assertIn('test.com', [str(x) for x in artifact_list])
+        self.assertIn('http://test.com', [str(x) for x in artifact_list])
+        self.assertEquals(len(artifact_list), 4)
+
+    def test_urls_are_extracted(self):
+        content = 'hxxp://someurl.com/test'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(str(artifact_list[0]), content.replace('xx', 'tt'))
+        self.assertTrue(isinstance(artifact_list[0], artifacts.URL))
+        self.assertEquals(str(artifact_list[1]), 'someurl.com')
+        self.assertTrue(isinstance(artifact_list[1], artifacts.Domain))
+
+    def test_ips_are_extracted(self):
+        content = '232.23.21.12'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(str(artifact_list[0]), content)
+        self.assertTrue(isinstance(artifact_list[0], artifacts.IPAddress))
+
+    def test_yara_sigs_are_extracted(self):
+        content = 'rule testRule { condition: true }'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(str(artifact_list[0]), content)
+        self.assertTrue(isinstance(artifact_list[0], artifacts.YARASignature))
+
+    def test_urls_matching_reference_link_are_discarded(self):
+        content = 'hxxp://someurl.com/test hxxp://noturl.com/test'
+
+        artifact_list = self.source.process_element(content, 'http://someurl.com')
+        self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('noturl.com', [str(x) for x in artifact_list])
+        self.assertNotIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertNotIn('someurl.com', [str(x) for x in artifact_list])
+        self.assertEquals(len(artifact_list), 2)
+
+    def test_nonobfuscated_urls_are_discarded(self):
+        content = 'hxxp://someurl.com/test http://noturl.com/test'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertNotIn('http://noturl.com/test', [str(x) for x in artifact_list])
+        self.assertNotIn('noturl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('someurl.com', [str(x) for x in artifact_list])
+        self.assertEquals(len(artifact_list), 2)
+
+    def test_nonobfuscated_urls_are_included_if_specified(self):
+        content = 'hxxp://someurl.com/test http://noturl.com/test'
+
+        artifact_list = self.source.process_element(content, 'link', include_nonobfuscated=True)
+        self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('noturl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('someurl.com', [str(x) for x in artifact_list])
+        self.assertEquals(len(artifact_list), 4)
