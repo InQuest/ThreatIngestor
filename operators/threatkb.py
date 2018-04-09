@@ -55,7 +55,7 @@ class ThreatKB(Operator):
         """Handle a single YARA signature"""
         self.api.create('import', {
                 'autocommit': 1,
-                'import_text': yarasignature.encode('utf-8'),
+                'import_text': str(yarasignature),
                 'shared_reference': yarasignature.reference_link,
                 'shared_state': {'state': self.state},
             })
