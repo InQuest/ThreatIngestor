@@ -1,8 +1,8 @@
 import unittest
 try:
-    from unittest.mock import Mock, patch
+    from unittest.mock import patch
 except ImportError:
-    from mock import Mock, patch
+    from mock import patch
 
 import sources.twitter
 
