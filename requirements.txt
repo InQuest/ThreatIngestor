@@ -1,6 +1,5 @@
-beautifulsoup4==4.4.1
-feedparser==5.2.1
-twitter==1.17.1
-dnspython==1.15.0
+beautifulsoup4>=4.4.1
+feedparser>=5.2.1
+twitter>=1.17.1
 requests>=2.4.3
-ipaddress==1.0.18
+ipaddress>=1.0.18
