@@ -10,7 +10,7 @@ install:
   - "pip install coveralls"
   - "pip install codacy-coverage"
 script:
-  - nosetests --with-coverage --cover-package=sources,artifacts,operators
+  - nosetests --with-coverage --cover-package=artifacts,config,ingestor,operators,sources
 after_success:
   - coveralls
   - coverage xml
