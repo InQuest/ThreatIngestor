@@ -1,12 +1,12 @@
 import sys
 import time
 
-from config import Config
+import config
 
 class Ingestor:
 
     def __init__(self, config_file):
-        self.config = Config(config_file)
+        self.config = config.Config(config_file)
         self.sources = dict([(name, source(**kwargs)) for name, source, kwargs in self.config.sources()])
         self.operators = dict([(name, operator(**kwargs)) for name, operator, kwargs in self.config.operators()])
 
