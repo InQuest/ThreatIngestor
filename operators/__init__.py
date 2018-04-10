@@ -3,11 +3,11 @@ class Operator:
 
     def __init__(self):
         """Args should be url, auth, etc, whatever is needed to set up the object.
-        
+
         Set self.artifact_types to a list of Artifacts supported by the plugin.
-            
+
         Example:
-        
+
         >>> self.artifact_types = [artifacts.IPAddress, artifacts.Domain]
         """
         self.artifact_types = []

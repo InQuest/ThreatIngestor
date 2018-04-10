@@ -44,7 +44,7 @@ class Twitter(Source):
             'content': s['text'],
             'id': s['id_str']
         } for s in tweet_list]
-        
+
         artifacts = []
         # traverse in reverse, old to new
         tweets.reverse()
