@@ -9,3 +9,8 @@
 threatkb.py
 crawlerlib.py
 .virtualenv
+
+# coverage
+cover/
+coverage.xml
+.coverage
