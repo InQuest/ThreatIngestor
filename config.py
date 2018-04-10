@@ -1,6 +1,6 @@
 try:
     import ConfigParser as configparser
-except:
+except ImportError:
     #py3
     import configparser
 
