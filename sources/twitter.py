@@ -42,13 +42,23 @@ class Twitter(Source):
             tweet_list = response
         tweets = [{
             'content': s['text'],
-            'id': s['id_str']
+            'id': s['id_str'],
+            'entities': s.get('entities', {}),
         } for s in tweet_list]
 
         artifacts = []
         # traverse in reverse, old to new
         tweets.reverse()
         for tweet in tweets:
+            # expand t.co links
+            for url in tweet['entities'].get('urls', []):
+                try:
+                    tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
+                except KeyError:
+                    # no url/expanded_url, continue without expanding
+                    pass
+
+            # process tweet
             saved_state = tweet['id']
             artifacts += self.process_element(tweet['content'], TWEET_URL.format(id=tweet['id']))
 

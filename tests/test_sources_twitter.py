@@ -91,3 +91,27 @@ class TestTwitter(unittest.TestCase):
         self.assertEquals(len(artifact_list), 2)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+
+    def test_run_expands_tco_links_if_available(self):
+        self.twitter.endpoint.return_value = [
+            {
+                'text': 'https://t.co/t3s7',
+                'id_str': '12345',
+                'entities': {
+                    'urls': [
+                        {
+                            'url': 'https://t.co/t3s7',
+                            'expanded_url': 'hxxp://someurl.com/test',
+                        },
+                    ],
+                },
+            },
+        ]
+        # note: using hxxp above just to get the expanded url to be processed as
+        # an obfuscated url and added to the artifacts list
+        saved_state, artifact_list = self.twitter.run(None)
+        self.assertEquals(len(artifact_list), 2)
+        self.assertIn('someurl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertNotIn('t.co', [str(x) for x in artifact_list])
+        self.assertNotIn('https://t.co/t3s7', [str(x) for x in artifact_list])
