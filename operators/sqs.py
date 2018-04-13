@@ -21,7 +21,9 @@ class SQS(Operator):
         # kwargs are used to dynamically form message body
         self.kwargs = kwargs
 
-        self.artifact_types = [artifacts.URL]
+        self.artifact_types = kwargs.get('artifact_types') or [
+            artifacts.URL,
+        ]
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""

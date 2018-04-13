@@ -25,3 +25,9 @@ class TestThreatKB(unittest.TestCase):
     def test_handle_yarasignature_creates_yarasignature(self):
         self.threatkb.handle_artifact(artifacts.YARASignature('test', '', ''))
         self.threatkb.api.create.assert_called_once_with('import', MOCK_ANY)
+
+    def test_artifact_types_are_set_if_passed_in_else_default(self):
+        artifact_types = [artifacts.IPAddress, artifacts.URL]
+        self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
+        self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd').artifact_types, [artifacts.Domain, artifacts.IPAddress,
+                artifacts.YARASignature])

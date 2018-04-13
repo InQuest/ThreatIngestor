@@ -4,6 +4,7 @@ except ImportError:
     #py3
     import configparser
 
+import artifacts
 import sources.twitter
 import sources.rss
 import operators.threatkb
@@ -27,6 +28,9 @@ INTERNAL_OPTIONS = [
     'saved_state',
     'module',
 ]
+
+ARTIFACT_TYPES = 'artifact_types'
+
 
 class Config:
 
@@ -63,7 +67,19 @@ class Config:
                 kwargs = {}
                 for option in self.config.options(section):
                     if option not in INTERNAL_OPTIONS:
-                        kwargs[option] = self.config.get(section, option)
+                        if option == ARTIFACT_TYPES:
+                            # parse out special artifact_types option
+                            types_list = self.config.get(section, option).split(',')
+                            artifact_types = []
+                            for artifact in types_list:
+                                try:
+                                    artifact_types.append(artifacts.STRING_MAP[artifact.lower().strip()])
+                                except KeyError:
+                                    # ignore invalid artifact types
+                                    pass
+                            kwargs[option] = artifact_types
+                        else:
+                            kwargs[option] = self.config.get(section, option)
                 operators.append((section, OPERATOR_MAP[self.config.get(section, 'module')], kwargs))
         return operators
 

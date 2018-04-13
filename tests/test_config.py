@@ -1,3 +1,5 @@
+import sys
+import io
 import unittest
 try:
     from unittest.mock import mock_open, patch
@@ -5,8 +7,10 @@ except ImportError:
     from mock import mock_open, patch
 
 import config
+import artifacts
 import sources.rss
 import operators.csv
+import operators.threatkb
 
 
 class TestConfig(unittest.TestCase):
@@ -97,3 +101,36 @@ class TestConfig(unittest.TestCase):
         self.config.config.read.assert_called_once()
         self.assertEquals(self.config.get_state(None), 'test')
         self.assertEquals(self.config.config.read.call_count, 2)
+
+    def test_operators_include_artifact_list_in_kwargs(self):
+        data = '\n'.join([l.strip() for l in """
+        [operator:test-one]
+        module = threatkb
+        artifact_types = URL,Domain, IPAddress , YARASignature
+        another_one = test
+
+        [operator:test-operator-two]
+        module = csv
+        artifact_types = IPAddress
+
+        [operator:test-no-types]
+        module = csv
+        """.splitlines()])
+        # can't use mock_open, since ConfigParser reacts poorly with it.
+        # mock the correct global open depending on python version.
+        open_func = '__builtin__.open'
+        if sys.version_info[0] == 3:
+            open_func = 'builtins.open'
+        with patch(open_func, return_value=io.BytesIO(data)):
+            config_obj = config.Config('test')
+            expected_operators = [
+                ('operator:test-one', operators.threatkb.ThreatKB, {'another_one': 'test', 'artifact_types': [
+                    artifacts.URL,
+                    artifacts.Domain,
+                    artifacts.IPAddress,
+                    artifacts.YARASignature,
+                ]}),
+                ('operator:test-operator-two', operators.csv.CSV, {'artifact_types': [artifacts.IPAddress]}),
+                ('operator:test-no-types', operators.csv.CSV, {}),
+            ]
+            self.assertEquals(config_obj.operators(), expected_operators)

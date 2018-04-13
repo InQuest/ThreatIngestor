@@ -40,3 +40,9 @@ class TestSQS(unittest.TestCase):
         })
         self.sqs.handle_url(artifacts.URL('http://somedomain.com/test', '', ''))
         self.sqs._sqs_put.assert_called_once_with(expected_content)
+
+    @patch('boto3.client')
+    def test_artifact_types_are_set_if_passed_in_else_default(self, boto3_client):
+        artifact_types = [artifacts.IPAddress, artifacts.URL]
+        self.assertEquals(operators.sqs.SQS('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
+        self.assertEquals(operators.sqs.SQS('a', 'b', 'c', 'd').artifact_types, [artifacts.URL])

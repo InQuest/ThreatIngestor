@@ -165,3 +165,12 @@ class Domain(Artifact):
 class YARASignature(Artifact):
     """YARA signature artifact abstraction"""
     pass
+
+
+# Define string mappings for artifact types
+STRING_MAP = {
+    'url': URL,
+    'ipaddress': IPAddress,
+    'domain': Domain,
+    'yarasignature': YARASignature
+}

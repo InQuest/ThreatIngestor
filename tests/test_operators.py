@@ -35,3 +35,7 @@ class TestOperators(unittest.TestCase):
         operator.process(artifact_list)
         self.assertTrue(all([isinstance(x, artifacts.IPAddress) or isinstance(x, artifacts.URL) for x in operator.artifacts]))
         self.assertEquals(len(operator.artifacts), 2)
+
+    def test_artifact_types_are_set_if_passed_in(self):
+        artifact_types = [artifacts.IPAddress, artifacts.URL]
+        self.assertEquals(operators.Operator(artifact_types=artifact_types).artifact_types, artifact_types)

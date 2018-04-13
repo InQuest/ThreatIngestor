@@ -8,12 +8,16 @@ from operators import Operator
 class ThreatKB(Operator):
     """Operator for InQuest ThreatKB"""
 
-    def __init__(self, url, email, password, state):
+    def __init__(self, url, email, password, state, artifact_types=None):
         """ThreatKB operator"""
         self.state = state
         self.api = threatkb.ThreatKB(url, email, password)
 
-        self.artifact_types = [artifacts.Domain, artifacts.IPAddress, artifacts.YARASignature]
+        self.artifact_types = artifact_types or [
+            artifacts.Domain,
+            artifacts.IPAddress,
+            artifacts.YARASignature,
+        ]
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
