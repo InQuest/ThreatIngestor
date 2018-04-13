@@ -128,12 +128,12 @@ from operators import Operator
 
 class ExampleOperator(Operator):
 
-    def __init__(self, my_required_arg):
+    def __init__(self, my_required_arg, artifact_types=None):
         """Args should be url, auth, etc, whatever is needed to set up the object.
 
         Set self.artifact_types to a list of Artifacts supported by the plugin.
         """
-        self.artifact_types = [artifacts.IPAddress, artifacts.Domain]
+        self.artifact_types = artifact_types or [artifacts.IPAddress, artifacts.Domain]
 
     def handle_artifact(self, artifact):
         """Override with the same signature"""
