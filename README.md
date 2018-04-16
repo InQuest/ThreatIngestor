@@ -76,8 +76,12 @@ from sources import Source
 
 class ExampleSource(Source):
 
-    def __init__(self, my_required_arg):
-        """Args should be url, auth, etc, whatever is needed to set up the object."""
+    def __init__(self, name, my_required_arg):
+        """Args should be url, auth, etc, whatever is needed to set up the object.
+
+        The name argument is required for all Source plugins, and is used internally.
+        """
+        self.name = name
         self.my_required_arg = my_required_arg
 
     def run(self, saved_state):
