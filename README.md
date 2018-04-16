@@ -57,10 +57,6 @@ And the following operators:
 * CSV file
 * Amazon SQS
 
-The Amazon SQS operator was designed for use with the InQuest Threat Crawler,
-but can be used out of the box to send non-IP-based URLs to any SQS queue, or
-modified as needed to suit your use case.
-
 The Twitter source can use three Twitter API endpoints out of the box: standard
 search, user timeline, and Twitter lists. For examples of each, see
 `config.ini.example`.
