@@ -134,3 +134,37 @@ class TestConfig(unittest.TestCase):
                 ('operator:test-no-types', operators.csv.CSV, {}),
             ]
             self.assertEquals(config_obj.operators(), expected_operators)
+
+    def test_operators_include_filter_in_kwargs(self):
+        data = '\n'.join([l.strip() for l in """
+        [operator:test-one]
+        module = threatkb
+        artifact_types = URL,Domain, IPAddress , YARASignature
+        filter = (some|regex.*)
+        another_one = test
+
+        [operator:test-operator-two]
+        module = csv
+        filter = is_domain, not is_ip
+
+        [operator:test-no-filter]
+        module = csv
+        """.splitlines()])
+        # can't use mock_open, since ConfigParser reacts poorly with it.
+        # mock the correct global open depending on python version.
+        open_func = '__builtin__.open'
+        if sys.version_info[0] == 3:
+            open_func = 'builtins.open'
+        with patch(open_func, return_value=io.BytesIO(data)):
+            config_obj = config.Config('test')
+            expected_operators = [
+                ('operator:test-one', operators.threatkb.ThreatKB, {'another_one': 'test', 'filter_string': '(some|regex.*)', 'artifact_types': [
+                    artifacts.URL,
+                    artifacts.Domain,
+                    artifacts.IPAddress,
+                    artifacts.YARASignature,
+                ]}),
+                ('operator:test-operator-two', operators.csv.CSV, {'filter_string': 'is_domain, not is_ip'}),
+                ('operator:test-no-filter', operators.csv.CSV, {}),
+            ]
+            self.assertEquals(config_obj.operators(), expected_operators)

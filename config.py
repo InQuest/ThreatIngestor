@@ -30,6 +30,7 @@ INTERNAL_OPTIONS = [
 ]
 
 ARTIFACT_TYPES = 'artifact_types'
+FILTER_STRING = 'filter'
 
 
 class Config:
@@ -78,6 +79,9 @@ class Config:
                                     # ignore invalid artifact types
                                     pass
                             kwargs[option] = artifact_types
+                        elif option == FILTER_STRING:
+                            # pass in special filter_string option
+                            kwargs['filter_string'] = self.config.get(section, option)
                         else:
                             kwargs[option] = self.config.get(section, option)
                 operators.append((section, OPERATOR_MAP[self.config.get(section, 'module')], kwargs))

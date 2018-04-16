@@ -1,16 +1,24 @@
+import re
 import ipaddress
 try:
     from urllib.parse import urlparse
 except ImportError:
      from urlparse import urlparse
 
-class Artifact:
+class Artifact(object):
     """Base class"""
 
     def __init__(self, artifact, reference_link, reference_text=None):
         self.artifact = artifact
         self.reference_link = reference_link
         self.reference_text = reference_text or ''
+
+    def match(self, pattern):
+        """Return True if regex pattern matches the deobfuscated artifact, else False.
+
+        May be overridden or extended by child classes."""
+        regex = re.compile(pattern)
+        return True if regex.search(self.__str__()) else False
 
     def __unicode__(self):
         return unicode(self.artifact)
@@ -48,6 +56,52 @@ class URL(Artifact):
             url = 'http://' + url
 
         return url
+
+    def _match_expression(self, pattern):
+        """Process pattern as a condition expression.
+
+        Raises ValueError if not a valid expression, else returns the
+        truthiness of the expression.
+        """
+        NOT = 'not '
+        conditions = [c.strip().lower() for c in pattern.split(',')]
+        for condition in conditions:
+            if condition.lstrip(NOT) not in URL.__dict__:
+                raise ValueError('not a condition expression')
+            else:
+                result = URL.__dict__[condition.lstrip(NOT)](self)
+                if condition.startswith(NOT) and result:
+                    return False
+                elif not condition.startswith(NOT) and not result:
+                    return False
+        return True
+
+    def match(self, pattern):
+        """Filter on some predefined conditions or a regex pattern.
+
+        If pattern can be parsed as one of the conditions below, it returns the
+        truthiness of the resulting expression; otherwise it is treated as regex.
+
+        Valid conditions:
+
+        * is_obfuscated
+        * is_ipv4
+        * is_ipv6
+        * is_ip
+        * is_domain
+        * not {any above condition}
+        * {any comma-separated list of above conditions}
+
+        For example:
+
+        * is_obfuscated, not is_ip
+        * not is_obfuscated, is_domain
+        """
+        try:
+            return self._match_expression(pattern)
+        except ValueError:
+            # not a valid condition expression, treat as regex instead
+            return super(URL, self).match(pattern)
 
     def __unicode__(self):
         """Always returns deobfuscated url"""

@@ -118,3 +118,47 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(artifacts.IPAddress('192.168.0.1:9090', '').ipaddress(), ipaddress.IPv4Address(u'192.168.0.1'))
         self.assertEquals(artifacts.IPAddress('192.168.0.1:9090/url', '').ipaddress(), ipaddress.IPv4Address(u'192.168.0.1'))
         self.assertEquals(artifacts.IPAddress('192[.]168[.]0[.]1:9090/url', '').ipaddress(), ipaddress.IPv4Address(u'192.168.0.1'))
+
+    def test_match_artifact_regex(self):
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('192'))
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('168'))
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('192\.168'))
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('.'))
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('\.'))
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match('.*'))
+        self.assertTrue(artifacts.IPAddress('192[.]168.0[.]1', '').match('^192\.168\.0\.1$'))
+        self.assertFalse(artifacts.IPAddress('192.168.0.1', '').match('168.192'))
+        self.assertFalse(artifacts.IPAddress('192.168.0.1', '').match('192.*2'))
+        self.assertFalse(artifacts.IPAddress('192.168.0.1', '').match('test'))
+        self.assertTrue(artifacts.URL('http://example[.com', '').match('example.com'))
+        self.assertTrue(artifacts.URL('http://example[.com/test.doc', '').match('.*\.doc'))
+        # empty always matches
+        self.assertTrue(artifacts.IPAddress('192.168.0.1', '').match(''))
+
+    def test_match_url_condition_expression(self):
+        # should be treated as regex
+        self.assertTrue(artifacts.URL('http://example[.com/test.doc', '').match('.*\.doc'))
+        self.assertTrue(artifacts.URL('http://example[.com/not is_ip', '').match('not is_ip.*'))
+        self.assertTrue(artifacts.URL('http://example[.com/not is_ip,', '').match('not is_ip,.*'))
+        # should be treated as condition
+        self.assertTrue(artifacts.URL('http://example[.com/not is_ip', '').match('not is_ip'))
+        self.assertTrue(artifacts.URL('http://example[.com/not is_ip', '').match('is_domain'))
+        self.assertTrue(artifacts.URL('http://example[.com/', '').match('is_domain'))
+        self.assertTrue(artifacts.URL('http://example[.com/', '').match('is_domain, not is_ip'))
+
+        self.assertFalse(artifacts.URL('http://example[.com/', '').match('is_ip'))
+        self.assertFalse(artifacts.URL('http://example[.com/', '').match('is_ip, not is_domain'))
+
+        # first element true
+        self.assertFalse(artifacts.URL('http://example[.com/', '').match('not is_ip, not is_domain'))
+        # second element true
+        self.assertFalse(artifacts.URL('http://example[.com/', '').match('is_ip, is_domain'))
+
+        self.assertTrue(artifacts.URL('http://192.168[.]0.1/test.doc', '').match('is_ip, not is_domain, is_ipv4'))
+        self.assertTrue(artifacts.URL('http://[[2001:db8:85a3::8a2e:370:7334]]/test.doc', '').match('is_ip, not is_domain, is_ipv6, not is_ipv4'))
+        self.assertTrue(artifacts.URL('http://example[.com/test.doc', '').match('is_obfuscated'))
+        self.assertFalse(artifacts.URL('http://example.com/test.doc', '').match('is_obfuscated'))
+        self.assertTrue(artifacts.URL('http://example.com/test.doc', '').match('not is_obfuscated, is_domain'))
+
+        # empty always matches
+        self.assertTrue(artifacts.URL('http://example.com/test.doc', '').match(''))
