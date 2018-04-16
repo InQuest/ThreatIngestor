@@ -46,3 +46,9 @@ class TestSQS(unittest.TestCase):
         artifact_types = [artifacts.IPAddress, artifacts.URL]
         self.assertEquals(operators.sqs.SQS('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
         self.assertEquals(operators.sqs.SQS('a', 'b', 'c', 'd').artifact_types, [artifacts.URL])
+
+    @patch('boto3.client')
+    def test_init_sets_config_args(self, boto3_client):
+        operator = operators.sqs.SQS('a', 'b', 'c', 'd', filter_string='test', allowed_sources=['test-one'])
+        self.assertEquals(operator.filter_string, 'test')
+        self.assertEquals(operator.allowed_sources, ['test-one'])

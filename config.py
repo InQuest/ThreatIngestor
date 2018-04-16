@@ -31,6 +31,7 @@ INTERNAL_OPTIONS = [
 
 ARTIFACT_TYPES = 'artifact_types'
 FILTER_STRING = 'filter'
+ALLOWED_SOURCES = 'allowed_sources'
 
 
 class Config:
@@ -83,6 +84,8 @@ class Config:
                         elif option == FILTER_STRING:
                             # pass in special filter_string option
                             kwargs['filter_string'] = self.config.get(section, option)
+                        elif option == ALLOWED_SOURCES:
+                            kwargs[option] = [s.strip() for s in self.config.get(section, option).split(',')]
                         else:
                             kwargs[option] = self.config.get(section, option)
                 operators.append((section, OPERATOR_MAP[self.config.get(section, 'module')], kwargs))

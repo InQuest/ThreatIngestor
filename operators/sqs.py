@@ -21,6 +21,7 @@ class SQS(Operator):
         # kwargs are used to dynamically form message body
         self.kwargs = kwargs
 
+        super(SQS, self).__init__(kwargs.get('artifact_types'), kwargs.get('filter_string'), kwargs.get('allowed_sources'))
         self.artifact_types = kwargs.get('artifact_types') or [
             artifacts.URL,
         ]

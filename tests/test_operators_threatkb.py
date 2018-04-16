@@ -31,3 +31,7 @@ class TestThreatKB(unittest.TestCase):
         self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
         self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd').artifact_types, [artifacts.Domain, artifacts.IPAddress,
                 artifacts.YARASignature])
+
+    def test_filter_string_and_allowed_sources_are_set_if_passed_in(self):
+        self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', filter_string='test').filter_string, 'test')
+        self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', allowed_sources=['test-one']).allowed_sources, ['test-one'])

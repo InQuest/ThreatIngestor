@@ -8,10 +8,11 @@ from operators import Operator
 class CSV(Operator):
     """Operator for output to flat CSV file"""
 
-    def __init__(self, filename, artifact_types=None):
+    def __init__(self, filename, artifact_types=None, filter_string=None, allowed_sources=None):
         """CSV operator"""
         self.filename = filename
 
+        super(CSV, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [
             artifacts.Domain,
             artifacts.IPAddress,
