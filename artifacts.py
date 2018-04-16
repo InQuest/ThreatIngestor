@@ -8,9 +8,10 @@ except ImportError:
 class Artifact(object):
     """Base class"""
 
-    def __init__(self, artifact, reference_link, reference_text=None):
+    def __init__(self, artifact, source_name, reference_link=None, reference_text=None):
         self.artifact = artifact
-        self.reference_link = reference_link
+        self.source_name = source_name
+        self.reference_link = reference_link or ''
         self.reference_text = reference_text or ''
 
     def match(self, pattern):

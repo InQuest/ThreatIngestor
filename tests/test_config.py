@@ -43,8 +43,8 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module']
         self.config.config.get.return_value = 'rss'
         expected_sources = [
-            ('source:test-one', sources.rss.RSS, {}),
-            ('source:test-two', sources.rss.RSS, {}),
+            ('source:test-one', sources.rss.RSS, {'name': 'test-one'}),
+            ('source:test-two', sources.rss.RSS, {'name': 'test-two'}),
         ]
         self.assertEquals(self.config.sources(), expected_sources)
 
@@ -55,7 +55,7 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module', 'saved_state', 'another_one']
         self.config.config.get.return_value = 'rss'
         expected_sources = [
-            ('source:test-one', sources.rss.RSS, {'another_one': 'rss'}),
+            ('source:test-one', sources.rss.RSS, {'another_one': 'rss', 'name': 'test-one'}),
         ]
         self.assertEquals(self.config.sources(), expected_sources)
 

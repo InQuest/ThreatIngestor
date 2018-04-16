@@ -10,7 +10,8 @@ TWEET_URL = 'https://twitter.com/statuses/{id}'
 
 class Twitter(Source):
 
-    def __init__(self, token, token_key, con_secret_key, con_secret, **kwargs):
+    def __init__(self, name, token, token_key, con_secret_key, con_secret, **kwargs):
+        self.name = name
         self.api = twitter.Twitter(auth=twitter.OAuth(token, token_key, con_secret, con_secret_key))
 
         # forward kwargs.

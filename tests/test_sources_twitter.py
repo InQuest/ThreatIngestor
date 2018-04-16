@@ -11,7 +11,7 @@ class TestTwitter(unittest.TestCase):
 
     @patch('twitter.Twitter')
     def setUp(self, Twitter):
-        self.twitter = sources.twitter.Twitter('a', 'b', 'c', 'd')
+        self.twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e')
 
     def teadDown(self):
         self.twitter.api.reset_mock()
@@ -19,21 +19,22 @@ class TestTwitter(unittest.TestCase):
     @patch('twitter.Twitter')
     def test_init_detects_search_type(self, Twitter):
         # default to search
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd')
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
+        self.assertEquals(twitter.name, 'a')
 
         # slug and owner_screen_name => list
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', slug='test', owner_screen_name='test')
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', slug='test', owner_screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'statuses')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', slug='test')
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', slug='test')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', owner_screen_name='test')
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', owner_screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
 
         # screen_name or user_id => user
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', screen_name='test')
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', user_id=1)
+        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', user_id=1)
         self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
 
     def test_run_respects_saved_state(self):

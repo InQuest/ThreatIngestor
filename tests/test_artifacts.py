@@ -162,3 +162,7 @@ class TestArtifacts(unittest.TestCase):
 
         # empty always matches
         self.assertTrue(artifacts.URL('http://example.com/test.doc', '').match(''))
+
+    def test_second_arg_to_artifact_is_source_name(self):
+        self.assertEquals(artifacts.URL('http://t.co/', 'a').source_name, 'a')
+        self.assertEquals(artifacts.Domain('t.co', 'a').source_name, 'a')

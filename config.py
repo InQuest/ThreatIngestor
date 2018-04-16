@@ -53,7 +53,8 @@ class Config:
         sources = []
         for section in self.config.sections():
             if section.startswith('source:'):
-                kwargs = {}
+                # initialize kwargs with required name argument
+                kwargs = {'name': section.lstrip('source:')}
                 for option in self.config.options(section):
                     if option not in INTERNAL_OPTIONS:
                         kwargs[option] = self.config.get(section, option)

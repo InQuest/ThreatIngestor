@@ -9,7 +9,8 @@ AFTERIOC = 'Indicators of Compromise'
 
 class RSS(Source):
 
-    def __init__(self, url, feed_type):
+    def __init__(self, name, url, feed_type):
+        self.name = name
         self.url = url
         self.feed_type = feed_type
 

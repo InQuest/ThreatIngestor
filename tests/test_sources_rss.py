@@ -57,7 +57,7 @@ class TestRSS(unittest.TestCase):
     """
 
     def setUp(self):
-        self.rss = sources.rss.RSS('http://rss.mock/rss.xml', 'messy')
+        self.rss = sources.rss.RSS('myrss', 'http://rss.mock/rss.xml', 'messy')
 
     @httpretty.activate
     def test_run_respects_saved_state(self):
@@ -89,9 +89,9 @@ class TestRSS(unittest.TestCase):
         httpretty.register_uri(httpretty.GET, "http://rss.mock/rss.xml",
                 body=self.RSS_CONTENT)
 
-        messy = sources.rss.RSS('http://rss.mock/rss.xml', 'messy')
-        clean = sources.rss.RSS('http://rss.mock/rss.xml', 'clean')
-        afterioc = sources.rss.RSS('http://rss.mock/rss.xml', 'afterioc')
+        messy = sources.rss.RSS('myrss', 'http://rss.mock/rss.xml', 'messy')
+        clean = sources.rss.RSS('testrss', 'http://rss.mock/rss.xml', 'clean')
+        afterioc = sources.rss.RSS('rsss', 'http://rss.mock/rss.xml', 'afterioc')
 
         saved_state, artifacts = messy.run(None)
         self.assertEquals(len(artifacts), 4)
@@ -132,7 +132,7 @@ class TestRSS(unittest.TestCase):
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertEquals(artifacts[0].reference_link, 'https://www.rss.mock/some/url')
 
-        afterioc = sources.rss.RSS('http://rss.mock/rss.xml', 'afterioc')
+        afterioc = sources.rss.RSS('test', 'http://rss.mock/rss.xml', 'afterioc')
         saved_state, artifacts = afterioc.run(None)
 
         # fallback to url

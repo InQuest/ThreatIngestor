@@ -11,6 +11,7 @@ class TestSources(unittest.TestCase):
         self.orig_init = sources.Source.__init__
         sources.Source.__init__ = lambda x: None
         self.source = sources.Source()
+        self.source.name = 'test'
 
     def tearDown(self):
         # unpatch init
@@ -100,3 +101,11 @@ class TestSources(unittest.TestCase):
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertEquals(len(artifact_list), 4)
+
+    def test_source_name_is_included_in_artifacts(self):
+        content = 'hxxp://someurl.com/test http://noturl.com/test'
+
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(artifact_list[0].source_name, 'test')
+        self.assertEquals(artifact_list[1].source_name, 'test')

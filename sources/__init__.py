@@ -15,7 +15,7 @@ TRUNCATE_LENGTH = 140
 class Source:
     """Base class, see method documentation"""
 
-    def __init__(self):
+    def __init__(self, name=None):
         """Args should be url, auth, etc, whatever is needed to set up the object."""
         raise NotImplementedError()
 
@@ -48,7 +48,8 @@ class Source:
             if u'\u2026' in url:
                 continue
 
-            artifact = artifacts.URL(url, reference_link, reference_text)
+            artifact = artifacts.URL(url, self.name, reference_link=reference_link,
+                                     reference_text=reference_text)
 
             # dump urls that appear to have the same domain as reference_url
             if artifact.domain() == urlparse(reference_link).netloc:
@@ -60,12 +61,15 @@ class Source:
 
                 # do domain collection in the same pass
                 if artifact.is_domain():
-                    artifact_list.append(artifacts.Domain(artifact.domain(), reference_link, reference_text))
+                    artifact_list.append(artifacts.Domain(artifact.domain(), self.name,
+                                                          reference_link=reference_link,
+                                                          reference_text=reference_text))
 
         # collect IPs
         scraped = crawlerlib.extract_info(content, get_ips=True)
         for ip in scraped:
-            artifact = artifacts.IPAddress(ip, reference_link, reference_text)
+            artifact = artifacts.IPAddress(ip, self.name, reference_link=reference_link,
+                                           reference_text=reference_text)
 
             try:
                 if artifact.ipaddress().is_private or artifact.ipaddress().is_loopback:
@@ -81,7 +85,8 @@ class Source:
         # collect yara rules
         scraped = crawlerlib.extract_yara_rules(content)
         for rule in scraped:
-            artifact = artifacts.YARASignature(rule, reference_link, reference_text)
+            artifact = artifacts.YARASignature(rule, self.name, reference_link=reference_link,
+                                               reference_text=reference_text)
 
             artifact_list.append(artifact)
 
