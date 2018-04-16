@@ -95,6 +95,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertFalse(artifacts.URL('x.x.x.x', '').is_domain())
         self.assertFalse(artifacts.URL('tooshor.t', '').is_domain())
         self.assertFalse(artifacts.URL('tooshor.', '').is_domain())
+        self.assertFalse(artifacts.URL('http://123.123.123.123/test', '').is_domain())
 
     def test_url_domain_parsing(self):
         self.assertEquals(artifacts.URL('http://example.com/', '').domain(), 'example.com')

@@ -33,10 +33,6 @@ class SQS(Operator):
 
     def handle_url(self, url):
         """Handle a single URL; excludes IP-based URLs"""
-        # skip ip address based URLs
-        if url.is_ip():
-            return
-
         # allow interpolation from kwargs
         message_body = dict([(k, v.format(
             url=unicode(url),
