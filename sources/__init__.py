@@ -17,6 +17,7 @@ class Source:
 
     def __init__(self, name=None):
         """Args should be url, auth, etc, whatever is needed to set up the object."""
+        self.name = name
         raise NotImplementedError()
 
     def run(self, saved_state):
