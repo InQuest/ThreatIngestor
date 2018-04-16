@@ -36,7 +36,7 @@ con_secret =
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
 screen_name = InQuest
 
-[source:myiocfeed]
+[source:rss-myiocfeed]
 module = rss
 saved_state = 
 url = https://example.com/rss.xml
@@ -50,6 +50,7 @@ filename = output.csv
 [operator:mythreatkb]
 # Send artifacts to a ThreatKB instance
 module = threatkb
+allowed_sources = twitter-inquest-c2-list, rss-.*
 url = http://mythreatkb
 email = a@a.a
 password = password
@@ -57,6 +58,9 @@ state = Inbox
 
 [operator:inquest-threatcrawler]
 module = sqs
+allowed_sources = twitter-open-directory
+filter = is_domain
+artifact_types = URL
 aws_access_key_id = MY_KEY
 aws_secret_access_key = MY_SECRET
 aws_region = MY_REGION
