@@ -19,7 +19,7 @@ class TestSQS(unittest.TestCase):
         # control
         self.sqs._sqs_put = Mock()
         self.sqs.filter_string = 'is_domain'
-        self.sqs.handle_url(artifacts.URL('http://somedomain.com/test', '', ''))
+        self.sqs.handle_artifact(artifacts.URL('http://somedomain.com/test', '', ''))
         self.sqs._sqs_put.assert_called_once()
 
         # test
@@ -27,7 +27,7 @@ class TestSQS(unittest.TestCase):
         self.sqs.process([artifacts.URL('http://123.123.123.123/test', '', '')])
         self.sqs._sqs_put.assert_not_called()
 
-    def test_handle_url_passes_kwargs(self):
+    def test_handle_artifact_passes_kwargs_url(self):
         self.sqs._sqs_put = Mock()
         self.sqs.kwargs = {
             'test_arg': 'test_val',
@@ -39,7 +39,59 @@ class TestSQS(unittest.TestCase):
             'test_domain': 'somedomain.com',
             'test_url': 'http://somedomain.com/test',
         })
-        self.sqs.handle_url(artifacts.URL('http://somedomain.com/test', '', ''))
+        self.sqs.handle_artifact(artifacts.URL('http://somedomain.com/test', '', ''))
+        self.sqs._sqs_put.assert_called_once_with(expected_content)
+
+    def test_handle_artifact_passes_kwargs_hash(self):
+        self.sqs._sqs_put = Mock()
+        self.sqs.kwargs = {
+            'test_arg': 'test_val',
+            'test_hash': '{hash}',
+        }
+        expected_content = json.dumps({
+            'test_arg': 'test_val',
+            'test_hash': 'test',
+        })
+        self.sqs.handle_artifact(artifacts.Hash('test', '', ''))
+        self.sqs._sqs_put.assert_called_once_with(expected_content)
+
+    def test_handle_artifact_passes_kwargs_ipaddress(self):
+        self.sqs._sqs_put = Mock()
+        self.sqs.kwargs = {
+            'test_arg': 'test_val',
+            'test_ipaddress': '{ipaddress}',
+        }
+        expected_content = json.dumps({
+            'test_arg': 'test_val',
+            'test_ipaddress': 'test',
+        })
+        self.sqs.handle_artifact(artifacts.IPAddress('test', '', ''))
+        self.sqs._sqs_put.assert_called_once_with(expected_content)
+
+    def test_handle_artifact_passes_kwargs_domain(self):
+        self.sqs._sqs_put = Mock()
+        self.sqs.kwargs = {
+            'test_arg': 'test_val',
+            'test_domain': '{domain}',
+        }
+        expected_content = json.dumps({
+            'test_arg': 'test_val',
+            'test_domain': 'test',
+        })
+        self.sqs.handle_artifact(artifacts.Domain('test', '', ''))
+        self.sqs._sqs_put.assert_called_once_with(expected_content)
+
+    def test_handle_artifact_passes_kwargs_yarasignature(self):
+        self.sqs._sqs_put = Mock()
+        self.sqs.kwargs = {
+            'test_arg': 'test_val',
+            'test_yarasignature': '{yarasignature}',
+        }
+        expected_content = json.dumps({
+            'test_arg': 'test_val',
+            'test_yarasignature': 'test',
+        })
+        self.sqs.handle_artifact(artifacts.YARASignature('test', '', ''))
         self.sqs._sqs_put.assert_called_once_with(expected_content)
 
     @patch('boto3.client')

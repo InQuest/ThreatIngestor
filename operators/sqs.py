@@ -28,18 +28,54 @@ class SQS(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
+        format_fm = None
         if isinstance(artifact, artifacts.URL):
-            self.handle_url(artifact)
+            format_fn = self._format_value_url
+        elif isinstance(artifact, artifacts.Hash):
+            format_fn = self._format_value_hash
+        elif isinstance(artifact, artifacts.IPAddress):
+            format_fn = self._format_value_ipaddress
+        elif isinstance(artifact, artifacts.Domain):
+            format_fn = self._format_value_domain
+        elif isinstance(artifact, artifacts.YARASignature):
+            format_fn = self._format_value_yarasignature
 
-    def handle_url(self, url):
-        """Handle a single URL; excludes IP-based URLs"""
-        # allow interpolation from kwargs
-        message_body = dict([(k, v.format(
+        if format_fn:
+            # it's an artifact type we know how to handle
+            message_body = dict([(k, format_fn(v, artifact)) for (k, v) in self.kwargs.iteritems()])
+
+            self._sqs_put(json.dumps(message_body))
+
+    def _format_value_url(self, value, url):
+        """Allow interpolation from kwargs"""
+        return value.format(
             url=unicode(url),
             domain=url.domain()
-        )) for (k, v) in self.kwargs.iteritems()])
+        )
 
-        self._sqs_put(json.dumps(message_body))
+    def _format_value_domain(self, value, domain):
+        """Allow interpolation from kwargs"""
+        return value.format(
+            domain=unicode(domain)
+        )
+
+    def _format_value_ipaddress(self, value, ipaddress):
+        """Allow interpolation from kwargs"""
+        return value.format(
+            ipaddress=unicode(ipaddress)
+        )
+
+    def _format_value_hash(self, value, hash_):
+        """Allow interpolation from kwargs"""
+        return value.format(
+            hash=unicode(hash_)
+        )
+
+    def _format_value_yarasignature(self, value, yarasignature):
+        """Allow interpolation from kwargs"""
+        return value.format(
+            yarasignature=unicode(yarasignature)
+        )
 
     def _sqs_put(self, content):
         """Send content to an SQS queue"""
