@@ -91,4 +91,12 @@ class Source:
 
             artifact_list.append(artifact)
 
+        # collect hashes
+        scraped = crawlerlib.extract_info(content, get_hashes=True)
+        for hash_ in scraped:
+            artifact = artifacts.Hash(hash_, self.name, reference_link=reference_link,
+                                      reference_text=reference_text)
+
+            artifact_list.append(artifact)
+
         return artifact_list

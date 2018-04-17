@@ -217,6 +217,29 @@ class Domain(Artifact):
     pass
 
 
+class Hash(Artifact):
+    """Hash artifact abstraction"""
+
+    # Types
+    MD5 = 'md5'
+    SHA1 = 'sha1'
+    SHA256 = 'sha256'
+    SHA512 = 'sha512'
+
+    def hash_type(self):
+        """Return the hash type as a string, or None"""
+        if len(self.artifact) == 32:
+            return self.MD5
+        elif len(self.artifact) == 40:
+            return self.SHA1
+        elif len(self.artifact) == 64:
+            return self.SHA256
+        elif len(self.artifact) == 128:
+            return self.SHA512
+        else:
+            return None
+
+
 class YARASignature(Artifact):
     """YARA signature artifact abstraction"""
     pass

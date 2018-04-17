@@ -15,6 +15,7 @@ class CSV(Operator):
         super(CSV, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [
             artifacts.Domain,
+            artifacts.Hash,
             artifacts.IPAddress,
             artifacts.URL,
         ]

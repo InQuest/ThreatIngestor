@@ -109,3 +109,20 @@ class TestSources(unittest.TestCase):
         self.assertEquals(len(artifact_list), 2)
         self.assertEquals(artifact_list[0].source_name, 'test')
         self.assertEquals(artifact_list[1].source_name, 'test')
+
+    def test_hashes_are_extracted(self):
+        content = """68b329da9893e34099c7d8ad5cb9c940
+        $ sha1sum <<< ''
+        adc83b19e793491b1c6ea0fd8b46cd9f32e592fc  -
+        $ sha256sum <<< ''
+        01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  -
+        $ sha512sum <<< ''
+        be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09"""
+
+        artifact_list = self.source.process_element(content, '')
+        self.assertIn('68b329da9893e34099c7d8ad5cb9c940', [str(h) for h in artifact_list])
+        self.assertIn('adc83b19e793491b1c6ea0fd8b46cd9f32e592fc', [str(h) for h in artifact_list])
+        self.assertIn('01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b', [str(h) for h in artifact_list])
+        self.assertIn('be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09',
+                      [str(h) for h in artifact_list])
+        self.assertTrue(isinstance(artifact_list[0], artifacts.Hash))
