@@ -4,3 +4,4 @@ twitter>=1.17.1
 requests>=2.4.3
 ipaddress>=1.0.18
 iocextract
+git+https://github.com/InQuest/python-threatkb#egg=threatkb
