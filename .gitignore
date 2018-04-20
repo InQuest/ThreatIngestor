@@ -7,7 +7,6 @@
 
 # dev sources
 threatkb.py
-crawlerlib.py
 .virtualenv
 
 # coverage

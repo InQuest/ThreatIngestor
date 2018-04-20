@@ -4,7 +4,7 @@ try:
 except ImportError:
      from urlparse import urlparse
 
-import crawlerlib
+import iocextract
 
 import artifacts
 
@@ -43,7 +43,7 @@ class Source:
         artifact_list = []
 
         # collect URLs and domains
-        scraped = crawlerlib.extract_info(content, get_urls=True, strip_extra=False)
+        scraped = iocextract.extract_urls(content)
         for url in scraped:
             # dump anything with ellipses, these get through the regex
             if u'\u2026' in url:
@@ -67,7 +67,7 @@ class Source:
                                                           reference_text=reference_text))
 
         # collect IPs
-        scraped = crawlerlib.extract_info(content, get_ips=True)
+        scraped = iocextract.extract_ips(content)
         for ip in scraped:
             artifact = artifacts.IPAddress(ip, self.name, reference_link=reference_link,
                                            reference_text=reference_text)
@@ -84,7 +84,7 @@ class Source:
             artifact_list.append(artifact)
 
         # collect yara rules
-        scraped = crawlerlib.extract_yara_rules(content)
+        scraped = iocextract.extract_yara_rules(content)
         for rule in scraped:
             artifact = artifacts.YARASignature(rule, self.name, reference_link=reference_link,
                                                reference_text=reference_text)
@@ -92,7 +92,7 @@ class Source:
             artifact_list.append(artifact)
 
         # collect hashes
-        scraped = crawlerlib.extract_info(content, get_hashes=True)
+        scraped = iocextract.extract_hashes(content)
         for hash_ in scraped:
             artifact = artifacts.Hash(hash_, self.name, reference_link=reference_link,
                                       reference_text=reference_text)

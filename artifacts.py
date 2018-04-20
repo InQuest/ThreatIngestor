@@ -1,5 +1,8 @@
 import re
 import ipaddress
+
+import iocextract
+
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -30,33 +33,6 @@ class Artifact(object):
 
 class URL(Artifact):
     """URL artifact abstraction, unicode-safe"""
-
-    def _get_clean_url(self):
-        """Fixes urlparse errors"""
-        url = self.artifact
-
-        # fix ipv6 parsing exception
-        if '[.' in url and '[.]' not in url:
-            url = url.replace('[.', '[.]')
-        if '.]' in url and '[.]' not in url:
-            url = url.replace('.]', '[.]')
-        if '[/]' in url:
-            url = url.replace('[/]', '/')
-        if '[' in url and ']' not in url:
-            url = url.replace('[', '')
-
-        try:
-            urlparse(url)
-        except ValueError:
-            # last resort on ipv6 fail
-            url = url.replace('[', '').replace(']', '')
-            urlparse(url)
-
-        # urlparse expects a scheme, make sure one exists
-        if '//' not in url:
-            url = 'http://' + url
-
-        return url
 
     def _match_expression(self, pattern):
         """Process pattern as a condition expression.
@@ -106,36 +82,19 @@ class URL(Artifact):
 
     def __unicode__(self):
         """Always returns deobfuscated url"""
-        url = self._get_clean_url()
-
-        parsed = urlparse(url)
-
-        # Handle URLs with no scheme / obfuscated scheme
-        # Note: ParseResult._replace is a public member, this is safe
-        if parsed.scheme not in ['http', 'https', 'ftp']:
-            parsed = parsed._replace(scheme='http')
-            url = parsed.geturl().replace('http:///', 'http://')
-            parsed = urlparse(url)
-
-        # Fix example[.]com, but keep RFC 2732 URLs intact
-        if not self.is_ipv6():
-            parsed = parsed._replace(netloc=parsed.netloc.replace('[dot]', '[.]').replace('[', '').\
-                                                   replace(']', '').replace('(', '').replace(')', '').\
-                                                   replace(',', '.').split()[0])
-
-        # fix unicode obfuscation
-        if u'\u30fb' in parsed.netloc:
-            parsed = parsed._replace(netloc=parsed.netloc.replace(u'\u30fb', '.'))
-
-        return unicode(parsed.geturl())
+        return unicode(iocextract.refang_url(self.artifact))
 
     def is_obfuscated(self):
         """Boolean: is an obfuscated URL"""
-        return self.__unicode__() != unicode(self._get_clean_url())
+        if self.__unicode__() != unicode(self.artifact):
+            # don't treat "example.com" as obfuscated
+            if self.__unicode__() != u'http://' + unicode(self.artifact):
+                return True
+        return False
 
     def is_ipv4(self):
         """Boolean: URL network location is an IPv4 address, not a domain"""
-        parsed = urlparse(self._get_clean_url())
+        parsed = urlparse(iocextract.refang_url(self.artifact))
 
         try:
             ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.')))
@@ -147,7 +106,7 @@ class URL(Artifact):
     def is_ipv6(self):
         """Boolean: URL network location is an IPv6 address, not a domain"""
         # fix urlparse exception
-        parsed = urlparse(self._get_clean_url())
+        parsed = urlparse(iocextract.refang_url(self.artifact))
 
         # Handle RFC 2732 IPv6 URLs with and without port, as well as non-RFC IPv6 URLs
         if ']:' in parsed.netloc:

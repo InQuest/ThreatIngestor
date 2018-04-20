@@ -47,7 +47,8 @@ class TestSources(unittest.TestCase):
         self.assertIn('blah.com', [str(x) for x in artifact_list])
         self.assertIn('test.com', [str(x) for x in artifact_list])
         self.assertIn('http://test.com', [str(x) for x in artifact_list])
-        self.assertEquals(len(artifact_list), 4)
+        # there are some dups since iocextract fires on [.] and http://
+        self.assertEquals(len(artifact_list), 8)
 
     def test_urls_are_extracted(self):
         content = 'hxxp://someurl.com/test'
