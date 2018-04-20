@@ -2,9 +2,13 @@ import sys
 import io
 import unittest
 try:
+    # py3
     from unittest.mock import mock_open, patch
+    CONFIGPARSER = 'configparser.ConfigParser'
 except ImportError:
+    # py2
     from mock import mock_open, patch
+    CONFIGPARSER = 'ConfigParser.ConfigParser'
 
 import config
 import artifacts
@@ -15,9 +19,8 @@ import operators.threatkb
 
 class TestConfig(unittest.TestCase):
 
-    @patch('ConfigParser.ConfigParser')
-    @patch('configparser.ConfigParser')
-    def setUp(self, ConfigParser2, ConfigParser3):
+    @patch(CONFIGPARSER)
+    def setUp(self, ConfigParser):
         self.config = config.Config('test')
 
     def test_daemon_returns_main_daemon_bool(self):
