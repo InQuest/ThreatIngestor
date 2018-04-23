@@ -28,7 +28,7 @@ class SQS(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
-        format_fm = None
+        format_fn = None
         if isinstance(artifact, artifacts.URL):
             format_fn = self._format_value_url
         elif isinstance(artifact, artifacts.Hash):
