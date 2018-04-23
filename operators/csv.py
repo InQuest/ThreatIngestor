@@ -24,7 +24,7 @@ class CSV(Operator):
         """Operate on a single artifact"""
         with open(self.filename, 'a+') as f:
             writer = csv.writer(f)
-            artifact_type = unicode(artifact.__class__).split('.')[-1].encode('utf-8')
+            artifact_type = unicode(artifact.__class__).split('.')[-1].strip("'>").encode('utf-8')
             writer.writerow([artifact_type, unicode(artifact).encode('utf-8'),
                     artifact.reference_link.encode('utf-8'),
                     artifact.reference_text.encode('utf-8').encode('string_escape')])
