@@ -209,5 +209,6 @@ STRING_MAP = {
     'url': URL,
     'ipaddress': IPAddress,
     'domain': Domain,
+    'hash': Hash,
     'yarasignature': YARASignature
 }
