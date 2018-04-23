@@ -35,3 +35,8 @@ class TestThreatKB(unittest.TestCase):
     def test_filter_string_and_allowed_sources_are_set_if_passed_in(self):
         self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', filter_string='test').filter_string, 'test')
         self.assertEquals(operators.threatkb.ThreatKB('a', 'b', 'c', 'd', allowed_sources=['test-one']).allowed_sources, ['test-one'])
+
+    def test_handle_task_creates_task(self):
+        self.threatkb.handle_artifact(artifacts.Task('', '', ''))
+        self.threatkb.api.create.assert_called_once_with('tasks', MOCK_ANY)
+

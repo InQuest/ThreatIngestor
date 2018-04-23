@@ -48,7 +48,7 @@ class TestSources(unittest.TestCase):
         self.assertIn('test.com', [str(x) for x in artifact_list])
         self.assertIn('http://test.com', [str(x) for x in artifact_list])
         # there are some dups since iocextract fires on [.] and http://
-        self.assertEquals(len(artifact_list), 8)
+        self.assertEquals(len(artifact_list), 9)
 
     def test_urls_are_extracted(self):
         content = 'hxxp://someurl.com/test'
@@ -81,7 +81,7 @@ class TestSources(unittest.TestCase):
         self.assertIn('noturl.com', [str(x) for x in artifact_list])
         self.assertNotIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('someurl.com', [str(x) for x in artifact_list])
-        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(len(artifact_list), 3)
 
     def test_nonobfuscated_urls_are_discarded(self):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
@@ -91,7 +91,7 @@ class TestSources(unittest.TestCase):
         self.assertNotIn('noturl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
-        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(len(artifact_list), 3)
 
     def test_nonobfuscated_urls_are_included_if_specified(self):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
@@ -101,13 +101,13 @@ class TestSources(unittest.TestCase):
         self.assertIn('noturl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
-        self.assertEquals(len(artifact_list), 4)
+        self.assertEquals(len(artifact_list), 5)
 
     def test_source_name_is_included_in_artifacts(self):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
 
         artifact_list = self.source.process_element(content, 'link')
-        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(len(artifact_list), 3)
         self.assertEquals(artifact_list[0].source_name, 'test')
         self.assertEquals(artifact_list[1].source_name, 'test')
 
@@ -127,3 +127,8 @@ class TestSources(unittest.TestCase):
         self.assertIn('be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09',
                       [str(h) for h in artifact_list])
         self.assertTrue(isinstance(artifact_list[0], artifacts.Hash))
+
+    def test_tasks_are_added(self):
+        artifact_list = self.source.process_element('', 'test')
+        self.assertIn('Manual Task: test', [str(h) for h in artifact_list])
+        self.assertTrue(isinstance(artifact_list[0], artifacts.Task))

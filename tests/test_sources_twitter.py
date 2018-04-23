@@ -89,7 +89,7 @@ class TestTwitter(unittest.TestCase):
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
 
@@ -111,7 +111,7 @@ class TestTwitter(unittest.TestCase):
         # note: using hxxp above just to get the expanded url to be processed as
         # an obfuscated url and added to the artifacts list
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(len(artifact_list), 2)
+        self.assertEquals(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('t.co', [str(x) for x in artifact_list])

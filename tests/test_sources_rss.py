@@ -66,13 +66,13 @@ class TestRSS(unittest.TestCase):
 
         # normal usage
         saved_state, artifacts = self.rss.run(None)
-        self.assertEquals(len(artifacts), 4)
+        self.assertEquals(len(artifacts), 8)
         saved_state, artifacts = self.rss.run(saved_state)
         self.assertEquals(len(artifacts), 0)
 
         # fake saved_state
         saved_state, artifacts = self.rss.run('Thu, 01 Oct 2017 17:00:00 +0000')
-        self.assertEquals(len(artifacts), 2)
+        self.assertEquals(len(artifacts), 4)
 
     @httpretty.activate
     def test_run_does_preprocessing_deobfuscation(self):
@@ -94,19 +94,19 @@ class TestRSS(unittest.TestCase):
         afterioc = sources.rss.RSS('rsss', 'http://rss.mock/rss.xml', 'afterioc')
 
         saved_state, artifacts = messy.run(None)
-        self.assertEquals(len(artifacts), 4)
+        self.assertEquals(len(artifacts), 8)
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertNotIn('http://example.com/good/url', [str(x) for x in artifacts])
         self.assertNotIn('http://example.com/bad/url/00', [str(x) for x in artifacts])
 
         saved_state, artifacts = clean.run(None)
-        self.assertEquals(len(artifacts), 10)
+        self.assertEquals(len(artifacts), 14)
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertIn('http://example.com/good/url', [str(x) for x in artifacts])
         self.assertIn('http://example.com/bad/url/00', [str(x) for x in artifacts])
 
         saved_state, artifacts = afterioc.run(None)
-        self.assertEquals(len(artifacts), 8)
+        self.assertEquals(len(artifacts), 12)
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertNotIn('http://example.com/good/url', [str(x) for x in artifacts])
         self.assertIn('http://example.com/bad/url/00', [str(x) for x in artifacts])
@@ -117,7 +117,7 @@ class TestRSS(unittest.TestCase):
                 body=self.RSS_CONTENT)
 
         saved_state, artifacts = self.rss.run(None)
-        self.assertEquals(len(artifacts), 4)
+        self.assertEquals(len(artifacts), 8)
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertIn('http://example.net/bad/another/20', [str(x) for x in artifacts])
 
@@ -130,7 +130,7 @@ class TestRSS(unittest.TestCase):
 
         # link
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
-        self.assertEquals(artifacts[0].reference_link, 'https://www.rss.mock/some/url')
+        self.assertIn('https://www.rss.mock/some/url', [a.reference_link for a in artifacts])
 
         afterioc = sources.rss.RSS('test', 'http://rss.mock/rss.xml', 'afterioc')
         saved_state, artifacts = afterioc.run(None)
@@ -156,7 +156,7 @@ class TestRSS(unittest.TestCase):
         saved_state, artifacts = self.rss.run(None)
 
         self.assertEquals(saved_state, u'Fri, 11 Oct 2017 17:00:00 +0000')
-        self.assertEquals(len(artifacts), 4)
+        self.assertEquals(len(artifacts), 8)
         self.assertIn('example.com', [str(x) for x in artifacts])
         self.assertIn('example.net', [str(x) for x in artifacts])
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])

@@ -204,11 +204,17 @@ class YARASignature(Artifact):
     pass
 
 
+class Task(Artifact):
+    """Generic Task artifact abstraction"""
+    pass
+
+
 # Define string mappings for artifact types
 STRING_MAP = {
     'url': URL,
     'ipaddress': IPAddress,
     'domain': Domain,
     'hash': Hash,
-    'yarasignature': YARASignature
+    'yarasignature': YARASignature,
+    'task': Task,
 }

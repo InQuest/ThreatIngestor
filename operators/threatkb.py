@@ -28,6 +28,8 @@ class ThreatKB(Operator):
             self.handle_ipaddress(artifact)
         elif isinstance(artifact, artifacts.YARASignature):
             self.handle_yarasignature(artifact)
+        elif isinstance(artifact, artifacts.Task):
+            self.handle_task(artifact)
 
     def handle_domain(self, domain):
         """Handle a single domain"""
@@ -63,4 +65,13 @@ class ThreatKB(Operator):
                 'import_text': str(yarasignature),
                 'shared_reference': yarasignature.reference_link,
                 'shared_state': {'state': self.state},
+            })
+
+    def handle_task(self, task):
+        """Handle a single Task"""
+        self.api.create('tasks', {
+                'title': str(task),
+                'description': task.reference_text,
+                'state': {'state': self.state},
+                'final_artifact': '',
             })
