@@ -50,6 +50,8 @@ currently includes the following sources:
 
 * Twitter
 * RSS
+* SQS
+* Web
 
 And the following operators:
 
