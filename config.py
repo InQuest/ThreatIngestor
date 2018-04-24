@@ -7,6 +7,7 @@ except ImportError:
 import artifacts
 import sources.twitter
 import sources.rss
+import sources.sqs
 import operators.threatkb
 import operators.csv
 import operators.sqs
@@ -15,6 +16,7 @@ SOURCE_MAP = {
     # Add new source plugins here
     'twitter': sources.twitter.Twitter,
     'rss': sources.rss.RSS,
+    'sqs': sources.sqs.SQS,
 }
 
 OPERATOR_MAP = {
