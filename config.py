@@ -8,6 +8,7 @@ import artifacts
 import sources.twitter
 import sources.rss
 import sources.sqs
+import sources.web
 import operators.threatkb
 import operators.csv
 import operators.sqs
@@ -17,6 +18,7 @@ SOURCE_MAP = {
     'twitter': sources.twitter.Twitter,
     'rss': sources.rss.RSS,
     'sqs': sources.sqs.SQS,
+    'web': sources.web.Web,
 }
 
 OPERATOR_MAP = {
