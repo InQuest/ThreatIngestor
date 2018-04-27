@@ -29,7 +29,7 @@ class TestWeb(unittest.TestCase):
         httpretty.register_uri(httpretty.HEAD, "http://example.mock/list.txt",
                                status=304)
 
-        saved_state, artifacts = self.web.run(None)
+        saved_state, artifacts = self.web.run('test;"test"')
         self.assertEquals(len(artifacts), 0)
 
     @httpretty.activate
