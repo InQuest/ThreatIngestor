@@ -9,7 +9,6 @@ except ImportError:
 
 import requests
 
-import artifacts
 from sources import Source
 
 class SQS(Source):
