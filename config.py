@@ -9,6 +9,7 @@ import sources.twitter
 import sources.rss
 import sources.sqs
 import sources.web
+import sources.git
 import operators.threatkb
 import operators.csv
 import operators.sqs
@@ -19,6 +20,7 @@ SOURCE_MAP = {
     'rss': sources.rss.RSS,
     'sqs': sources.sqs.SQS,
     'web': sources.web.Web,
+    'git': sources.git.Git,
 }
 
 OPERATOR_MAP = {

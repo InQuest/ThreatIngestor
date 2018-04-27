@@ -52,6 +52,7 @@ currently includes the following sources:
 * RSS
 * SQS
 * Web
+* Git
 
 And the following operators:
 
