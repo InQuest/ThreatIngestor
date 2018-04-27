@@ -4,8 +4,6 @@ import os
 import sys
 import subprocess
 
-import requests
-
 from sources import Source
 
 YARA_FILE_EXTS = [
