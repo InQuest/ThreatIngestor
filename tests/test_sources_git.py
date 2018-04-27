@@ -1,10 +1,8 @@
 import unittest
 try:
-    # py3
-    from unittest.mock import patch, ANY as MOCK_ANY
-    CONFIGPARSER = 'configparser.ConfigParser'
+    from unittest.mock import patch
 except ImportError:
-    from mock import patch, ANY as MOCK_ANY
+    from mock import patch
 import os
 
 import httpretty
