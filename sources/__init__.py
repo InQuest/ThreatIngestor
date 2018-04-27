@@ -32,14 +32,6 @@ class Source:
         # truncate content to a reasonable length for reference_text
         reference_text = content[:TRUNCATE_LENGTH] + ('...' if len(content) > TRUNCATE_LENGTH else '')
 
-        # enable detection of some extra obfuscated urls
-        content = content.replace(' [.] ', '[.]')
-        matches = re.findall(r'[^/\w.\[\]-]?([\w-]+\[\.\]\w+)[\W\b]?', content)
-        for match in set(matches):
-            if not ']https' in match:
-                # special case for broken tweets
-                content = content.replace(match, 'hxxp://{u}'.format(u=match))
-
         artifact_list = []
 
         # collect URLs and domains
