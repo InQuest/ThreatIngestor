@@ -177,6 +177,8 @@ artifacts are currently supported:
 * IPAddress
 * URL
 * YARASignature
+* Hash
+* Task
 
 Depending on the source type and feed type (see Usage section above), the
 content of the sources will be parsed differently. For example, for both
