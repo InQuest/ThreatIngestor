@@ -33,8 +33,8 @@ class Web(Source):
             return saved_state, []
 
         # otherwise, do the full request
-        response = requests.get(self.url, headers=headers) 
-        
+        response = requests.get(self.url, headers=headers)
+
         # form saved state
         last_modified = response.headers.get('Last-Modified')
         etag = response.headers.get('Etag')
