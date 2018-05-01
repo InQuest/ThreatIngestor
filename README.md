@@ -53,7 +53,7 @@ currently includes the following sources:
 * SQS
 * Web
 * Git
-* GitHub
+* GitHub Repository Search
 
 And the following operators:
 
