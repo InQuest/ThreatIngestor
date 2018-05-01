@@ -10,6 +10,7 @@ import sources.rss
 import sources.sqs
 import sources.web
 import sources.git
+import sources.github
 import operators.threatkb
 import operators.csv
 import operators.sqs
@@ -21,6 +22,7 @@ SOURCE_MAP = {
     'sqs': sources.sqs.SQS,
     'web': sources.web.Web,
     'git': sources.git.Git,
+    'github': sources.github.GitHub,
 }
 
 OPERATOR_MAP = {
