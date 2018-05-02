@@ -52,8 +52,8 @@ filename = output.csv
 module = threatkb
 allowed_sources = twitter-inquest-c2-list, rss-.*
 url = http://mythreatkb
-email = a@a.a
-password = password
+token = MYTOKEN
+secret_key = MYKEY
 state = Inbox
 
 [operator:inquest-threatcrawler]
