@@ -13,3 +13,6 @@ threatkb.py
 cover/
 coverage.xml
 .coverage
+
+# Sphinx documentation
+docs/_build/
