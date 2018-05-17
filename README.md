@@ -8,7 +8,7 @@ but can be used without it.
 ## Overview
 
 ThreatIngestor can be configured to watch Twitter, RSS feeds, or other
-sources, extract meaningful information such as C2 IPs and domains and YARA
+sources, extract meaningful information such as C2 IPs/domains and YARA
 signatures, and send that information to another system for analysis.
 
 ## Installation
