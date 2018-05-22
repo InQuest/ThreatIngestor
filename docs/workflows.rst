@@ -125,7 +125,7 @@ Full-Circle
 ThreatIngestor can both :ref:`read from <sqs-source>` and :ref:`write to
 <sqs-operator>` SQS queues, which allows us to set up a "full circle" workflow.
 (Note that you can also replace SQS with :ref:`custom plugins <developing>` to
-acheive the same effect.) In this workflow, we can extract artifacts from a
+achieve the same effect.) In this workflow, we can extract artifacts from a
 source, send them off to some SQS listener for processing, and that listener
 can send the processed content back into ThreatIngestor's input queue for
 extraction. Consider the following workflow:
