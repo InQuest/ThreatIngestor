@@ -21,18 +21,9 @@ options <operator-plugins>` though, and you can now send *specific* artifacts
 to different operators depending on type, source, or advanced filters. Consider
 the following workflow:
 
-.. code-block:: mermaid
-
-    graph LR
-    A(Twitter C2 List) --> X
-    B(Twitter Search: #opendir) --> X
-    C(Twitter Search: virustotal.com) --> X
-    D(Vendor X Blog) --> X
-    E(Domain Masquerade Feed) --> X
-
-    X[ThreatIngestor] --> Z(ThreatKB)
-    X --> W(Crawler)
-    X --> V(Automated Analysis)
+.. image:: _static/mermaid-multiple-operators.svg
+   :width: 80%
+   :align: center
 
 We want artifacts from "Twitter C2 List" and "Vendor X Blog" to go directly to
 ThreatKB. URLs and domains from "Twitter Search: #opendir" and "Domain
@@ -139,16 +130,9 @@ source, send them off to some SQS listener for processing, and that listener
 can send the processed content back into ThreatIngestor's input queue for
 extraction. Consider the following workflow:
 
-.. code-block:: mermaid
-
-    graph LR
-    A(SQS Input Queue) --> X
-    B(Twitter C2 List) --> X
-    C(Twitter Search: pastebin.com ioc) --> X
-
-    X[ThreatIngestor] --> Z(ThreatKB)
-    X --> W(SQS Pastebin Processor)
-    W --> A
+.. image:: _static/mermaid-full-circle.svg
+   :width: 80%
+   :align: center
 
 Here, we have two Twitter sources: our C2 list and a search for "pastebin.com
 ioc", and one SQS source: the input queue. We then have two operators:

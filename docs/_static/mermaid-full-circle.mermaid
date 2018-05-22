@@ -1,0 +1,8 @@
+graph LR
+A(SQS Input Queue) --> X
+B(Twitter C2 List) --> X
+C(Twitter Search: pastebin.com ioc) --> X
+
+X[ThreatIngestor] --> Z(ThreatKB)
+X --> W(SQS Pastebin Processor)
+W --> A

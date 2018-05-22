@@ -1,0 +1,10 @@
+graph LR
+A(Twitter C2 List) --> X
+B(Twitter Search: #opendir) --> X
+C(Twitter Search: virustotal.com) --> X
+D(Vendor X Blog) --> X
+E(Domain Masquerade Feed) --> X
+
+X[ThreatIngestor] --> Z(ThreatKB)
+X --> W(Crawler)
+X --> V(Automated Analysis)

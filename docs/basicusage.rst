@@ -68,15 +68,9 @@ Standard Case
 Generally, you are going to want multiple sources feeding into one or more
 operators. Let's consider this standard use case:
 
-.. code-block:: mermaid
-
-    graph LR
-    A(Twitter C2 List) --> X
-    B(Twitter C2 Search) --> X
-    C(Vendor X Blog) --> X
-    D(Vendor Y Blog) --> X
-
-    X[ThreatIngestor] --> Z(ThreatKB)
+.. image:: _static/mermaid-standard.svg
+   :width: 80%
+   :align: center
 
 Create your ``config.ini``:
 
