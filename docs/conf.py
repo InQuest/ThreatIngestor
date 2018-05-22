@@ -12,15 +12,15 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = u'ThreatIngestor'
-copyright = u'2018, InQuest Labs'
+copyright = u'2018 InQuest, LLC'
 author = u'InQuest Labs'
 
 # The short X.Y version
