@@ -38,7 +38,7 @@ accomplishes all of that:
 .. code-block:: ini
 
     [main]
-    daemon = false
+    daemon = true
     sleep = 900
 
     [source:twitter-feed-c2]
@@ -147,7 +147,7 @@ accomplishes all that:
 .. code-block:: ini
 
     [main]
-    daemon = false
+    daemon = true
     sleep = 900
 
     [source:twitter-feed-c2]
