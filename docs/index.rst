@@ -49,6 +49,7 @@ User Guide
 
     workflows
     developing
+    api
     contributing
 
 Indices and tables

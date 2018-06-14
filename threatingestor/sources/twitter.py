@@ -2,13 +2,13 @@ from __future__ import absolute_import
 
 import twitter
 
-from sources import Source
+from threatingestor.sources import Source
 
 
 TWEET_URL = 'https://twitter.com/statuses/{id}'
 
 
-class Twitter(Source):
+class Plugin(Source):
 
     def __init__(self, name, token, token_key, con_secret_key, con_secret, **kwargs):
         self.name = name

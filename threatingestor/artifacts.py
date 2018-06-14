@@ -1,12 +1,12 @@
 import re
 import ipaddress
 
-import iocextract
-
 try:
     from urllib.parse import urlparse
 except ImportError:
      from urlparse import urlparse
+
+import iocextract
 
 class Artifact(object):
     """Base class"""

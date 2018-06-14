@@ -4,14 +4,14 @@ try:
 except ImportError:
     from mock import patch
 
-import sources.twitter
+import threatingestor.sources.twitter
 
 
 class TestTwitter(unittest.TestCase):
 
     @patch('twitter.Twitter')
     def setUp(self, Twitter):
-        self.twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e')
+        self.twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e')
 
     def teadDown(self):
         self.twitter.api.reset_mock()
@@ -19,22 +19,22 @@ class TestTwitter(unittest.TestCase):
     @patch('twitter.Twitter')
     def test_init_detects_search_type(self, Twitter):
         # default to search
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e')
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
         self.assertEquals(twitter.name, 'a')
 
         # slug and owner_screen_name => list
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', slug='test', owner_screen_name='test')
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test', owner_screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'statuses')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', slug='test')
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', owner_screen_name='test')
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', owner_screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'tweets')
 
         # screen_name or user_id => user
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', screen_name='test')
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', screen_name='test')
         self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
-        twitter = sources.twitter.Twitter('a', 'b', 'c', 'd', 'e', user_id=1)
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', user_id=1)
         self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
 
     def test_run_respects_saved_state(self):
@@ -109,7 +109,7 @@ class TestTwitter(unittest.TestCase):
             },
         ]
         # note: using hxxp above just to get the expanded url to be processed as
-        # an obfuscated url and added to the artifacts list
+        # an obfuscated url and added to the threatingestor.artifacts list
         saved_state, artifact_list = self.twitter.run(None)
         self.assertEquals(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])

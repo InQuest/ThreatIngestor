@@ -7,33 +7,33 @@ import os
 
 import httpretty
 
-import sources.git
+import threatingestor.sources.git
 
 
 class TestGit(unittest.TestCase):
 
     def setUp(self):
-        self.git = sources.git.Git('mygit', 'https://example.mock/user/repo.git', '/tmp/test/repo')
+        self.git = threatingestor.sources.git.Plugin('mygit', 'https://example.mock/user/repo.git', '/tmp/test/repo')
 
     @patch('subprocess.check_output')
     def test_internal_git_cmd_calls_subprocess_git(self, check_output):
-        sources.git._git_cmd(['test'])
+        threatingestor.sources.git._git_cmd(['test'])
         check_output.assert_called_once_with(['git', 'test'])
 
     @patch('subprocess.check_output')
     @patch('os.chdir')
     def test_internal_git_cmd_chdir_manages_working_dir(self, chdir, check_output):
         current_dir = os.getcwd()
-        sources.git._git_cmd_chdir('/test', ['test'])
+        threatingestor.sources.git._git_cmd_chdir('/test', ['test'])
 
         chdir.assert_any_call('/test')
         chdir.assert_called_with(current_dir)
         check_output.assert_called_once_with(['git', 'test'])
 
-    @patch('sources.git.git_pull')
-    @patch('sources.git.git_latest_hash')
-    @patch('sources.git.git_diff_names')
-    @patch('sources.git.open')
+    @patch('threatingestor.sources.git.git_pull')
+    @patch('threatingestor.sources.git.git_latest_hash')
+    @patch('threatingestor.sources.git.git_diff_names')
+    @patch('threatingestor.sources.git.open')
     def test_run_with_saved_state_pulls_diffs_parses(self, m_open, git_diff_names, git_latest_hash, git_pull):
         git_latest_hash.return_value = 'test_latest'
         git_diff_names.return_value = 'test_file\ntest_file.rule'
@@ -48,10 +48,10 @@ class TestGit(unittest.TestCase):
         self.assertEquals(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 
-    @patch('sources.git.git_clone')
-    @patch('sources.git.git_latest_hash')
-    @patch('sources.git.git_ls_files')
-    @patch('sources.git.open')
+    @patch('threatingestor.sources.git.git_clone')
+    @patch('threatingestor.sources.git.git_latest_hash')
+    @patch('threatingestor.sources.git.git_ls_files')
+    @patch('threatingestor.sources.git.open')
     def test_run_without_saved_state_clones_lists_parses(self, m_open, git_ls_files, git_latest_hash, git_clone):
         git_latest_hash.return_value = 'test_latest'
         git_ls_files.return_value = 'test_file\ntest_file.yar'
@@ -66,9 +66,9 @@ class TestGit(unittest.TestCase):
         self.assertEquals(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 
-    @patch('sources.git.git_pull')
-    @patch('sources.git.git_latest_hash')
-    @patch('sources.git.git_diff_names')
+    @patch('threatingestor.sources.git.git_pull')
+    @patch('threatingestor.sources.git.git_latest_hash')
+    @patch('threatingestor.sources.git.git_diff_names')
     def test_run_with_saved_state_returns_early_if_nothing_new(self, git_diff_names, git_latest_hash, git_pull):
         git_latest_hash.return_value = 'test_saved'
         git_diff_names.return_value = ''

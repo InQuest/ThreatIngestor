@@ -1,23 +1,21 @@
-from __future__ import absolute_import
-
 import csv
 
-import artifacts
-from operators import Operator
+import threatingestor.artifacts
+from threatingestor.operators import Operator
 
-class CSV(Operator):
+class Plugin(Operator):
     """Operator for output to flat CSV file"""
 
     def __init__(self, filename, artifact_types=None, filter_string=None, allowed_sources=None):
         """CSV operator"""
         self.filename = filename
 
-        super(CSV, self).__init__(artifact_types, filter_string, allowed_sources)
+        super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [
-            artifacts.Domain,
-            artifacts.Hash,
-            artifacts.IPAddress,
-            artifacts.URL,
+            threatingestor.artifacts.Domain,
+            threatingestor.artifacts.Hash,
+            threatingestor.artifacts.IPAddress,
+            threatingestor.artifacts.URL,
         ]
 
     def handle_artifact(self, artifact):

@@ -1,10 +1,8 @@
-from __future__ import absolute_import
-
 import os
 import sys
 import subprocess
 
-from sources import Source
+from threatingestor.sources import Source
 
 YARA_FILE_EXTS = [
     '.rule',
@@ -13,7 +11,7 @@ YARA_FILE_EXTS = [
     '.rules',
 ]
 
-class Git(Source):
+class Plugin(Source):
 
     def __init__(self, name, url, local_path):
         self.name = name

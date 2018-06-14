@@ -1,17 +1,17 @@
-from __future__ import absolute_import
 import sys
 import json
+
+import requests
+
+from threatingestor.exceptions import DependencyError
+from threatingestor.sources import Source
 
 try:
     import boto3
 except ImportError:
-    sys.stderr.write("warn: dependency boto3 required for SQS source is not installed\n")
+    raise DependencyError("Dependency boto3 required for SQS operator is not installed")
 
-import requests
-
-from sources import Source
-
-class SQS(Source):
+class Plugin(Source):
     """Source for Amazon SQS"""
 
     def __init__(self, name, aws_access_key_id, aws_secret_access_key, aws_region, queue_name):

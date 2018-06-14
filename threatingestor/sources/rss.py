@@ -1,13 +1,13 @@
 import feedparser
 import bs4
 
-from sources import Source
+from threatingestor.sources import Source
 
 
 AFTERIOC = 'Indicators of Compromise'
 
 
-class RSS(Source):
+class Plugin(Source):
 
     def __init__(self, name, url, feed_type):
         self.name = name

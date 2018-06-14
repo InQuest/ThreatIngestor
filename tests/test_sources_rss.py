@@ -2,7 +2,7 @@ import unittest
 
 import httpretty
 
-import sources.rss
+import threatingestor.sources.rss
 
 
 class TestRSS(unittest.TestCase):
@@ -57,7 +57,7 @@ class TestRSS(unittest.TestCase):
     """
 
     def setUp(self):
-        self.rss = sources.rss.RSS('myrss', 'http://rss.mock/rss.xml', 'messy')
+        self.rss = threatingestor.sources.rss.Plugin('myrss', 'http://rss.mock/rss.xml', 'messy')
 
     @httpretty.activate
     def test_run_respects_saved_state(self):
@@ -89,9 +89,9 @@ class TestRSS(unittest.TestCase):
         httpretty.register_uri(httpretty.GET, "http://rss.mock/rss.xml",
                 body=self.RSS_CONTENT)
 
-        messy = sources.rss.RSS('myrss', 'http://rss.mock/rss.xml', 'messy')
-        clean = sources.rss.RSS('testrss', 'http://rss.mock/rss.xml', 'clean')
-        afterioc = sources.rss.RSS('rsss', 'http://rss.mock/rss.xml', 'afterioc')
+        messy = threatingestor.sources.rss.Plugin('myrss', 'http://rss.mock/rss.xml', 'messy')
+        clean = threatingestor.sources.rss.Plugin('testrss', 'http://rss.mock/rss.xml', 'clean')
+        afterioc = threatingestor.sources.rss.Plugin('rsss', 'http://rss.mock/rss.xml', 'afterioc')
 
         saved_state, artifacts = messy.run(None)
         self.assertEquals(len(artifacts), 8)
@@ -132,7 +132,7 @@ class TestRSS(unittest.TestCase):
         self.assertIn('http://example.com/bad/url/10', [str(x) for x in artifacts])
         self.assertIn('https://www.rss.mock/some/url', [a.reference_link for a in artifacts])
 
-        afterioc = sources.rss.RSS('test', 'http://rss.mock/rss.xml', 'afterioc')
+        afterioc = threatingestor.sources.rss.Plugin('test', 'http://rss.mock/rss.xml', 'afterioc')
         saved_state, artifacts = afterioc.run(None)
 
         # fallback to url
@@ -146,7 +146,7 @@ class TestRSS(unittest.TestCase):
 
         saved_state, artifacts = self.rss.run(None)
 
-        self.assertEquals(saved_state, u'Fri, 11 Oct 2017 17:00:00 +0000')
+        self.assertEquals(saved_state, 'Fri, 11 Oct 2017 17:00:00 +0000')
 
     @httpretty.activate
     def test_run_returns_artifacts_correctly(self):
@@ -155,7 +155,7 @@ class TestRSS(unittest.TestCase):
 
         saved_state, artifacts = self.rss.run(None)
 
-        self.assertEquals(saved_state, u'Fri, 11 Oct 2017 17:00:00 +0000')
+        self.assertEquals(saved_state, 'Fri, 11 Oct 2017 17:00:00 +0000')
         self.assertEquals(len(artifacts), 8)
         self.assertIn('example.com', [str(x) for x in artifacts])
         self.assertIn('example.net', [str(x) for x in artifacts])

@@ -1,21 +1,21 @@
 import unittest
 
-import sources
-import artifacts
+import threatingestor.sources
+import threatingestor.artifacts
 
 
 class TestSources(unittest.TestCase):
 
     def setUp(self):
         # patch init
-        self.orig_init = sources.Source.__init__
-        sources.Source.__init__ = lambda x: None
-        self.source = sources.Source()
+        self.orig_init = threatingestor.sources.Source.__init__
+        threatingestor.sources.Source.__init__ = lambda x: None
+        self.source = threatingestor.sources.Source()
         self.source.name = 'test'
 
     def tearDown(self):
         # unpatch init
-        sources.Source.__init__ = self.orig_init
+        threatingestor.sources.Source.__init__ = self.orig_init
 
     def test_init_raises_not_implemented(self):
         with self.assertRaises(NotImplementedError):
@@ -26,18 +26,18 @@ class TestSources(unittest.TestCase):
             self.source.run(None)
 
     def test_truncate_length_is_respected(self):
-        orig_truncate = sources.TRUNCATE_LENGTH
-        sources.TRUNCATE_LENGTH = 15
+        orig_truncate = threatingestor.sources.TRUNCATE_LENGTH
+        threatingestor.sources.TRUNCATE_LENGTH = 15
         content = '123.45.67.89 0 12.33.45.67 890'
 
         artifact_list = self.source.process_element(content, 'link')
         self.assertEquals(artifact_list[0].reference_text, content[:15] + '...')
 
-        sources.TRUNCATE_LENGTH = 8
+        threatingestor.sources.TRUNCATE_LENGTH = 8
         artifact_list = self.source.process_element(content, 'link')
         self.assertEquals(artifact_list[0].reference_text, content[:8] + '...')
 
-        sources.TRUNCATE_LENGTH = orig_truncate
+        threatingestor.sources.TRUNCATE_LENGTH = orig_truncate
 
     def test_content_is_preprocessed(self):
         content = 'blah[.]com/test and test [.] com'
@@ -54,23 +54,23 @@ class TestSources(unittest.TestCase):
 
         artifact_list = self.source.process_element(content, 'link')
         self.assertEquals(str(artifact_list[0]), content.replace('xx', 'tt'))
-        self.assertTrue(isinstance(artifact_list[0], artifacts.URL))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.URL))
         self.assertEquals(str(artifact_list[1]), 'someurl.com')
-        self.assertTrue(isinstance(artifact_list[1], artifacts.Domain))
+        self.assertTrue(isinstance(artifact_list[1], threatingestor.artifacts.Domain))
 
     def test_ips_are_extracted(self):
         content = '232.23.21.12'
 
         artifact_list = self.source.process_element(content, 'link')
         self.assertEquals(str(artifact_list[0]), content)
-        self.assertTrue(isinstance(artifact_list[0], artifacts.IPAddress))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.IPAddress))
 
     def test_yara_sigs_are_extracted(self):
         content = 'rule testRule { condition: true }'
 
         artifact_list = self.source.process_element(content, 'link')
         self.assertEquals(str(artifact_list[0]), content)
-        self.assertTrue(isinstance(artifact_list[0], artifacts.YARASignature))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.YARASignature))
 
     def test_urls_matching_reference_link_are_discarded(self):
         content = 'hxxp://someurl.com/test hxxp://noturl.com/test'
@@ -125,9 +125,9 @@ class TestSources(unittest.TestCase):
         self.assertIn('01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b', [str(h) for h in artifact_list])
         self.assertIn('be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09',
                       [str(h) for h in artifact_list])
-        self.assertTrue(isinstance(artifact_list[0], artifacts.Hash))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.Hash))
 
     def test_tasks_are_added(self):
         artifact_list = self.source.process_element('', 'test')
         self.assertIn('Manual Task: test', [str(h) for h in artifact_list])
-        self.assertTrue(isinstance(artifact_list[0], artifacts.Task))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.Task))

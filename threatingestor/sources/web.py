@@ -1,11 +1,9 @@
-from __future__ import absolute_import
-
 import requests
 
-from sources import Source
+from threatingestor.sources import Source
 
 
-class Web(Source):
+class Plugin(Source):
 
     def __init__(self, name, url):
         self.name = name

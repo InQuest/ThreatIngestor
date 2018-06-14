@@ -1,12 +1,19 @@
 import sys
 import time
 
-import config
+import threatingestor.config
+from threatingestor.exceptions import IngestorError
 
 class Ingestor:
 
     def __init__(self, config_file):
-        self.config = config.Config(config_file)
+        try:
+            self.config = config.Config(config_file)
+        except IngestorError as e:
+            # error loading config
+            sys.stderr.write(e.message)
+            sys.exit(1)
+
         self.sources = dict([(name, source(**kwargs)) for name, source, kwargs in self.config.sources()])
         self.operators = dict([(name, operator(**kwargs)) for name, operator, kwargs in self.config.operators()])
 
@@ -29,11 +36,13 @@ class Ingestor:
             self.run_once()
             time.sleep(self.config.sleep())
 
-
-if __name__ == "__main__":
+def main():
     if len(sys.argv) < 2:
         print("You must specify a config file")
         sys.exit(1)
 
     app = Ingestor(sys.argv[1])
     app.run()
+
+if __name__ == "__main__":
+    main()

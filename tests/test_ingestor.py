@@ -4,11 +4,11 @@ try:
 except ImportError:
     from mock import Mock, patch
 
-import ingestor
+import threatingestor
 
 class TestIngestor(unittest.TestCase):
 
-    @patch('config.Config')
+    @patch('threatingestor.config.Config')
     def setUp(self, Config):
         mock_source_operator = Mock()
         mock_source_operator.return_value.run.return_value = (1,2)
@@ -22,9 +22,9 @@ class TestIngestor(unittest.TestCase):
             ['test-csv', mock_source_operator, {'filename': 'test'}],
         ]
 
-        self.app = ingestor.Ingestor('test')
+        self.app = threatingestor.Ingestor('test')
 
-    @patch('config.Config')
+    @patch('threatingestor.config.Config')
     def test_init_creates_sources_operators_dicts(self, Config):
         attrs = {
             'sources.return_value': [
@@ -38,7 +38,7 @@ class TestIngestor(unittest.TestCase):
         }
         Config.return_value.configure_mock(**attrs)
 
-        app = ingestor.Ingestor('test')
+        app = threatingestor.Ingestor('test')
         self.assertEquals(app.sources['test-twitter'].q, 'test') 
         self.assertEquals(app.operators['test-csv'].filename, 'test') 
         self.assertEquals(len(app.sources), 2)

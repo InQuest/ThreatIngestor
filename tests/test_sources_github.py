@@ -7,7 +7,7 @@ import datetime
 
 import responses
 
-import sources.github
+import threatingestor.sources.github
 
 
 API_RESPONSE_DATA = """
@@ -55,12 +55,12 @@ API_RESPONSE_DATA = """
 class TestGitHub(unittest.TestCase):
 
     def setUp(self):
-        self.github = sources.github.GitHub('mygithub', 'CVE-2018-')
+        self.github = threatingestor.sources.github.Plugin('mygithub', 'CVE-2018-')
 
-    @patch('sources.github.datetime')
+    @patch('threatingestor.sources.github.datetime')
     @responses.activate
     def test_run_returns_saved_state_tasks(self, mock_datetime):
-        responses.add(responses.GET, sources.github.SEARCH_URL,
+        responses.add(responses.GET, threatingestor.sources.github.SEARCH_URL,
                 body=API_RESPONSE_DATA)
         mock_datetime.datetime.utcnow.return_value = datetime.datetime(2018, 4, 30, 17, 5, 13, 194840)
         mock_datetime.datetime.side_effect = lambda *args, **kw: datetime.datetime(*args, **kw)

@@ -1,36 +1,15 @@
+import importlib
 try:
     import ConfigParser as configparser
 except ImportError:
     #py3
     import configparser
 
-import artifacts
-import sources.twitter
-import sources.rss
-import sources.sqs
-import sources.web
-import sources.git
-import sources.github
-import operators.threatkb
-import operators.csv
-import operators.sqs
+from threatingestor.exceptions import PluginError
+import threatingestor.artifacts
 
-SOURCE_MAP = {
-    # Add new source plugins here
-    'twitter': sources.twitter.Twitter,
-    'rss': sources.rss.RSS,
-    'sqs': sources.sqs.SQS,
-    'web': sources.web.Web,
-    'git': sources.git.Git,
-    'github': sources.github.GitHub,
-}
-
-OPERATOR_MAP = {
-    # Add new operator plugins here
-    'threatkb': operators.threatkb.ThreatKB,
-    'csv': operators.csv.CSV,
-    'sqs': operators.sqs.SQS,
-}
+SOURCE = 'threatingestor.sources'
+OPERATOR = 'threatingestor.operators'
 
 INTERNAL_OPTIONS = [
     'saved_state',
@@ -48,6 +27,14 @@ class Config:
         self.filename = filename
         self.config = configparser.ConfigParser()
         self.config.read(filename)
+
+    def _load_plugin(self, plugin_type, plugin):
+        """Returns plugin class or raises an exception"""
+        try:
+            module = importlib.import_module('.'.join([plugin_type, plugin]))
+            return module.Plugin
+        except (ImportError, AttributeError):
+            raise PluginError("No valid plugin '{p}' in '{t}'".format(p=plugin, t=plugin_type))
 
     def daemon(self):
         """Returns boolean, are we daemonizing?"""
@@ -67,7 +54,10 @@ class Config:
                 for option in self.config.options(section):
                     if option not in INTERNAL_OPTIONS:
                         kwargs[option] = self.config.get(section, option)
-                sources.append((section, SOURCE_MAP[self.config.get(section, 'module')], kwargs))
+
+                # load and initialize the plugin
+                sources.append((section, self._load_plugin(SOURCE, self.config.get(section, 'module')), kwargs))
+
         return sources
 
     def operators(self):
@@ -84,7 +74,7 @@ class Config:
                             artifact_types = []
                             for artifact in types_list:
                                 try:
-                                    artifact_types.append(artifacts.STRING_MAP[artifact.lower().strip()])
+                                    artifact_types.append(threatingestor.artifacts.STRING_MAP[artifact.lower().strip()])
                                 except KeyError:
                                     # ignore invalid artifact types
                                     pass
@@ -96,7 +86,10 @@ class Config:
                             kwargs[option] = [s.strip() for s in self.config.get(section, option).split(',')]
                         else:
                             kwargs[option] = self.config.get(section, option)
-                operators.append((section, OPERATOR_MAP[self.config.get(section, 'module')], kwargs))
+
+                # load and initialize the plugin
+                operators.append((section, self._load_plugin(OPERATOR, self.config.get(section, 'module')), kwargs))
+
         return operators
 
     def save_state(self, source, saved_state):

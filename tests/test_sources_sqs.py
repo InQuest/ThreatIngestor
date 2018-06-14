@@ -7,15 +7,15 @@ import json
 
 import httpretty
 
-import sources.sqs
-import artifacts
+import threatingestor.sources.sqs
+import threatingestor.artifacts
 
 
 class TestSQS(unittest.TestCase):
 
     @patch('boto3.client')
     def setUp(self, boto3_client):
-        self.sqs = sources.sqs.SQS('a', 'b', 'c', 'd', 'e')
+        self.sqs = threatingestor.sources.sqs.Plugin('a', 'b', 'c', 'd', 'e')
 
     @httpretty.activate
     def test_run_reads_messages_deletes_returns_artifacts(self):

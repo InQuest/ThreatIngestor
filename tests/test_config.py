@@ -10,18 +10,18 @@ except ImportError:
     from mock import mock_open, patch
     CONFIGPARSER = 'ConfigParser.ConfigParser'
 
-import config
-import artifacts
-import sources.rss
-import operators.csv
-import operators.threatkb
+import threatingestor.config
+import threatingestor.artifacts
+import threatingestor.sources.rss
+import threatingestor.operators.csv
+import threatingestor.operators.threatkb
 
 
 class TestConfig(unittest.TestCase):
 
     @patch(CONFIGPARSER)
     def setUp(self, ConfigParser):
-        self.config = config.Config('test')
+        self.config = threatingestor.config.Config('test')
 
     def test_daemon_returns_main_daemon_bool(self):
         self.config.config.getboolean.return_value = True
@@ -46,8 +46,8 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module']
         self.config.config.get.return_value = 'rss'
         expected_sources = [
-            ('source:test-one', sources.rss.RSS, {'name': 'test-one'}),
-            ('source:test-two', sources.rss.RSS, {'name': 'test-two'}),
+            ('source:test-one', threatingestor.sources.rss.Plugin, {'name': 'test-one'}),
+            ('source:test-two', threatingestor.sources.rss.Plugin, {'name': 'test-two'}),
         ]
         self.assertEquals(self.config.sources(), expected_sources)
 
@@ -58,7 +58,7 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module', 'saved_state', 'another_one']
         self.config.config.get.return_value = 'rss'
         expected_sources = [
-            ('source:test-one', sources.rss.RSS, {'another_one': 'rss', 'name': 'test-one'}),
+            ('source:test-one', threatingestor.sources.rss.Plugin, {'another_one': 'rss', 'name': 'test-one'}),
         ]
         self.assertEquals(self.config.sources(), expected_sources)
 
@@ -73,8 +73,8 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module']
         self.config.config.get.return_value = 'csv'
         expected_operators = [
-            ('operator:test-one', operators.csv.CSV, {}),
-            ('operator:test-three', operators.csv.CSV, {}),
+            ('operator:test-one', threatingestor.operators.csv.Plugin, {}),
+            ('operator:test-three', threatingestor.operators.csv.Plugin, {}),
         ]
         self.assertEquals(self.config.operators(), expected_operators)
 
@@ -85,7 +85,7 @@ class TestConfig(unittest.TestCase):
         self.config.config.options.return_value = ['module', 'saved_state', 'another_one']
         self.config.config.get.return_value = 'csv'
         expected_operators = [
-            ('operator:test-one', operators.csv.CSV, {'another_one': 'csv'}),
+            ('operator:test-one', threatingestor.operators.csv.Plugin, {'another_one': 'csv'}),
         ]
         self.assertEquals(self.config.operators(), expected_operators)
 
@@ -93,7 +93,7 @@ class TestConfig(unittest.TestCase):
         self.config.config.set.assert_not_called()
 
         m = mock_open()
-        with patch('config.open', m, create=True):
+        with patch('threatingestor.config.open', m, create=True):
             m.assert_not_called()
             self.config.save_state('test', 'state')
             self.config.config.set.assert_called_once()
@@ -125,16 +125,16 @@ class TestConfig(unittest.TestCase):
         if sys.version_info[0] == 3:
             open_func = 'builtins.open'
         with patch(open_func, return_value=io.BytesIO(data)):
-            config_obj = config.Config('test')
+            config_obj = threatingestor.config.Config('test')
             expected_operators = [
-                ('operator:test-one', operators.threatkb.ThreatKB, {'another_one': 'test', 'artifact_types': [
-                    artifacts.URL,
-                    artifacts.Domain,
-                    artifacts.IPAddress,
-                    artifacts.YARASignature,
+                ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'artifact_types': [
+                    threatingestor.artifacts.URL,
+                    threatingestor.artifacts.Domain,
+                    threatingestor.artifacts.IPAddress,
+                    threatingestor.artifacts.YARASignature,
                 ]}),
-                ('operator:test-operator-two', operators.csv.CSV, {'artifact_types': [artifacts.IPAddress]}),
-                ('operator:test-no-types', operators.csv.CSV, {}),
+                ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'artifact_types': [threatingestor.artifacts.IPAddress]}),
+                ('operator:test-no-types', threatingestor.operators.csv.Plugin, {}),
             ]
             self.assertEquals(config_obj.operators(), expected_operators)
 
@@ -159,15 +159,15 @@ class TestConfig(unittest.TestCase):
         if sys.version_info[0] == 3:
             open_func = 'builtins.open'
         with patch(open_func, return_value=io.BytesIO(data)):
-            config_obj = config.Config('test')
+            config_obj = threatingestor.config.Config('test')
             expected_operators = [
-                ('operator:test-one', operators.threatkb.ThreatKB, {'another_one': 'test', 'filter_string': '(some|regex.*)', 'artifact_types': [
-                    artifacts.URL,
-                    artifacts.Domain,
-                    artifacts.IPAddress,
-                    artifacts.YARASignature,
+                ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'filter_string': '(some|regex.*)', 'artifact_types': [
+                    threatingestor.artifacts.URL,
+                    threatingestor.artifacts.Domain,
+                    threatingestor.artifacts.IPAddress,
+                    threatingestor.artifacts.YARASignature,
                 ]}),
-                ('operator:test-operator-two', operators.csv.CSV, {'filter_string': 'is_domain, not is_ip'}),
-                ('operator:test-no-filter', operators.csv.CSV, {}),
+                ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'filter_string': 'is_domain, not is_ip'}),
+                ('operator:test-no-filter', threatingestor.operators.csv.Plugin, {}),
             ]
             self.assertEquals(config_obj.operators(), expected_operators)

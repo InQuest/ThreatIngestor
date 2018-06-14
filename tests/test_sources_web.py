@@ -2,13 +2,13 @@ import unittest
 
 import httpretty
 
-import sources.web
+import threatingestor.sources.web
 
 
 class TestWeb(unittest.TestCase):
 
     def setUp(self):
-        self.web = sources.web.Web('myweb', 'http://example.mock/list.txt')
+        self.web = threatingestor.sources.web.Plugin('myweb', 'http://example.mock/list.txt')
 
     @httpretty.activate
     def test_run_with_200(self):

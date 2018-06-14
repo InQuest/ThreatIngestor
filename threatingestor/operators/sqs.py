@@ -1,16 +1,16 @@
-from __future__ import absolute_import
 import sys
 import json
+
+from threatingestor.exceptions import DependencyError
+from threatingestor.operators import Operator
+import threatingestor.artifacts
 
 try:
     import boto3
 except ImportError:
-    sys.stderr.write("warn: dependency boto3 required for SQS operator is not installed\n")
+    raise DependencyError("Dependency boto3 required for SQS operator is not installed")
 
-import artifacts
-from operators import Operator
-
-class SQS(Operator):
+class Plugin(Operator):
     """Operator for Amazon SQS"""
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region, queue_name, **kwargs):
@@ -21,23 +21,23 @@ class SQS(Operator):
         # kwargs are used to dynamically form message body
         self.kwargs = kwargs
 
-        super(SQS, self).__init__(kwargs.get('artifact_types'), kwargs.get('filter_string'), kwargs.get('allowed_sources'))
+        super(Plugin, self).__init__(kwargs.get('artifact_types'), kwargs.get('filter_string'), kwargs.get('allowed_sources'))
         self.artifact_types = kwargs.get('artifact_types') or [
-            artifacts.URL,
+            threatingestor.artifacts.URL,
         ]
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
         format_fn = None
-        if isinstance(artifact, artifacts.URL):
+        if isinstance(artifact, threatingestor.artifacts.URL):
             format_fn = _format_value_url
-        elif isinstance(artifact, artifacts.Hash):
+        elif isinstance(artifact, threatingestor.artifacts.Hash):
             format_fn = _format_value_hash
-        elif isinstance(artifact, artifacts.IPAddress):
+        elif isinstance(artifact, threatingestor.artifacts.IPAddress):
             format_fn = _format_value_ipaddress
-        elif isinstance(artifact, artifacts.Domain):
+        elif isinstance(artifact, threatingestor.artifacts.Domain):
             format_fn = _format_value_domain
-        elif isinstance(artifact, artifacts.YARASignature):
+        elif isinstance(artifact, threatingestor.artifacts.YARASignature):
             format_fn = _format_value_yarasignature
 
         if format_fn:
