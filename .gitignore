@@ -4,6 +4,7 @@
 *.csv
 *.err
 *.log
+*.egg-info/
 
 # dev sources
 threatkb.py
