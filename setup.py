@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
@@ -27,6 +27,7 @@ setup(
     url='https://github.com/InQuest/python-iocextract',
     author='InQuest Labs',
     author_email='labs@inquest.net',
+    packages=find_packages(),
     classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
