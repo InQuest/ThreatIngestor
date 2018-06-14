@@ -16,40 +16,33 @@ Source Plugins
 
 To add support for a new source, simply create a new Python file in the
 ``sources`` folder (e.g. ``examplesource.py``) and extend the ``sources.Source``
-class, overwriting both the ``__init__`` and ``run`` methods::
+class with a class called ``Plugin``, overwriting both the ``__init__`` and
+``run`` methods:
 
-    from sources import Source
+.. code-block:: python
 
-    class ExampleSource(Source):
+   from threatingestor.sources import Source
 
-        def __init__(self, name, my_required_arg):
-            """Args should be url, auth, etc, whatever is needed to set up the object.
+   class Plugin(Source):
 
-            The name argument is required for all Source plugins, and is used internally.
-            """
-            self.name = name
-            self.my_required_arg = my_required_arg
+       def __init__(self, name, my_required_arg):
+           """Args should be url, auth, etc, whatever is needed to set up the object.
 
-        def run(self, saved_state):
-            """Run and return (saved_state, list(Artifact))"""
-            artifacts = []
+           The name argument is required for all Source plugins, and is used internally.
+           """
+           self.name = name
+           self.my_required_arg = my_required_arg
 
-            return saved_state, artifacts
+       def run(self, saved_state):
+           """Run and return (saved_state, list(Artifact))"""
+           artifact_list = []
+
+           return saved_state, artifact_list
 
 
 You will most likely want to use the ``sources.Source.process_element`` method to
 build the ``artifacts`` list. Check inline documentation, and see
 ``sources/twitter.py`` and ``sources/rss.py`` for examples.
-
-Once your module is complete, include it in ``config.py`` and it's ready to use::
-
-    # in config.py
-    import sources.examplesource
-
-    SOURCE_MAP = {
-        ...,
-        'examplesource': sources.examplesource.ExampleSource,
-    }
 
 Any arguments specified in ``__init__`` can be passed in from correspondingly
 named keys in the ``config.ini`` section at runtime::
@@ -67,37 +60,29 @@ Operator Plugins
 Once artifacts are collected by a source plugin, they're sent to any
 configured operator plugins for processing or export. Adding an operator
 plugin is much the same as adding a source. Create a Python file in the
-``operators`` folder and extend the ``operators.Operator`` class, overwriting
-the ``__init__`` and ``handle_artifact`` methods::
+``operators`` folder and extend the ``operators.Operator`` class, with a class
+named ``Plugin``, overwriting the ``__init__`` and ``handle_artifact`` methods:
 
-    import artifacts
-    from operators import Operator
+.. code-block:: python
 
-    class ExampleOperator(Operator):
+   import threatingestor.artifacts
+   from threatingestor.operators import Operator
 
-        def __init__(self, my_required_arg, artifact_types=None, filter_string=None, allowed_sources=None):
-            """Args should be url, auth, etc, whatever is needed to set up the object.
+   class Plugin(Operator):
 
-            Set self.artifact_types to a list of Artifacts supported by the plugin.
-            """
-            super(ExampleOperator, self).__init__(artifact_types, filter_string, allowed_sources)
-            self.artifact_types = artifact_types or [artifacts.IPAddress, artifacts.Domain]
+       def __init__(self, my_required_arg, artifact_types=None, filter_string=None, allowed_sources=None):
+           """Args should be url, auth, etc, whatever is needed to set up the object.
 
-        def handle_artifact(self, artifact):
-            """Override with the same signature"""
-            # process artifact
+           Set self.artifact_types to a list of Artifacts supported by the plugin.
+           """
+           super(ExampleOperator, self).__init__(artifact_types, filter_string, allowed_sources)
+           self.artifact_types = artifact_types or [artifacts.IPAddress, artifacts.Domain]
+
+       def handle_artifact(self, artifact):
+           """Override with the same signature"""
+           # process artifact
 
 Operators will only be run on artifacts in their ``artifact_types`` list.
-
-Once your module is complete, include it in ``config.py`` and it's ready to use::
-
-    # in config.py
-    import operators.exampleoperator
-
-    OPERATOR_MAP = {
-        ...,
-        'exampleoperator': operators.exampleoperator.ExampleOperator,
-    }
 
 As with source modules, any arguments specified in ``__init__`` can be passed in
 from correspondingly named keys in the ``config.ini`` section at runtime::
