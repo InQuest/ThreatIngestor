@@ -1,6 +1,10 @@
 InQuest ThreatIngestor
 ======================
 
+.. image:: https://inquest.net/images/inquest-badge.svg
+    :target: https://inquest.net/
+    :alt: Developed by InQuest
+
 An extendable tool to extract and aggregate IOCs from threat feeds.
 
 Designed for use with `InQuest ThreatKB`_, but can be used without it.
