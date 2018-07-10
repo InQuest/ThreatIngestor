@@ -68,8 +68,7 @@ Standard Case
 Generally, you are going to want multiple sources feeding into one or more
 operators. Let's consider this standard use case:
 
-.. image:: _static/mermaid-standard.svg
-   :width: 80%
+.. image:: _static/mermaid-standard.png
    :align: center
 
 Create your ``config.ini``:

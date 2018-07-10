@@ -21,8 +21,7 @@ options <operator-plugins>` though, and you can now send *specific* artifacts
 to different operators depending on type, source, or advanced filters. Consider
 the following workflow:
 
-.. image:: _static/mermaid-multiple-operators.svg
-   :width: 80%
+.. image:: _static/mermaid-multiple-operators.png
    :align: center
 
 We want artifacts from "Twitter C2 List" and "Vendor X Blog" to go directly to
@@ -130,8 +129,7 @@ source, send them off to some SQS listener for processing, and that listener
 can send the processed content back into ThreatIngestor's input queue for
 extraction. Consider the following workflow:
 
-.. image:: _static/mermaid-full-circle.svg
-   :width: 80%
+.. image:: _static/mermaid-full-circle.png
    :align: center
 
 Here, we have two Twitter sources: our C2 list and a search for "pastebin.com
