@@ -82,7 +82,32 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'fixed_sidebar': 'true',
+#    'logo': 'inquest-logo.svg',
+    'font_family': '"Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif',
+    'head_font_family': '"Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif',
+    'logo_name': 'true',
+    'description': 'Extract and aggregate IOCs from threat feeds.',
+    'github_user': 'InQuest',
+    'github_repo': 'ThreatIngestor',
+    'github_type': 'star',
+    'show_powered_by': 'false',
+    'page_width': 'auto',
+    'sidebar_width': '320px',
+    'gray_1': '#23272d',
+    'gray_2': '#f7f9fc',
+    'gray_3': '#fefeff',
+    'pink_1': '#ff796e',
+    'pink_2': '#e12a26',
+    'body_text': '#1f292f',
+    'footer_text': '#919396',
+    'link': '#e03f26',
+    'link_hover': '#e03f26',
+    'sidebar_search_button': '#ccc',
+    'narrow_sidebar_bg': '#f0f2f5',
+    'narrow_sidebar_link': '#1f292f'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -97,7 +122,15 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': [
+        'about.html',
+        'localtoc.html',
+        'relations.html',
+        'links.html',
+        'searchbox.html',
+    ]
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

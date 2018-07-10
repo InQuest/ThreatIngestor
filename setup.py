@@ -22,9 +22,9 @@ setup(
           ]
     },
     license='BSD',
-    description='Advanced Indicator of Compromise (IOC) extractor',
+    description='Extract and aggregate IOCs from threat feeds.',
     long_description=README,
-    url='https://github.com/InQuest/python-iocextract',
+    url='https://github.com/InQuest/ThreatIngestor',
     author='InQuest Labs',
     author_email='labs@inquest.net',
     packages=find_packages(),

@@ -1,0 +1,195 @@
+/* -------------------------------------------------------------------------- */
+/* HTML DEFS ---------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+/* Proxima Nova Light = normal, 400 */
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('fonts/2C60D5_28_0.eot');
+  src: url('fonts/2C60D5_28_0.eot?#iefix') format('embedded-opentype'),
+  url('fonts/2C60D5_28_0.woff2') format('woff2'),
+  url('fonts/2C60D5_28_0.woff') format('woff'),
+  url('fonts/2C60D5_28_0.ttf') format('truetype');
+
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Proxima Nova Regular = bold, 700 */
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('fonts/2C60D5_25_0.eot');
+  src: url('fonts/2C60D5_25_0.eot?#iefix') format('embedded-opentype'),
+  url('fonts/2C60D5_25_0.woff2') format('woff2'),
+  url('fonts/2C60D5_25_0.woff') format('woff'),
+  url('fonts/2C60D5_25_0.ttf') format('truetype');
+
+  font-weight: bold;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+/* -------------------------------------------------------------------------- */
+/* TOP LEVEL ---------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+div.document {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  bottom: 67px;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+
+div.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  padding: 20px 20px 30px 20px;
+  margin: 0;
+  background: #23272d;
+}
+
+@media screen and (max-width: 875px) {
+  div.document {
+    display: block;
+    position: static;
+    border-top: 0;
+  }
+
+  div.footer {
+    display: block;
+    position: static;
+    border-top: solid 1px #ccc;
+    padding: 40px 0 0 0;
+    margin: 40px 0 0 0;
+    background: #fff;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* DOCUMENT LEVEL ----------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+div.sphinxsidebar,
+div.documentwrapper {
+  position: static;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+div.sphinxsidebar {
+  flex-grow: 0;
+  flex-shrink: 0;
+  color: #1f292f;
+  background: #f0f2f5;
+}
+
+div.documentwrapper {
+  background: #fff;
+}
+
+@media screen and (max-width: 875px) {
+  div.sphinxsidebar {
+    padding: 10px 20px;
+  }
+
+  div.documentwrapper {
+    padding: 0px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* SIDE BAR LEVEL ----------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+div.sphinxsidebarwrapper h1.logo {
+  background: transparent url(inquest-magnifying-glass@2x.png) left 5px no-repeat;
+  padding-left: 40px;
+}
+
+
+div.sphinxsidebar hr {
+  background: #ccc;
+}
+
+@media screen and (max-width: 875px) {
+  /* 'narrow_sidebar_fg': '#1f292f' doesn't work */
+  div.sphinxsidebar h3,
+  div.sphinxsidebar h4,
+  div.sphinxsidebar p,
+  div.sphinxsidebar h3 a {
+    color: #1f292f;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* INNER LEVEL -------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+div.bodywrapper {
+  margin-left: 0;
+}
+
+div.body {
+  min-width: auto;
+  max-width: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* BLOCKS ------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+.note,
+.warning {
+  border-radius: 5px;
+}
+
+.responsive-table table.docutils,
+.responsive-table table.docutils td,
+.responsive-table table.docutils th {
+  border-color: #dddddd;
+}
+
+.responsive-table table.docutils th {
+  white-space: nowrap;
+  vertical-align: top;
+  background-color: #f3f4f5;
+}
+
+.responsive-table table.docutils td {
+  color: #686e71;
+}
+
+.responsive-table .row-even {
+  background: #f7f9fc;
+}
+
+.responsive-table .row-odd {
+  background: #ffffff;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CUSTOM BLOCKS ------------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+.responsive-table {
+  overflow-x: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* SOCIAL ICONS ------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+svg.icon {
+    height: 15px;
+    width: 15px;
+    vertical-align: middle;
+}
