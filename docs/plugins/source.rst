@@ -250,6 +250,11 @@ Example Configuration
 
 .. code-block:: ini
 
+    [source:github-cve-repos]
+    module = github
+    saved_state =
+    search = CVE-2018-
+
 .. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
 .. _Twitter list: https://dev.twitter.com/rest/reference/get/lists/statuses
 .. _Twitter user timeline: https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
