@@ -38,7 +38,6 @@ User Guide
  .. toctree::
     :maxdepth: 2
 
-    plugins/overview
     plugins/source
     plugins/operator
 

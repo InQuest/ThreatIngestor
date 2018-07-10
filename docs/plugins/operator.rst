@@ -21,9 +21,9 @@ one of the operators listed below, or your :ref:`custom operator
 
 The following options are globally accepted by all operators:
 
-* ``allowed_sources``: Comma-separated list of source names to allow
-* ``artifact_types``: Comma-separated list of artifact types to allow
-* ``filter``: A regex, or comma-separated list of some `special keywords`
+* ``allowed_sources``: Comma-separated list of source names to allow.
+* ``artifact_types``: Comma-separated list of artifact types to allow.
+* ``filter``: A regex, or comma-separated list of some `special keywords`.
 
 All of these options are *inclusive*, so only artifacts matching the
 restrictions will be sent through the operator.
@@ -74,7 +74,7 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``csv``
-* ``filename`` (required): filename with relative or absolute path
+* ``filename`` (required): filename with relative or absolute path.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -97,10 +97,10 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``threatkb``
-* ``url`` (required): Base URL for your ThreatKB instance
-* ``token`` (required): Your ThreatKB authentication token
-* ``secret_key`` (required): Your ThreatKB authentication secret key
-* ``state`` (required): The State you want assigned to created artifacts
+* ``url`` (required): Base URL for your ThreatKB instance.
+* ``token`` (required): Your ThreatKB authentication token.
+* ``secret_key`` (required): Your ThreatKB authentication secret key.
+* ``state`` (required): The State you want assigned to created artifacts.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -128,10 +128,10 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``sqs``
-* ``aws_access_key_id`` (required): Your AWS access key ID
-* ``aws_secret_access_key`` (required): Your AWS secret access key
-* ``aws_region`` (required): Your AWS region name
-* ``queue_name`` (required): The name of the SQS queue you want to use
+* ``aws_access_key_id`` (required): Your AWS access key ID.
+* ``aws_secret_access_key`` (required): Your AWS secret access key.
+* ``aws_region`` (required): Your AWS region name.
+* ``queue_name`` (required): The name of the SQS queue you want to use.
 
 Any other options defined in the SQS operator section will be passed in to your
 queue as part of a JSON object, after string interpolation to fill in artifact
