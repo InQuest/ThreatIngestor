@@ -9,6 +9,7 @@ import httpretty
 
 import threatingestor.sources.sqs
 import threatingestor.artifacts
+import threatingestor.exceptions
 
 
 class TestSQS(unittest.TestCase):

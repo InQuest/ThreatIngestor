@@ -171,3 +171,23 @@ class TestConfig(unittest.TestCase):
                 ('operator:test-no-filter', threatingestor.operators.csv.Plugin, {}),
             ]
             self.assertEquals(config_obj.operators(), expected_operators)
+
+    def test_load_plugin_returns_plugin_class(self):
+        self.assertEqual(self.config._load_plugin(threatingestor.config.SOURCE, 'rss'),
+                         threatingestor.sources.rss.Plugin)
+        self.assertEqual(self.config._load_plugin(threatingestor.config.OPERATOR, 'csv'),
+                         threatingestor.operators.csv.Plugin)
+
+    @patch('importlib.import_module')
+    def test_load_plugin_raises_pluginerror_if_no_plugin(self, import_module):
+        # module doesn't exist
+        import_module.side_effect = ImportError
+
+        with self.assertRaises(threatingestor.exceptions.PluginError):
+            self.config._load_plugin(threatingestor.config.OPERATOR, 'csv')
+
+        # Plugin class doesn't exist
+        import_module.side_effect = AttributeError
+
+        with self.assertRaises(threatingestor.exceptions.PluginError):
+            self.config._load_plugin(threatingestor.config.OPERATOR, 'csv')
