@@ -9,7 +9,7 @@ Minimal Case
 ------------
 
 For the most basic ThreatIngestor setup, you will want to configure at least
-one :ref:`source <source-plugins>`, one :ref:`operator <operator-plugins>`, and daemon_.
+one source_, one operator_, and the daemon_.
 
 First create a new ``config.ini`` file, and add the ``[main]`` section:
 
@@ -26,6 +26,8 @@ Set ``sleep`` to the number of seconds to wait between each check - this will be
 Don't set the sleep too low, or you may run into rate limits or other issues.
 If in doubt, keep this above 900 (fifteen minutes).
 
+.. _source:
+.. _operator:
 Next, add your sources and operators. For easy testing, we'll use an :ref:`RSS
 <rss-source>` source and a :ref:`CSV <csv-operator>` operator:
 
@@ -56,8 +58,12 @@ It should write out a ``output.csv`` file that looks something like this:
     URL,http://purl.org/dc/elements/1.1,http://blog.inquest.net/blog/2018/02/07/cve-2018-4878-adobe-flash-0day-itw/,"\n On February 1st, Adobe published bulletin  APSA18-01  for CVE-2018-4878 describing a use-after-free (UAF) vulnerability affecting Flash ve..."
     ...
 
+
 Assuming you are running in daemon mode, ThreatIngestor will continue to check
-the blog and append new artifacts to the CSV as it finds them.
+the blog and append new artifacts to the CSV as it finds them.  For further configuration,
+continue to the Standard Use Case section (standard-use-case_) or see the detailed sections about
+:ref:`source plugins <source-plugins>`, and :ref:`operator <operator-plugins>`.
+
 
 .. _standard-use-case:
 
