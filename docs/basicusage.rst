@@ -26,9 +26,7 @@ Don't set the sleep too low, or you may run into rate limits or other issues.
 If in doubt, keep this above 900 (fifteen minutes).
 
 .. _source:
-.. _operator:
-Next, add your sources and operators. For easy testing, we'll use an :ref:`RSS
-<rss-source>` source and a :ref:`CSV <csv-operator>` operator:
+Next, add your sources. To configure the source, you should give it a unique name like ``[source:inquest-rss]``.  Each source uses a module like twitter, rss, or csv.  Choose the module for the expected format of the source data.  For easy testing, we'll use an :ref:`RSS <rss-source>` source and a :ref:`CSV <csv-operator>` operator:
 
 .. code-block:: ini
 
@@ -37,6 +35,10 @@ Next, add your sources and operators. For easy testing, we'll use an :ref:`RSS
     saved_state = 
     url = http://blog.inquest.net/atom.xml
     feed_type = messy
+
+.. _operator:
+Similarly the operators are identify a name, a module, and a file for output.  The module specifies the format of the output.
+.. code-block:: ini
 
     [operator:csv]
     module = csv
@@ -60,11 +62,11 @@ It should write out a ``output.csv`` file that looks something like this:
 
 Assuming you are running in daemon mode, ThreatIngestor will continue to check
 the blog and append new artifacts to the CSV as it finds them.  For further configuration,
-continue to the Standard Use Case section (standard-use-case_) or see the detailed sections about
+continue to the Standard Use Case section (standard-case_) or see the detailed sections about
 :ref:`source plugins <source-plugins>`, and :ref:`operator <operator-plugins>`.
 
 
-.. _standard-use-case:
+.. _standard-case:
 
 Standard Case
 -------------
