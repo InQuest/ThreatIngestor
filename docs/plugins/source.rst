@@ -3,11 +3,11 @@
 Source Plugins
 ==============
 
-Source plugins handle artifact import. All source plugins maintain state
-between runs, allowing them to skip previously processed tweets, blog posts,
-etc and get right to work finding new indicators.
+Source plugins handle artifact import. Artifacts include tweets, blog posts, etc.
+All source plugins maintain state between runs, allowing them to skip previously
+processed artifacts and get right to work finding new indicators.
 
-To add an source to your configuration file, include a section like this:
+To add a source to your configuration file, include a section like this:
 
 .. code-block:: ini
 
