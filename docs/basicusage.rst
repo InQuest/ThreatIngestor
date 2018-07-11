@@ -9,8 +9,7 @@ Minimal Case
 ------------
 
 For the most basic ThreatIngestor setup, you will want to configure at least
-one :ref:`source <source-plugins>`, one :ref:`operator <operator-plugins>`, and
-whether you want to run in daemon or job mode.
+one :ref:`source <source-plugins>`, one :ref:`operator <operator-plugins>`, and choose your mode (daemon or job).
 
 First create a new ``config.ini`` file, and add the ``[main]`` section:
 
