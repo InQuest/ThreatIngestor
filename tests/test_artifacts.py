@@ -11,8 +11,7 @@ class TestArtifacts(unittest.TestCase):
 
     def test_unicode_support(self):
         self.assertEquals(type(threatingestor.artifacts.Artifact('test', 'test').__str__()), str)
-        self.assertEquals(type(threatingestor.artifacts.Artifact('test', 'test').__unicode__()), unicode)
-        self.assertEquals(type(threatingestor.artifacts.Artifact(u't\u1111st', 'test').__unicode__()), unicode)
+        self.assertEquals(type(threatingestor.artifacts.Artifact(u't\u1111st', 'test').__str__()), str)
 
     def test_url_ipv4(self):
         self.assertTrue(threatingestor.artifacts.URL('http://192.168.0.1', '').is_ipv4())

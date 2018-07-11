@@ -42,7 +42,7 @@ class Plugin(Operator):
 
         if format_fn:
             # it's an artifact type we know how to handle
-            message_body = dict([(k, format_fn(v, artifact)) for (k, v) in self.kwargs.iteritems()])
+            message_body = dict([(k, format_fn(v, artifact)) for (k, v) in self.kwargs.items()])
 
             self._sqs_put(json.dumps(message_body))
 
@@ -57,30 +57,30 @@ class Plugin(Operator):
 def _format_value_url(value, url):
     """Allow interpolation from kwargs"""
     return value.format(
-        url=unicode(url),
+        url=str(url),
         domain=url.domain()
     )
 
 def _format_value_domain(value, domain):
     """Allow interpolation from kwargs"""
     return value.format(
-        domain=unicode(domain)
+        domain=str(domain)
     )
 
 def _format_value_ipaddress(value, ipaddress):
     """Allow interpolation from kwargs"""
     return value.format(
-        ipaddress=unicode(ipaddress)
+        ipaddress=str(ipaddress)
     )
 
 def _format_value_hash(value, hash_):
     """Allow interpolation from kwargs"""
     return value.format(
-        hash=unicode(hash_)
+        hash=str(hash_)
     )
 
 def _format_value_yarasignature(value, yarasignature):
     """Allow interpolation from kwargs"""
     return value.format(
-        yarasignature=unicode(yarasignature)
+        yarasignature=str(yarasignature)
     )

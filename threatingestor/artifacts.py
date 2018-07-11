@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import re
 import ipaddress
 
@@ -24,12 +25,21 @@ class Artifact(object):
         regex = re.compile(pattern)
         return True if regex.search(self.__str__()) else False
 
-    def __unicode__(self):
-        return unicode(self.artifact)
+    def _stringify(self):
+        """Return str (or unicode) representation of the artifact.
+
+        May be overridden in child classes. On Python3, this always returns a
+        str - on Python2, it may return a str or unicode.
+        """
+        return self.artifact
 
     def __str__(self):
-        return self.__unicode__().encode('utf-8')
-
+        stringlike = self._stringify()
+        if isinstance(stringlike, str):
+            return stringlike
+        else:
+            # assume it's unicode - bytes objects are not supported.
+            return stringlike.encode('utf-8', 'ignore')
 
 class URL(Artifact):
     """URL artifact abstraction, unicode-safe"""
@@ -80,15 +90,16 @@ class URL(Artifact):
             # not a valid condition expression, treat as regex instead
             return super(URL, self).match(pattern)
 
-    def __unicode__(self):
+    def _stringify(self):
         """Always returns deobfuscated url"""
-        return unicode(iocextract.refang_url(self.artifact))
+        return iocextract.refang_url(self.artifact)
 
     def is_obfuscated(self):
         """Boolean: is an obfuscated URL"""
-        if self.__unicode__() != unicode(self.artifact):
+        stringlike = self._stringify()
+        if stringlike != self.artifact:
             # don't treat "example.com" as obfuscated
-            if self.__unicode__() != u'http://' + unicode(self.artifact):
+            if stringlike != 'http://' + self.artifact:
                 return True
         return False
 
@@ -97,7 +108,7 @@ class URL(Artifact):
         parsed = urlparse(iocextract.refang_url(self.artifact))
 
         try:
-            ipaddress.IPv4Address(unicode(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.')))
+            ipaddress.IPv4Address(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.'))
         except ValueError:
             return False
 
@@ -115,7 +126,7 @@ class URL(Artifact):
             ipv6 = parsed.netloc
 
         try:
-            ipaddress.IPv6Address(unicode(ipv6.replace('[', '').replace(']', '')))
+            ipaddress.IPv6Address(ipv6.replace('[', '').replace(']', ''))
         except ValueError:
             return False
 
@@ -127,17 +138,22 @@ class URL(Artifact):
 
     def domain(self):
         """Deobfuscated domain; undefined behavior if self.is_ip()"""
-        return urlparse(self.__unicode__()).netloc.split(':')[0]
+        return urlparse(self._stringify()).netloc.split(':')[0]
 
     def is_domain(self):
         """Boolean: URL network location might be a valid domain"""
+        try:
+            # can't have non-ascii
+            self.domain().encode('ascii')
+        except UnicodeEncodeError:
+            return False
         return not self.is_ip() and len(self.domain()) > 3 and '.' in self.domain()[1:-1] and \
-               all([str.isalnum(x.encode('utf-8')) or x in '-.' for x in self.domain()]) and \
+               all([x.isalnum() or x in '-.' for x in self.domain()]) and \
                self.domain()[self.domain().rfind('.')+1:].isalpha() and len(self.domain()[self.domain().rfind('.')+1:]) > 1
 
     def deobfuscated(self):
-        """Named method for clarity, same as unicode(my_url_object)"""
-        return self.__unicode__()
+        """Named method for clarity, same as str(my_url_object)"""
+        return self.__str__()
 
 
 class IPAddress(Artifact):
@@ -145,18 +161,18 @@ class IPAddress(Artifact):
 
     Use version and ipaddress() for processing."""
 
-    def __unicode__(self):
+    def _stringify(self):
         """Always returns deobfuscated IP"""
-        return unicode(self.artifact.replace('[', '').replace(']', '').split('/')[0].split(':')[0].split(' ')[0])
+        return self.artifact.replace('[', '').replace(']', '').split('/')[0].split(':')[0].split(' ')[0]
 
     @property
     def version(self):
         """Returns 4, 6, or None"""
         try:
-            return ipaddress.IPv4Address(self.__unicode__()).version
+            return ipaddress.IPv4Address(self._stringify()).version
         except ValueError:
             try:
-                return ipaddress.IPv6Address(self.__unicode__()).version
+                return ipaddress.IPv6Address(self._stringify()).version
             except ValueError:
                 return None
 
@@ -164,9 +180,9 @@ class IPAddress(Artifact):
         """Return ipaddress.IPv4Address or ipaddress.IPv6Address object, or raise ValueError"""
         version = self.version
         if version == 4:
-            return ipaddress.IPv4Address(self.__unicode__())
+            return ipaddress.IPv4Address(self._stringify())
         elif version == 6:
-            return ipaddress.IPv6Address(self.__unicode__())
+            return ipaddress.IPv6Address(self._stringify())
         else:
             raise ValueError(u"Invalid IP address '{ip}'".format(ip=self.artifact))
 

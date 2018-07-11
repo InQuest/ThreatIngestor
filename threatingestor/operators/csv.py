@@ -22,7 +22,7 @@ class Plugin(Operator):
         """Operate on a single artifact"""
         with open(self.filename, 'a+') as f:
             writer = csv.writer(f)
-            artifact_type = unicode(artifact.__class__).split('.')[-1].strip("'>").encode('utf-8')
-            writer.writerow([artifact_type, unicode(artifact).encode('utf-8'),
-                    artifact.reference_link.encode('utf-8'),
-                    artifact.reference_text.encode('utf-8').encode('string_escape')])
+            artifact_type = str(artifact.__class__).split('.')[-1].strip("'>")
+            writer.writerow([artifact_type, str(artifact),
+                    artifact.reference_link,
+                    artifact.reference_text.encode('string_escape')])

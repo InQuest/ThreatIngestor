@@ -106,7 +106,7 @@ class TestConfig(unittest.TestCase):
         self.assertEquals(self.config.config.read.call_count, 2)
 
     def test_operators_include_artifact_list_in_kwargs(self):
-        data = '\n'.join([l.strip() for l in """
+        data = u'\n'.join([l.strip() for l in u"""
         [operator:test-one]
         module = threatkb
         artifact_types = URL,Domain, IPAddress , YARASignature
@@ -124,7 +124,7 @@ class TestConfig(unittest.TestCase):
         open_func = '__builtin__.open'
         if sys.version_info[0] == 3:
             open_func = 'builtins.open'
-        with patch(open_func, return_value=io.BytesIO(data)):
+        with patch(open_func, return_value=io.StringIO(data)):
             config_obj = threatingestor.config.Config('test')
             expected_operators = [
                 ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'artifact_types': [
@@ -139,7 +139,7 @@ class TestConfig(unittest.TestCase):
             self.assertEquals(config_obj.operators(), expected_operators)
 
     def test_operators_include_filter_in_kwargs(self):
-        data = '\n'.join([l.strip() for l in """
+        data = u'\n'.join([l.strip() for l in u"""
         [operator:test-one]
         module = threatkb
         artifact_types = URL,Domain, IPAddress , YARASignature
@@ -158,7 +158,7 @@ class TestConfig(unittest.TestCase):
         open_func = '__builtin__.open'
         if sys.version_info[0] == 3:
             open_func = 'builtins.open'
-        with patch(open_func, return_value=io.BytesIO(data)):
+        with patch(open_func, return_value=io.StringIO(data)):
             config_obj = threatingestor.config.Config('test')
             expected_operators = [
                 ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'filter_string': '(some|regex.*)', 'artifact_types': [

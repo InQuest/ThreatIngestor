@@ -3,3 +3,4 @@ httpretty
 responses
 mock
 boto3
+Nose

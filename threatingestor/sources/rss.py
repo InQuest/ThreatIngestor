@@ -35,7 +35,7 @@ class Plugin(Source):
             [x.unwrap() for x in soup.find_all('b')]
             [x.unwrap() for x in soup.find_all('em')]
             [x.unwrap() for x in soup.find_all('i')]
-            soup = bs4.BeautifulSoup(unicode(soup), 'html.parser')
+            soup = bs4.BeautifulSoup(soup.decode(), 'html.parser')
 
             text = ''
             if self.feed_type == 'afterioc':

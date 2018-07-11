@@ -16,8 +16,6 @@ class Plugin(Source):
         self.search = search
 
     def run(self, saved_state):
-        print datetime.datetime.utcnow()
-
         # if no saved_state, search max 1 day ago
         if not saved_state:
             saved_state = (datetime.datetime.utcnow() - datetime.timedelta(days=1)).isoformat()[:-7] + 'Z'
