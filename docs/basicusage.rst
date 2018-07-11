@@ -19,7 +19,7 @@ First create a new ``config.ini`` file, and add the ``[main]`` section:
     daemon = true
     sleep = 900
 
-.. _mode:
+.. _mode
 To configure mode, configure ``daemon``. If you set ``daemon`` to ``true``, ThreatIngestor will watch
 your sources in a loop; set it to ``false`` to run manually, or via cron or some other scheduler. 
 Set ``sleep`` to the number of seconds to wait between each check - this will be ignored if you disable daemon mode.
