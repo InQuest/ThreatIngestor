@@ -9,7 +9,7 @@ Minimal Case
 ------------
 
 For the most basic ThreatIngestor setup, you will want to configure at least
-one source_, one operator_, and the daemon_.
+one source_, one operator_, and set the mode (as shown below).
 
 First create a new ``config.ini`` file, and add the ``[main]`` section:
 
@@ -19,10 +19,9 @@ First create a new ``config.ini`` file, and add the ``[main]`` section:
     daemon = true
     sleep = 900
 
-.. _daemon:
-Configure ``daemon`` to run continuously or manually. If you set ``daemon`` to ``true``, ThreatIngestor will watch
+Configure ThreatIngestor to run continuously or manually. If you set ``daemon`` to ``true``, ThreatIngestor will watch
 your sources in a loop; set it to ``false`` to run manually, or via cron or some other scheduler. 
-Set ``sleep`` to the number of seconds to wait between each check - this will be ignored if you daemon mode is false.
+Set ``sleep`` to the number of seconds to wait between each check - this will be ignored if ``daemon`` is set ``false``.
 Don't set the sleep too low, or you may run into rate limits or other issues.
 If in doubt, keep this above 900 (fifteen minutes).
 
