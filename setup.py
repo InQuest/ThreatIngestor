@@ -15,6 +15,9 @@ setup(
         ':python_version <= "2.7"': [
             'ipaddress',
         ],
+        ':python_version >= "3.0"': [
+            'sgmllib3k',
+        ],
     },
     entry_points={
           'console_scripts': [

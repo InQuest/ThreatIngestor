@@ -7,8 +7,7 @@ import threatingestor.sources.rss
 
 class TestRSS(unittest.TestCase):
 
-    RSS_CONTENT = """
-        <?xml version="1.0" encoding="utf-8"?>
+    RSS_CONTENT = """<?xml version="1.0" encoding="utf-8"?>
         <rss version="2.0" xml:base="https://www.rss.mock"  xmlns:dc="http://purl.org/dc/elements/1.1/">
         <channel>
          <title>Mock Cybersecurity</title>
