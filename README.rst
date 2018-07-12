@@ -4,6 +4,21 @@ InQuest ThreatIngestor
 .. image:: https://inquest.net/images/inquest-badge.svg
     :target: https://inquest.net/
     :alt: Developed by InQuest
+.. image:: https://travis-ci.org/InQuest/ThreatIngestor.svg?branch=master
+    :target: https://travis-ci.org/InQuest/ThreatIngestor
+    :alt: Build Status
+.. image:: https://readthedocs.org/projects/ThreatIngestor/badge/?version=latest
+    :target: http://inquest.readthedocs.io/projects/threatingestor/en/latest/?badge=latest
+    :alt: Documentation Status
+.. image:: https://api.codacy.com/project/badge/Grade/
+    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+    :alt: Code Health
+.. image:: https://api.codacy.com/project/badge/Coverage/
+    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+    :alt: Test Coverage
+.. image:: http://img.shields.io/pypi/v/ThreatIngestor.svg
+    :target: https://pypi.python.org/pypi/ThreatIngestor
+    :alt: PyPi Version
 
 An extendable tool to extract and aggregate IOCs from threat feeds.
 
