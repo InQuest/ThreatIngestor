@@ -11,6 +11,5 @@ script:
   - nosetests --with-coverage --cover-package=threatingestor
   - cd docs/; make SPHINXOPTS=-W html
 after_success:
-  - coveralls
   - coverage xml
   - python-codacy-coverage
