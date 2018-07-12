@@ -4,3 +4,5 @@ responses
 mock
 boto3
 Nose
+sphinx
+Pygments
