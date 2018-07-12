@@ -9,8 +9,7 @@ Minimal Case
 ------------
 
 For the most basic ThreatIngestor setup, you will want to configure at least
-one :ref:`source <source-plugins>`, one :ref:`operator <operator-plugins>`, and
-whether you want to run in daemon or job mode.
+one source_, one operator_, and set the mode (as shown below).
 
 First create a new ``config.ini`` file, and add the ``[main]`` section:
 
@@ -20,15 +19,14 @@ First create a new ``config.ini`` file, and add the ``[main]`` section:
     daemon = true
     sleep = 900
 
-Set ``daemon`` to ``true`` if you want ThreatIngestor to constantly watch
-your sources in a loop; set it to ``false`` if you want to run it manually,
-or via cron or some other scheduler. Set ``sleep`` to the number of seconds
-to wait between each check - this will be ignored if you disable daemon mode.
+Configure ThreatIngestor to run continuously or manually. If you set ``daemon`` to ``true``, ThreatIngestor will watch
+your sources in a loop; set it to ``false`` to run manually, or via cron or some other scheduler. 
+Set ``sleep`` to the number of seconds to wait between each check - this will be ignored if ``daemon`` is set ``false``.
 Don't set the sleep too low, or you may run into rate limits or other issues.
 If in doubt, keep this above 900 (fifteen minutes).
 
-Next, add your sources and operators. For easy testing, we'll use an :ref:`RSS
-<rss-source>` source and a :ref:`CSV <csv-operator>` operator:
+.. _source:
+Next, add your sources. To configure the source, you should give it a unique name like ``[source:inquest-rss]``.  Each source uses a module like twitter, rss, or sqs.  Choose the module for the expected format of the source data.  For easy testing, we'll use an :ref:`RSS <rss-source>` source and a :ref:`CSV <csv-operator>` operator:
 
 .. code-block:: ini
 
@@ -37,6 +35,10 @@ Next, add your sources and operators. For easy testing, we'll use an :ref:`RSS
     saved_state = 
     url = http://blog.inquest.net/atom.xml
     feed_type = messy
+
+.. _operator:
+Similarly the operators are identify a name, a module, and an optional file for output.  The module specifies the format of the output.
+.. code-block:: ini
 
     [operator:csv]
     module = csv
@@ -57,10 +59,14 @@ It should write out a ``output.csv`` file that looks something like this:
     URL,http://purl.org/dc/elements/1.1,http://blog.inquest.net/blog/2018/02/07/cve-2018-4878-adobe-flash-0day-itw/,"\n On February 1st, Adobe published bulletin  APSA18-01  for CVE-2018-4878 describing a use-after-free (UAF) vulnerability affecting Flash ve..."
     ...
 
-Assuming you are running in daemon mode, ThreatIngestor will continue to check
-the blog and append new artifacts to the CSV as it finds them.
 
-.. _standard-use-case:
+Assuming you are running in daemon mode, ThreatIngestor will continue to check
+the blog and append new artifacts to the CSV as it finds them.  For further configuration,
+continue to the Standard Case section (standard-case_) or see the detailed sections about
+:ref:`source plugins <source-plugins>`, and :ref:`operator <operator-plugins>`.
+
+
+.. _standard-case:
 
 Standard Case
 -------------
