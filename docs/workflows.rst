@@ -3,7 +3,7 @@
 Example Workflows
 =================
 
-The :ref:`standard use case <standard-use-case>` for ThreatIngestor is pretty
+The :ref:`standard use case <standard-case>` for ThreatIngestor is pretty
 simple - just pull from Twitter and RSS, extract IOCs, and send them to
 ThreatKB. That said, there is a *lot* more you can do with just a few changes
 to the configuration file. Here, we'll go over some more advanced use cases,
