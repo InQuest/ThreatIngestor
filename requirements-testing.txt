@@ -6,3 +6,4 @@ boto3
 Nose
 sphinx
 Pygments
+collective.checkdocs

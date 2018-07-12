@@ -10,6 +10,7 @@ install:
 script:
   - nosetests --with-coverage --cover-package=threatingestor
   - cd docs/; make SPHINXOPTS=-W html
+  - python setup.py checkdocs
 after_success:
   - coverage xml
   - python-codacy-coverage
