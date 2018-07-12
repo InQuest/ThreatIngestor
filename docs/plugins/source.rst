@@ -3,7 +3,8 @@
 Source Plugins
 ==============
 
-Source plugins handle artifact import. Artifacts include tweets, blog posts, etc.
+For each source specified, ``ThreatIngestor`` handles artifact import. Sources may link to Twitter, Blogs, etc.
+Artifacts are imported from those sources and could include URLs, IP Addresses, YARA Signatures, etc.
 All source plugins maintain state between runs, allowing them to skip previously
 processed artifacts and get right to work finding new indicators.
 
