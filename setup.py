@@ -24,7 +24,7 @@ setup(
               'threatingestor = threatingestor:main'
           ]
     },
-    license='BSD',
+    license='GPL',
     description='Extract and aggregate IOCs from threat feeds.',
     long_description=README,
     url='https://github.com/InQuest/ThreatIngestor',
@@ -35,7 +35,7 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Security',
