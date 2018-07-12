@@ -7,7 +7,6 @@
 *.egg-info/
 
 # dev sources
-threatkb.py
 .virtualenv
 
 # coverage
