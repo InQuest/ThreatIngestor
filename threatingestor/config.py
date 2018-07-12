@@ -28,7 +28,8 @@ class Config:
         self.config = configparser.ConfigParser()
         self.config.read(filename)
 
-    def _load_plugin(self, plugin_type, plugin):
+    @staticmethod
+    def _load_plugin(plugin_type, plugin):
         """Returns plugin class or raises an exception"""
         try:
             module = importlib.import_module('.'.join([plugin_type, plugin]))
