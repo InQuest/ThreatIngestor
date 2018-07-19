@@ -8,9 +8,9 @@ install:
   - "pip install codacy-coverage"
   - "python setup.py install"
 script:
-  - nosetests --with-coverage --cover-package=threatingestor
+  - nosetests --with-coverage --cover-package=threatingestor --cover-xml
   - python setup.py checkdocs
   - cd docs/; make SPHINXOPTS=-W html
+  - cd ..
 after_success:
-  - coverage xml
   - python-codacy-coverage
