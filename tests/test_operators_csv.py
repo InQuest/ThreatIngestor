@@ -1,8 +1,5 @@
 import unittest
-try:
-    from unittest.mock import patch, ANY as MOCK_ANY
-except ImportError:
-    from mock import patch, ANY as MOCK_ANY
+from unittest.mock import patch, ANY as MOCK_ANY
 
 import threatingestor.operators.csv
 import threatingestor.artifacts

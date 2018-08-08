@@ -1,14 +1,7 @@
 import sys
 import io
 import unittest
-try:
-    # py3
-    from unittest.mock import mock_open, patch
-    CONFIGPARSER = 'configparser.ConfigParser'
-except ImportError:
-    # py2
-    from mock import mock_open, patch
-    CONFIGPARSER = 'ConfigParser.ConfigParser'
+from unittest.mock import mock_open, patch
 
 import threatingestor.config
 import threatingestor.artifacts
@@ -19,7 +12,7 @@ import threatingestor.operators.threatkb
 
 class TestConfig(unittest.TestCase):
 
-    @patch(CONFIGPARSER)
+    @patch('configparser.ConfigParser')
     def setUp(self, ConfigParser):
         self.config = threatingestor.config.Config('test')
 

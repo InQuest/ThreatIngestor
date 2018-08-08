@@ -1,8 +1,5 @@
 import unittest
-try:
-    from unittest.mock import patch, Mock
-except ImportError:
-    from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 import threatingestor.operators.twitter
 import threatingestor.artifacts
