@@ -65,7 +65,8 @@ class Source:
                                                           reference_text=reference_text)
 
             try:
-                if artifact.ipaddress().is_private or artifact.ipaddress().is_loopback:
+                ipaddress = artifact.ipaddress()
+                if ipaddress.is_private or ipaddress.is_loopback or ipaddress.is_reserved:
                     # don't care
                     continue
 

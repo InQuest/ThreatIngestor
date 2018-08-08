@@ -131,3 +131,17 @@ class TestSources(unittest.TestCase):
         artifact_list = self.source.process_element('', 'test')
         self.assertIn('Manual Task: test', [str(h) for h in artifact_list])
         self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.Task))
+
+    def test_uninteresting_ips_are_excluded(self):
+        # only the task artifact should get through.
+        content = '127.0.0.1'
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEqual(len(artifact_list), 1)
+
+        content = '192.168.0.1'
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEqual(len(artifact_list), 1)
+
+        content = '198.51.100.1'
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEqual(len(artifact_list), 1)
