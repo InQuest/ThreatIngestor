@@ -121,3 +121,32 @@ class TestTwitter(unittest.TestCase):
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('t.co', [str(x) for x in artifact_list])
         self.assertNotIn('https://t.co/t3s7', [str(x) for x in artifact_list])
+
+    @patch('twitter.Twitter')
+    def test_run_includes_nonobfuscated_iff_configured(self, Twitter):
+        # control
+        self.twitter.endpoint.return_value = [
+            {
+                'text': 'http://someurl.com/test',
+                'id_str': '12345',
+                'user': {'screen_name': 'test'},
+            },
+        ]
+        saved_state, artifact_list = self.twitter.run(None)
+        self.assertEqual(len(artifact_list), 1)
+
+        # test with defanged_only=False
+        new_twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', defanged_only=False)
+        new_twitter.endpoint.return_value = [
+            {
+                'text': 'http://someurl.com/test',
+                'id_str': '12345',
+                'user': {'screen_name': 'test'},
+            },
+        ]
+        saved_state, artifact_list = new_twitter.run(None)
+        self.assertEqual(len(artifact_list), 3)
+
+        self.assertIn('someurl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertEqual('https://twitter.com/test/status/12345', artifact_list[0].reference_link)

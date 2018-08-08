@@ -41,6 +41,9 @@ Configuration Options
   `Twitter oauth docs`_).
 * ``con_secret`` (required): Twitter auth connection secret (See `Twitter oauth
   docs`_).
+* ``defanged_only``: Defaults to true. If set to false, the Twitter source will
+  include all expanded links found in Tweets. If set to true, it will include
+  only defanged links.
 
 After the above required options, you must include valid options for one of the
 three supported Twitter endpoints, as described below. Any extra options

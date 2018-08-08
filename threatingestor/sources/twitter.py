@@ -10,9 +10,12 @@ TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 
 class Plugin(Source):
 
-    def __init__(self, name, token, token_key, con_secret_key, con_secret, **kwargs):
+    def __init__(self, name, token, token_key, con_secret_key, con_secret, defanged_only=True, **kwargs):
         self.name = name
         self.api = twitter.Twitter(auth=twitter.OAuth(token, token_key, con_secret, con_secret_key))
+
+        # let the user decide whether to include non-obfuscated URLs or not.
+        self.include_nonobfuscated = not defanged_only
 
         # forward kwargs.
         # NOTE: no validation is done here, so if the config is wrong, expect bad results.
@@ -65,6 +68,6 @@ class Plugin(Source):
             saved_state = tweet['id']
             artifacts += self.process_element(tweet['content'],
                                               TWEET_URL.format(user=tweet['user'], id=tweet['id']),
-                                              include_nonobfuscated=True)
+                                              include_nonobfuscated=self.include_nonobfuscated)
 
         return saved_state, artifacts
