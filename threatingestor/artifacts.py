@@ -93,7 +93,7 @@ class URL(Artifact):
             # not a valid condition expression, treat as regex instead
             return super(URL, self).match(pattern)
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(URL, self).format_message(message, url=str(self),
                                                domain=self.domain())
@@ -170,7 +170,7 @@ class IPAddress(Artifact):
     Use version and ipaddress() for processing.
     """
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(IPAddress, self).format_message(message, ipaddress=str(self))
 
@@ -203,7 +203,7 @@ class IPAddress(Artifact):
 class Domain(Artifact):
     """Domain artifact abstraction"""
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(Domain, self).format_message(message, domain=str(self))
 
@@ -217,7 +217,7 @@ class Hash(Artifact):
     SHA256 = 'sha256'
     SHA512 = 'sha512'
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(Hash, self).format_message(message, hash=str(self),
                                                 hash_type=self.hash_type() or 'hash')
@@ -239,7 +239,7 @@ class Hash(Artifact):
 class YARASignature(Artifact):
     """YARA signature artifact abstraction"""
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(YARASignature, self).format_message(message,
                                                          yarasignature=str(self))
@@ -248,7 +248,7 @@ class YARASignature(Artifact):
 class Task(Artifact):
     """Generic Task artifact abstraction"""
 
-    def format_message(self, message):
+    def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents."""
         return super(Task, self).format_message(message, task=str(self))
 
