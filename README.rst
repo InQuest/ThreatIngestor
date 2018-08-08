@@ -47,7 +47,7 @@ Usage
 Create a new ``config.ini`` file, and configure each source and operator module
 you want to use. (See ``config.ini.example`` for layout.) Then run the script::
 
-    python ingestor.py config.ini
+    threatingestor config.ini
 
 Set ``daemon = true`` in the configuration file to have ThreatIngestor watch each
 of your sources on a loop, or ``daemon = false`` if you'd rather run the script

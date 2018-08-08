@@ -57,7 +57,7 @@ Now that the config file is all set up, run ThreatIngestor:
 
 .. code-block:: console
 
-    python ingestor.py config.ini
+    threatingestor config.ini
 
 It should write out a ``output.csv`` file that looks something like this:
 
@@ -159,7 +159,7 @@ Now that everything is all set up, run the ingestor:
 
 .. code-block:: console
 
-    python ingestor.py config.ini
+    threatingestor config.ini
 
 You should see your ThreatKB Inbox start filling up with newly extracted
 C2 IPs and domains.
