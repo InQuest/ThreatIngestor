@@ -34,10 +34,12 @@ signatures, and send that information to another system for analysis.
 Installation
 ------------
 
+ThreatIngestor requires Python 3.6+.
+
 Install ThreatIngestor and its dependencies::
 
-    pip install -r requirements.txt
-    python setup.py install
+    pip3 install -r requirements.txt
+    python3 setup.py install
 
 Usage
 -----
