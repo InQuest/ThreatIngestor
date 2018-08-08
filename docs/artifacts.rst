@@ -19,6 +19,12 @@ IP Addresses
 
 ThreatIngestor supports IPv4 and IPv6 addresses, including "defanged" IPs.
 
+.. note::
+
+   When extracting from a ``Source``, IP addresses designated as private
+   (e.g. ``192.168.0.1``), loopback (e.g. ``127.0.0.1``), or reserved
+   (e.g. ``198.51.100.1``) are automatically excluded from the results.
+
 .. _url-artifact:
 
 URLs
