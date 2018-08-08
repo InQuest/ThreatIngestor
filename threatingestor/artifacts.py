@@ -1,11 +1,6 @@
-from __future__ import unicode_literals
 import re
 import ipaddress
-
-try:
-    from urllib.parse import urlparse
-except ImportError:
-     from urlparse import urlparse
+from urllib.parse import urlparse
 
 import iocextract
 
@@ -40,20 +35,14 @@ class Artifact(object):
         )
 
     def _stringify(self):
-        """Return str (or unicode) representation of the artifact.
+        """Return str representation of the artifact.
 
-        May be overridden in child classes. On Python3, this always returns a
-        str - on Python2, it may return a str or unicode.
+        May be overridden in child classes.
         """
         return self.artifact
 
     def __str__(self):
-        stringlike = self._stringify()
-        if isinstance(stringlike, str):
-            return stringlike
-        else:
-            # assume it's unicode - bytes objects are not supported.
-            return stringlike.encode('utf-8', 'ignore')
+        return self._stringify()
 
 class URL(Artifact):
     """URL artifact abstraction, unicode-safe"""
