@@ -21,9 +21,23 @@ class Artifact(object):
     def match(self, pattern):
         """Return True if regex pattern matches the deobfuscated artifact, else False.
 
-        May be overridden or extended by child classes."""
+        May be overridden or extended by child classes.
+        """
         regex = re.compile(pattern)
         return True if regex.search(self.__str__()) else False
+
+    def format_message(self, message, **kwargs):
+        """Allow string interpolation with artifact contents.
+
+        Optionally extend in child classes to add support for more
+        specific interpolations.
+        """
+        return message.format(
+            artifact=str(self),
+            reference_text=self.reference_text,
+            reference_link=self.reference_link,
+            **kwargs
+        )
 
     def _stringify(self):
         """Return str (or unicode) representation of the artifact.
@@ -89,6 +103,11 @@ class URL(Artifact):
         except ValueError:
             # not a valid condition expression, treat as regex instead
             return super(URL, self).match(pattern)
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(URL, self).format_message(message, url=str(self),
+                                               domain=self.domain())
 
     def _stringify(self):
         """Always returns deobfuscated url"""
@@ -159,7 +178,12 @@ class URL(Artifact):
 class IPAddress(Artifact):
     """IP address artifact abstraction
 
-    Use version and ipaddress() for processing."""
+    Use version and ipaddress() for processing.
+    """
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(IPAddress, self).format_message(message, ipaddress=str(self))
 
     def _stringify(self):
         """Always returns deobfuscated IP"""
@@ -189,7 +213,10 @@ class IPAddress(Artifact):
 
 class Domain(Artifact):
     """Domain artifact abstraction"""
-    pass
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(Domain, self).format_message(message, domain=str(self))
 
 
 class Hash(Artifact):
@@ -200,6 +227,11 @@ class Hash(Artifact):
     SHA1 = 'sha1'
     SHA256 = 'sha256'
     SHA512 = 'sha512'
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(Hash, self).format_message(message, hash=str(self),
+                                                hash_type=self.hash_type() or 'hash')
 
     def hash_type(self):
         """Return the hash type as a string, or None"""
@@ -217,12 +249,19 @@ class Hash(Artifact):
 
 class YARASignature(Artifact):
     """YARA signature artifact abstraction"""
-    pass
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(YARASignature, self).format_message(message,
+                                                         yarasignature=str(self))
 
 
 class Task(Artifact):
     """Generic Task artifact abstraction"""
-    pass
+
+    def format_message(self, message):
+        """Allow string interpolation with artifact contents."""
+        return super(Task, self).format_message(message, task=str(self))
 
 
 # Define string mappings for artifact types

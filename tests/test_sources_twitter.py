@@ -46,14 +46,17 @@ class TestTwitter(unittest.TestCase):
             {
                 'text': 'test',
                 'id_str': '12346',
+                'user': {'screen_name': 'test'},
             },
             {
                 'text': 'test',
                 'id_str': '12345',
+                'user': {'screen_name': 'test'},
             },
             {
                 'text': 'test',
                 'id_str': '12344',
+                'user': {'screen_name': 'test'},
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
@@ -65,6 +68,7 @@ class TestTwitter(unittest.TestCase):
             {
                 'text': 'test',
                 'id_str': '12345',
+                'user': {'screen_name': 'test'},
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
@@ -75,6 +79,7 @@ class TestTwitter(unittest.TestCase):
                 {
                     'text': 'test',
                     'id_str': '12345',
+                    'user': {'screen_name': 'test'},
                 },
             ]
         }
@@ -86,18 +91,21 @@ class TestTwitter(unittest.TestCase):
             {
                 'text': 'hxxp://someurl.com/test',
                 'id_str': '12345',
+                'user': {'screen_name': 'test'},
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
         self.assertEquals(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertEquals('https://twitter.com/test/status/12345', artifact_list[0].reference_link)
 
     def test_run_expands_tco_links_if_available(self):
         self.twitter.endpoint.return_value = [
             {
                 'text': 'https://t.co/t3s7',
                 'id_str': '12345',
+                'user': {'screen_name': 'test'},
                 'entities': {
                     'urls': [
                         {

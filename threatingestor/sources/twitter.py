@@ -5,7 +5,7 @@ import twitter
 from threatingestor.sources import Source
 
 
-TWEET_URL = 'https://twitter.com/statuses/{id}'
+TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 
 
 class Plugin(Source):
@@ -41,9 +41,11 @@ class Plugin(Source):
             tweet_list = response['statuses']
         except TypeError:
             tweet_list = response
+
         tweets = [{
             'content': s['text'],
             'id': s['id_str'],
+            'user': s['user']['screen_name'],
             'entities': s.get('entities', {}),
         } for s in tweet_list]
 
@@ -61,6 +63,6 @@ class Plugin(Source):
 
             # process tweet
             saved_state = tweet['id']
-            artifacts += self.process_element(tweet['content'], TWEET_URL.format(id=tweet['id']))
+            artifacts += self.process_element(tweet['content'], TWEET_URL.format(user=tweet['user'], id=tweet['id']))
 
         return saved_state, artifacts

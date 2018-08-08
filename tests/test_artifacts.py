@@ -173,3 +173,80 @@ class TestArtifacts(unittest.TestCase):
         self.assertEquals(threatingestor.artifacts.Hash('be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09', '').hash_type(),
                           threatingestor.artifacts.Hash.SHA512)
         self.assertEquals(threatingestor.artifacts.Hash('adc83b191b1c6ea0fd8b46cd9f32e592fc', '').hash_type(), None)
+
+    def test_artifact_format_message(self):
+        artifact = threatingestor.artifacts.Artifact('test', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'test: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_url_format_message(self):
+        artifact = threatingestor.artifacts.URL('http://example.com/', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'http://example.com/: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.URL('http://example.com/', '', 'link', 'text')
+        message = '{url} ({domain})'
+        expected = 'http://example.com/ (example.com)'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_domain_format_message(self):
+        artifact = threatingestor.artifacts.Domain('example.com', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'example.com: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.Domain('example.com', '', 'link', 'text')
+        message = '({domain})'
+        expected = '(example.com)'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_ipaddress_format_message(self):
+        artifact = threatingestor.artifacts.IPAddress('1.1.1.1', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = '1.1.1.1: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.IPAddress('1.1.1.1', '', 'link', 'text')
+        message = '({ipaddress})'
+        expected = '(1.1.1.1)'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_hash_format_message(self):
+        artifact = threatingestor.artifacts.Hash('test', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'test: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.Hash('68b329da9893e34099c7d8ad5cb9c940', '', 'link', 'text')
+        message = '{hash_type}: {hash}'
+        expected = 'md5: 68b329da9893e34099c7d8ad5cb9c940'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.Hash('1231231', '', 'link', 'text')
+        message = '{hash_type}: {hash}'
+        expected = 'hash: 1231231'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_yarasignature_format_message(self):
+        artifact = threatingestor.artifacts.YARASignature('test', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'test: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.YARASignature('test', '', 'link', 'text')
+        message = '{yarasignature}'
+        expected = 'test'
+        self.assertEquals(artifact.format_message(message), expected)
+
+    def test_task_format_message(self):
+        artifact = threatingestor.artifacts.Task('test', '', 'link', 'text')
+        message = '{artifact}: "{reference_text}" -- {reference_link}'
+        expected = 'test: "text" -- link'
+        self.assertEquals(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.Task('test', '', 'link', 'text')
+        message = '{task}: {reference_link}'
+        expected = 'test: link'
+        self.assertEquals(artifact.format_message(message), expected)

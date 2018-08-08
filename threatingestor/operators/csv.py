@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import csv
 
 import threatingestor.artifacts
@@ -20,9 +22,9 @@ class Plugin(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
-        with open(self.filename, 'a+') as f:
+        with open(self.filename, 'a+', encoding='utf-8') as f:
             writer = csv.writer(f)
-            artifact_type = str(artifact.__class__).split('.')[-1].strip("'>")
+            artifact_type = artifact.__class__.__name__
             writer.writerow([artifact_type, str(artifact),
                     artifact.reference_link,
-                    artifact.reference_text.encode('string_escape')])
+                    artifact.reference_text])
