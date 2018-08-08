@@ -49,10 +49,8 @@ you want to use. (See ``config.ini.example`` for layout.) Then run the script::
 
     threatingestor config.ini
 
-Set ``daemon = true`` in the configuration file to have ThreatIngestor watch each
-of your sources on a loop, or ``daemon = false`` if you'd rather run the script
-on-demand or via a cron job you schedule yourself. The ``sleep`` value is ignored
-if ``daemon`` is disabled.
+By default, it will run forever, polling each configured source every 15
+minutes.
 
 For full documentation, see the `ThreatIngestor ReadTheDocs site`_.
 
