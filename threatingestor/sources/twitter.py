@@ -24,12 +24,15 @@ class Plugin(Source):
         # decide which endpoint to use based on passed arguments.
         # if slug and owner_screen_name, use List API.
         # if screen_name or user_id, use User Timeline API.
-        # otherwise, default to Search API.
-        self.endpoint = self.api.search.tweets
+        # if q is set, use Search API.
+        # otherwise, default to mentions API.
+        self.endpoint = self.api.statuses.mentions_timeline
         if kwargs.get('slug') and kwargs.get('owner_screen_name'):
             self.endpoint = self.api.lists.statuses
         elif kwargs.get('screen_name') or kwargs.get('user_id'):
             self.endpoint = self.api.statuses.user_timeline
+        elif kwargs.get('q'):
+            self.endpoint = self.api.search.tweets
 
     def run(self, saved_state):
 

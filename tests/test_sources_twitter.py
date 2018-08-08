@@ -15,24 +15,29 @@ class TestTwitter(unittest.TestCase):
 
     @patch('twitter.Twitter')
     def test_init_detects_search_type(self, Twitter):
-        # default to search
+        # default to @mentions
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e')
-        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.endpoint._mock_name, 'mentions_timeline')
         self.assertEqual(twitter.name, 'a')
 
         # slug and owner_screen_name => list
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test', owner_screen_name='test')
         self.assertEqual(twitter.endpoint._mock_name, 'statuses')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test')
-        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.endpoint._mock_name, 'mentions_timeline')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', owner_screen_name='test')
-        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.endpoint._mock_name, 'mentions_timeline')
 
         # screen_name or user_id => user
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', screen_name='test')
         self.assertEqual(twitter.endpoint._mock_name, 'user_timeline')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', user_id=1)
         self.assertEqual(twitter.endpoint._mock_name, 'user_timeline')
+
+        # q => search
+        twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', q='test')
+        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.name, 'a')
 
     def test_run_respects_saved_state(self):
         self.twitter.run('12345')

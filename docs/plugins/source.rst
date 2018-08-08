@@ -27,8 +27,8 @@ be filled in automatically when the source runs.
 Twitter
 -------
 
-The **Twitter** source can use three Twitter API endpoints out of the box:
-Twitter lists, user timeline, and standard search.
+The **Twitter** source can use several Twitter API endpoints out of the box:
+@mentions, Twitter lists, user timeline, and standard search.
 
 Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
@@ -45,11 +45,16 @@ Configuration Options
   include all expanded links found in Tweets. If set to true, it will include
   only defanged links.
 
-After the above required options, you must include valid options for one of the
-three supported Twitter endpoints, as described below. Any extra options
-defined in the config will be passed in directly to the Twitter endpoint, so
-you can configure some extra options not shown here. See the relevant Twitter
-documentation for more information on supported parameters.
+After the above general options, you may include valid options for one of the
+supported Twitter endpoints, as described below. (If you do not include any
+extra options, the Twitter plugin will default to reading from your @mentions.)
+Any extra options defined in the config will be passed in directly to the
+Twitter endpoint, so you can configure some extra options not shown here. See
+the relevant Twitter documentation for more information on supported parameters.
+
+`Mentions`_:
+
+This is the default behavior.
 
 `Twitter list`_:
 
@@ -66,6 +71,18 @@ documentation for more information on supported parameters.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
+
+Mentions:
+
+.. code-block:: ini
+
+    [source:twitter-my-mentions]
+    module = twitter
+    saved_state =
+    token = MYTOKEN
+    token_key = MYTOKENKEY
+    con_secret_key = MYSECRETKEY
+    con_secret = MYSECRET
 
 Twitter list:
 
@@ -263,5 +280,6 @@ Example Configuration
 .. _Twitter list: https://dev.twitter.com/rest/reference/get/lists/statuses
 .. _Twitter user timeline: https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
 .. _Twitter search: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
+.. _Mentions: https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-mentions_timeline.html
 .. _Amazon SQS: https://aws.amazon.com/sqs/
 .. _repository search API: https://developer.github.com/v3/search/#search-repositories
