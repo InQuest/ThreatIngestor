@@ -67,5 +67,5 @@ class TestGitHub(unittest.TestCase):
 
         saved_state, artifact_list = self.github.run(None)
         self.assertIn('Manual Task: GitHub dtrupenn/Tetris', [str(x) for x in artifact_list])
-        self.assertEquals(len(artifact_list), 1)
-        self.assertEquals(saved_state, '2018-04-30T17:05:13Z')
+        self.assertEqual(len(artifact_list), 1)
+        self.assertEqual(saved_state, '2018-04-30T17:05:13Z')

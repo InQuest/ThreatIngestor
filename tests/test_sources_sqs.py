@@ -29,7 +29,7 @@ class TestSQS(unittest.TestCase):
 
         saved_state, artifact_list = self.sqs.run(None)
 
-        self.assertEquals(saved_state, None)
+        self.assertEqual(saved_state, None)
         self.sqs.queue.receive_messages.assert_called_once_with()
         message.delete.assert_called_once_with()
         self.assertIn('http://example.com/test', [str(x) for x in artifact_list])

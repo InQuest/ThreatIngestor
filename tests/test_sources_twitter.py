@@ -20,22 +20,22 @@ class TestTwitter(unittest.TestCase):
     def test_init_detects_search_type(self, Twitter):
         # default to search
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e')
-        self.assertEquals(twitter.endpoint._mock_name, 'tweets')
-        self.assertEquals(twitter.name, 'a')
+        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.name, 'a')
 
         # slug and owner_screen_name => list
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test', owner_screen_name='test')
-        self.assertEquals(twitter.endpoint._mock_name, 'statuses')
+        self.assertEqual(twitter.endpoint._mock_name, 'statuses')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', slug='test')
-        self.assertEquals(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', owner_screen_name='test')
-        self.assertEquals(twitter.endpoint._mock_name, 'tweets')
+        self.assertEqual(twitter.endpoint._mock_name, 'tweets')
 
         # screen_name or user_id => user
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', screen_name='test')
-        self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
+        self.assertEqual(twitter.endpoint._mock_name, 'user_timeline')
         twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', user_id=1)
-        self.assertEquals(twitter.endpoint._mock_name, 'user_timeline')
+        self.assertEqual(twitter.endpoint._mock_name, 'user_timeline')
 
     def test_run_respects_saved_state(self):
         self.twitter.run('12345')
@@ -60,7 +60,7 @@ class TestTwitter(unittest.TestCase):
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(saved_state, '12346')
+        self.assertEqual(saved_state, '12346')
 
     def test_run_supports_all_endpoints(self):
         # both supported return formats
@@ -72,7 +72,7 @@ class TestTwitter(unittest.TestCase):
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(saved_state, '12345')
+        self.assertEqual(saved_state, '12345')
 
         self.twitter.endpoint.return_value = {
             'statuses': [
@@ -84,7 +84,7 @@ class TestTwitter(unittest.TestCase):
             ]
         }
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(saved_state, '12345')
+        self.assertEqual(saved_state, '12345')
 
     def test_run_returns_artifacts_correctly(self):
         self.twitter.endpoint.return_value = [
@@ -95,10 +95,10 @@ class TestTwitter(unittest.TestCase):
             },
         ]
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(len(artifact_list), 3)
+        self.assertEqual(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
-        self.assertEquals('https://twitter.com/test/status/12345', artifact_list[0].reference_link)
+        self.assertEqual('https://twitter.com/test/status/12345', artifact_list[0].reference_link)
 
     def test_run_expands_tco_links_if_available(self):
         self.twitter.endpoint.return_value = [
@@ -119,7 +119,7 @@ class TestTwitter(unittest.TestCase):
         # note: using hxxp above just to get the expanded url to be processed as
         # an obfuscated url and added to the threatingestor.artifacts list
         saved_state, artifact_list = self.twitter.run(None)
-        self.assertEquals(len(artifact_list), 3)
+        self.assertEqual(len(artifact_list), 3)
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('t.co', [str(x) for x in artifact_list])

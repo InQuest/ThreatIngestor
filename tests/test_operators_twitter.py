@@ -46,15 +46,15 @@ class TestTwitter(unittest.TestCase):
             threatingestor.artifacts.Hash,
             threatingestor.artifacts.IPAddress,
         ]
-        self.assertEquals(threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd', 'e',
+        self.assertEqual(threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd', 'e',
                                                                   artifact_types=[threatingestor.artifacts.URL]).artifact_types,
                           [threatingestor.artifacts.URL])
-        self.assertEquals(threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd', 'e').artifact_types,
+        self.assertEqual(threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd', 'e').artifact_types,
                           artifact_types)
 
     def test_init_sets_config_args(self):
         operator = threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd', 'e',
                                                            filter_string='test',
                                                            allowed_sources=['test-one'])
-        self.assertEquals(operator.filter_string, 'test')
-        self.assertEquals(operator.allowed_sources, ['test-one'])
+        self.assertEqual(operator.filter_string, 'test')
+        self.assertEqual(operator.allowed_sources, ['test-one'])

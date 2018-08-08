@@ -22,7 +22,7 @@ class TestWeb(unittest.TestCase):
 
         saved_state, artifacts = self.web.run(None)
         self.assertIn('http://example.com/test', [str(x) for x in artifacts])
-        self.assertEquals(saved_state, 'test;"test"')
+        self.assertEqual(saved_state, 'test;"test"')
 
     @httpretty.activate
     def test_run_with_304(self):
@@ -30,7 +30,7 @@ class TestWeb(unittest.TestCase):
                                status=304)
 
         saved_state, artifacts = self.web.run('test;"test"')
-        self.assertEquals(len(artifacts), 0)
+        self.assertEqual(len(artifacts), 0)
 
     @httpretty.activate
     def test_run_with_200_and_no_etag(self):
@@ -43,4 +43,4 @@ class TestWeb(unittest.TestCase):
 
         saved_state, artifacts = self.web.run(None)
         self.assertIn('http://example.com/test', [str(x) for x in artifacts])
-        self.assertEquals(saved_state, 'test')
+        self.assertEqual(saved_state, 'test')

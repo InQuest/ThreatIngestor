@@ -97,11 +97,11 @@ class TestSQS(unittest.TestCase):
     @patch('boto3.client')
     def test_artifact_types_are_set_if_passed_in_else_default(self, boto3_client):
         artifact_types = [threatingestor.artifacts.IPAddress, threatingestor.artifacts.URL]
-        self.assertEquals(threatingestor.operators.sqs.Plugin('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
-        self.assertEquals(threatingestor.operators.sqs.Plugin('a', 'b', 'c', 'd').artifact_types, [threatingestor.artifacts.URL])
+        self.assertEqual(threatingestor.operators.sqs.Plugin('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
+        self.assertEqual(threatingestor.operators.sqs.Plugin('a', 'b', 'c', 'd').artifact_types, [threatingestor.artifacts.URL])
 
     @patch('boto3.client')
     def test_init_sets_config_args(self, boto3_client):
         operator = threatingestor.operators.sqs.Plugin('a', 'b', 'c', 'd', filter_string='test', allowed_sources=['test-one'])
-        self.assertEquals(operator.filter_string, 'test')
-        self.assertEquals(operator.allowed_sources, ['test-one'])
+        self.assertEqual(operator.filter_string, 'test')
+        self.assertEqual(operator.allowed_sources, ['test-one'])

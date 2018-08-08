@@ -39,10 +39,10 @@ class TestIngestor(unittest.TestCase):
         Config.return_value.configure_mock(**attrs)
 
         app = threatingestor.Ingestor('test')
-        self.assertEquals(app.sources['test-twitter'].q, 'test') 
-        self.assertEquals(app.operators['test-csv'].filename, 'test') 
-        self.assertEquals(len(app.sources), 2)
-        self.assertEquals(len(app.operators), 2)
+        self.assertEqual(app.sources['test-twitter'].q, 'test') 
+        self.assertEqual(app.operators['test-csv'].filename, 'test') 
+        self.assertEqual(len(app.sources), 2)
+        self.assertEqual(len(app.operators), 2)
 
     def test_run_checks_config_daemon(self):
         self.app.config.daemon.return_value = False
@@ -58,4 +58,4 @@ class TestIngestor(unittest.TestCase):
         self.app.sources['test-twitter'].run.assert_called()
         self.app.config.save_state.assert_called()
         # should run 4 times, sources*operators.
-        self.assertEquals(self.app.sources['test-twitter'].process.call_count, 4)
+        self.assertEqual(self.app.sources['test-twitter'].process.call_count, 4)

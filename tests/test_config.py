@@ -31,9 +31,9 @@ class TestConfig(unittest.TestCase):
 
     def test_sleep_returns_main_sleep_int(self):
         self.config.config.getint.return_value = 10
-        self.assertEquals(self.config.sleep(), 10)
+        self.assertEqual(self.config.sleep(), 10)
         self.config.config.getint.return_value = 90
-        self.assertEquals(self.config.sleep(), 90)
+        self.assertEqual(self.config.sleep(), 90)
 
     def test_sources_returns_list_of_all_source_tuples(self):
         self.config.config.sections.return_value = [
@@ -49,7 +49,7 @@ class TestConfig(unittest.TestCase):
             ('source:test-one', threatingestor.sources.rss.Plugin, {'name': 'test-one'}),
             ('source:test-two', threatingestor.sources.rss.Plugin, {'name': 'test-two'}),
         ]
-        self.assertEquals(self.config.sources(), expected_sources)
+        self.assertEqual(self.config.sources(), expected_sources)
 
     def test_sources_excludes_internal_options_from_kwargs(self):
         self.config.config.sections.return_value = [
@@ -60,7 +60,7 @@ class TestConfig(unittest.TestCase):
         expected_sources = [
             ('source:test-one', threatingestor.sources.rss.Plugin, {'another_one': 'rss', 'name': 'test-one'}),
         ]
-        self.assertEquals(self.config.sources(), expected_sources)
+        self.assertEqual(self.config.sources(), expected_sources)
 
     def test_operators_returns_list_of_all_operator_tuples(self):
         self.config.config.sections.return_value = [
@@ -76,7 +76,7 @@ class TestConfig(unittest.TestCase):
             ('operator:test-one', threatingestor.operators.csv.Plugin, {}),
             ('operator:test-three', threatingestor.operators.csv.Plugin, {}),
         ]
-        self.assertEquals(self.config.operators(), expected_operators)
+        self.assertEqual(self.config.operators(), expected_operators)
 
     def test_operators_excludes_internal_options_from_kwargs(self):
         self.config.config.sections.return_value = [
@@ -87,7 +87,7 @@ class TestConfig(unittest.TestCase):
         expected_operators = [
             ('operator:test-one', threatingestor.operators.csv.Plugin, {'another_one': 'csv'}),
         ]
-        self.assertEquals(self.config.operators(), expected_operators)
+        self.assertEqual(self.config.operators(), expected_operators)
 
     def test_save_state_writes_saved_state(self):
         self.config.config.set.assert_not_called()
@@ -102,8 +102,8 @@ class TestConfig(unittest.TestCase):
     def test_get_state_reads_saved_state(self):
         self.config.config.get.return_value = 'test'
         self.config.config.read.assert_called_once()
-        self.assertEquals(self.config.get_state(None), 'test')
-        self.assertEquals(self.config.config.read.call_count, 2)
+        self.assertEqual(self.config.get_state(None), 'test')
+        self.assertEqual(self.config.config.read.call_count, 2)
 
     def test_operators_include_artifact_list_in_kwargs(self):
         data = u'\n'.join([l.strip() for l in u"""
@@ -136,7 +136,7 @@ class TestConfig(unittest.TestCase):
                 ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'artifact_types': [threatingestor.artifacts.IPAddress]}),
                 ('operator:test-no-types', threatingestor.operators.csv.Plugin, {}),
             ]
-            self.assertEquals(config_obj.operators(), expected_operators)
+            self.assertEqual(config_obj.operators(), expected_operators)
 
     def test_operators_include_filter_in_kwargs(self):
         data = u'\n'.join([l.strip() for l in u"""
@@ -170,7 +170,7 @@ class TestConfig(unittest.TestCase):
                 ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'filter_string': 'is_domain, not is_ip'}),
                 ('operator:test-no-filter', threatingestor.operators.csv.Plugin, {}),
             ]
-            self.assertEquals(config_obj.operators(), expected_operators)
+            self.assertEqual(config_obj.operators(), expected_operators)
 
     def test_load_plugin_returns_plugin_class(self):
         self.assertEqual(self.config._load_plugin(threatingestor.config.SOURCE, 'rss'),

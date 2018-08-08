@@ -28,13 +28,13 @@ class TestThreatKB(unittest.TestCase):
 
     def test_artifact_types_are_set_if_passed_in_else_default(self):
         artifact_types = [threatingestor.artifacts.IPAddress, threatingestor.artifacts.URL]
-        self.assertEquals(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
-        self.assertEquals(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd').artifact_types, [threatingestor.artifacts.Domain, threatingestor.artifacts.IPAddress,
+        self.assertEqual(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', artifact_types=artifact_types).artifact_types, artifact_types)
+        self.assertEqual(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd').artifact_types, [threatingestor.artifacts.Domain, threatingestor.artifacts.IPAddress,
                 threatingestor.artifacts.YARASignature])
 
     def test_filter_string_and_allowed_sources_are_set_if_passed_in(self):
-        self.assertEquals(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', filter_string='test').filter_string, 'test')
-        self.assertEquals(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', allowed_sources=['test-one']).allowed_sources, ['test-one'])
+        self.assertEqual(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', filter_string='test').filter_string, 'test')
+        self.assertEqual(threatingestor.operators.threatkb.Plugin('a', 'b', 'c', 'd', allowed_sources=['test-one']).allowed_sources, ['test-one'])
 
     def test_handle_task_creates_task(self):
         self.threatkb.handle_artifact(threatingestor.artifacts.Task('', '', ''))
