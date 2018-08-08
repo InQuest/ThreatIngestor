@@ -166,4 +166,39 @@ In this example, the resulting JSON object for a URL artifact of
         "download_path": "/data/ingestor"
     }
 
+.. _twitter-operator:
+
+Twitter
+-------
+
+The Twitter operator will send custom messages including details of extracted
+artifacts as Tweets. It supports quote-tweeting the original source of the
+artifact, if that source was also a Tweet.
+
+Configuration Options
+~~~~~~~~~~~~~~~~~~~~~
+
+* ``module`` (required): ``twitter``
+* ``token`` (required): Twitter auth token (See `Twitter oauth docs`_).
+* ``token_key`` (required): Twitter auth token key (See `Twitter oauth docs`_).
+* ``con_secret_key`` (required): Twitter auth connection secret key (See
+  `Twitter oauth docs`_).
+* ``con_secret`` (required): Twitter auth connection secret (See `Twitter oauth
+  docs`_).
+* ``status`` (required): The text to send with each Tweet. (Interpolated by
+  ``Artifact.format_message``.)
+
+Example Configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: ini
+
+    [operator:mytwitterbot]
+    module = twitter
+    token = MYTOKEN
+    token_key = MYTOKENKEY
+    con_secret_key = MYSECRETKEY
+    con_secret = MYSECRET
+    status = {reference_text} #iocs
+
 .. _ThreatKB: https://github.com/InQuest/ThreatKB
