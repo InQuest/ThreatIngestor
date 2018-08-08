@@ -63,6 +63,8 @@ class Plugin(Source):
 
             # process tweet
             saved_state = tweet['id']
-            artifacts += self.process_element(tweet['content'], TWEET_URL.format(user=tweet['user'], id=tweet['id']))
+            artifacts += self.process_element(tweet['content'],
+                                              TWEET_URL.format(user=tweet['user'], id=tweet['id']),
+                                              include_nonobfuscated=True)
 
         return saved_state, artifacts
