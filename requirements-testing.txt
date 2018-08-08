@@ -7,3 +7,4 @@ Nose
 sphinx
 Pygments
 collective.checkdocs
+coverage
