@@ -202,3 +202,4 @@ Example Configuration
     status = {reference_text} #iocs
 
 .. _ThreatKB: https://github.com/InQuest/ThreatKB
+.. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
