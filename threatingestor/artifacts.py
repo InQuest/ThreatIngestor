@@ -26,6 +26,12 @@ class Artifact(object):
 
         Optionally extend in child classes to add support for more
         specific interpolations.
+
+        Supported variables:
+
+        * {artifact}
+        * {reference_text}
+        * {reference_link}
         """
         return message.format(
             artifact=str(self),
@@ -94,7 +100,14 @@ class URL(Artifact):
             return super(URL, self).match(pattern)
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {url}
+        * {domain}
+        * All supported variables from Artifact.format_message
+        """
         return super(URL, self).format_message(message, url=str(self),
                                                domain=self.domain())
 
@@ -171,7 +184,13 @@ class IPAddress(Artifact):
     """
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {ipaddress}
+        * All supported variables from Artifact.format_message
+        """
         return super(IPAddress, self).format_message(message, ipaddress=str(self))
 
     def _stringify(self):
@@ -204,7 +223,13 @@ class Domain(Artifact):
     """Domain artifact abstraction"""
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {domain}
+        * All supported variables from Artifact.format_message
+        """
         return super(Domain, self).format_message(message, domain=str(self))
 
 
@@ -218,7 +243,14 @@ class Hash(Artifact):
     SHA512 = 'sha512'
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {hash}
+        * {hash_type}
+        * All supported variables from Artifact.format_message
+        """
         return super(Hash, self).format_message(message, hash=str(self),
                                                 hash_type=self.hash_type() or 'hash')
 
@@ -240,7 +272,13 @@ class YARASignature(Artifact):
     """YARA signature artifact abstraction"""
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {yarasignature}
+        * All supported variables from Artifact.format_message
+        """
         return super(YARASignature, self).format_message(message,
                                                          yarasignature=str(self))
 
@@ -249,7 +287,13 @@ class Task(Artifact):
     """Generic Task artifact abstraction"""
 
     def format_message(self, message, **kwargs):
-        """Allow string interpolation with artifact contents."""
+        """Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {task}
+        * All supported variables from Artifact.format_message
+        """
         return super(Task, self).format_message(message, task=str(self))
 
 
