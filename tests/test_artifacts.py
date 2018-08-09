@@ -250,3 +250,19 @@ class TestArtifacts(unittest.TestCase):
         message = '{task}: {reference_link}'
         expected = 'test: link'
         self.assertEqual(artifact.format_message(message), expected)
+
+    def test_defanged_format_message(self):
+        artifact = threatingestor.artifacts.URL('http://example.com/', '', 'link', 'text')
+        message = '{defanged}'
+        expected = 'hxxp://example[.]com/'
+        self.assertEqual(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.Domain('example.com', '', 'link', 'text')
+        message = '{defanged}'
+        expected = 'example[.]com'
+        self.assertEqual(artifact.format_message(message), expected)
+
+        artifact = threatingestor.artifacts.IPAddress('1.1.1.1', '', 'link', 'text')
+        message = '{defanged}'
+        expected = '1[.]1[.]1[.]1'
+        self.assertEqual(artifact.format_message(message), expected)

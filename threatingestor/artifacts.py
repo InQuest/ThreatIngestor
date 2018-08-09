@@ -105,11 +105,13 @@ class URL(Artifact):
         Supported variables:
 
         * {url}
+        * {defanged}
         * {domain}
         * All supported variables from Artifact.format_message
         """
         return super(URL, self).format_message(message, url=str(self),
-                                               domain=self.domain())
+                                               domain=self.domain(),
+                                               defanged=iocextract.defang(str(self)))
 
     def _stringify(self):
         """Always returns deobfuscated url"""
@@ -189,9 +191,11 @@ class IPAddress(Artifact):
         Supported variables:
 
         * {ipaddress}
+        * {defanged}
         * All supported variables from Artifact.format_message
         """
-        return super(IPAddress, self).format_message(message, ipaddress=str(self))
+        return super(IPAddress, self).format_message(message, ipaddress=str(self),
+                                                     defanged=iocextract.defang(str(self)))
 
     def _stringify(self):
         """Always returns deobfuscated IP"""
@@ -228,9 +232,11 @@ class Domain(Artifact):
         Supported variables:
 
         * {domain}
+        * {defanged}
         * All supported variables from Artifact.format_message
         """
-        return super(Domain, self).format_message(message, domain=str(self))
+        return super(Domain, self).format_message(message, domain=str(self),
+                                                  defanged=iocextract.defang(str(self)))
 
 
 class Hash(Artifact):
