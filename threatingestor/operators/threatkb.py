@@ -36,18 +36,17 @@ class Plugin(Operator):
         self.api.create('c2dns', {
                 'domain_name': str(domain),
                 'match_type': '',
-                'reference_link': domain.reference_link,
                 'description': domain.reference_text,
                 'expiration_type': '',
                 'state': {'state': self.state},
                 'tags': [],
+                'metadata_values': {},
             })
 
     def handle_ipaddress(self, ipaddress):
         """Handle a single IP address"""
         self.api.create('c2ips', {
                 'ip': str(ipaddress),
-                'reference_link': ipaddress.reference_link,
                 'description': ipaddress.reference_text,
                 'expiration_type': '',
                 'state': {'state': self.state},
@@ -56,6 +55,7 @@ class Plugin(Operator):
                 'city': '',
                 'st': '',
                 'tags': [],
+                'metadata_values': {},
             })
 
     def handle_yarasignature(self, yarasignature):
