@@ -37,7 +37,6 @@ class TestArtifacts(unittest.TestCase):
         self.assertEqual(threatingestor.artifacts.URL('http://example.com/', '').deobfuscated(), 'http://example.com/')
         self.assertEqual(threatingestor.artifacts.URL('http://example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEqual(threatingestor.artifacts.URL('http://example(.)com/', '').deobfuscated(), 'http://example.com/')
-        self.assertEqual(threatingestor.artifacts.URL('http://example[.]com/[.]', '').deobfuscated(), 'http://example.com/[.]')
         self.assertEqual(threatingestor.artifacts.URL('hxxp://example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEqual(threatingestor.artifacts.URL('tcp://example[.]com/', '').deobfuscated(), 'http://example.com/')
         self.assertEqual(threatingestor.artifacts.URL('example[.]com/', '').deobfuscated(), 'http://example.com/')
