@@ -1,5 +1,10 @@
-InQuest ThreatIngestor
-======================
+.. raw:: html
+
+    <p align="center">
+      <img height="128" src="https://inquest.readthedocs.io/projects/threatingestor/en/latest/_static/threatingestor.png"  alt="threatingestor" title="threatingestor">
+    </p>
+
+    <h1 align="center">ThreatIngestor</h1>
 
 .. image:: https://inquest.net/images/inquest-badge.svg
     :target: https://inquest.net/

@@ -3,8 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-ThreatIngestor
-==============
+.. raw:: html
+
+    <p align="center">
+      <img height="128" src="https://inquest.readthedocs.io/projects/threatingestor/en/latest/_static/threatingestor.png"  alt="threatingestor" title="threatingestor">
+    </p>
+
+    <h1 align="center">ThreatIngestor</h1>
 
 ThreatIngestor is a flexible, configuration-driven, extensible framework for
 consuming threat intelligence.
