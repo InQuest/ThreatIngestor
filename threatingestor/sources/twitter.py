@@ -41,7 +41,14 @@ class Plugin(Source):
             self.kwargs['since_id'] = saved_state
 
         # pull new tweets
-        response = self.endpoint(**self.kwargs)
+        try:
+            response = self.endpoint(**self.kwargs)
+        except twitter.api.TwitterHTTPError as e:
+            # API error; log and return early
+            print("Twitter API Error: {e}".format(e=e))
+
+            return saved_state, []
+
         # correctly handle responses from different endpoints
         try:
             tweet_list = response['statuses']

@@ -12,7 +12,8 @@ except ImportError:
 class Plugin(Operator):
     """Operator for Amazon SQS"""
 
-    def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region, queue_name, **kwargs):
+    def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region, queue_name,
+            artifact_types=None, filter_string=None, allowed_sources=None, **kwargs):
         """SQS operator"""
         self.sqs = boto3.client('sqs', region_name=aws_region, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
         self.queue_url = self.sqs.get_queue_url(QueueName=queue_name)['QueueUrl']
@@ -20,8 +21,10 @@ class Plugin(Operator):
         # kwargs are used to dynamically form message body
         self.kwargs = kwargs
 
-        super(Plugin, self).__init__(kwargs.get('artifact_types'), kwargs.get('filter_string'), kwargs.get('allowed_sources'))
-        self.artifact_types = kwargs.get('artifact_types') or [
+        super(Plugin, self).__init__(artifact_types=artifact_types,
+                                     filter_string=filter_string,
+                                     allowed_sources=allowed_sources)
+        self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
 

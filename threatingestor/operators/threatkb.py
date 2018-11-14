@@ -11,7 +11,7 @@ class Plugin(Operator):
     def __init__(self, url, token, secret_key, state, artifact_types=None, filter_string=None, allowed_sources=None):
         """ThreatKB operator"""
         self.state = state
-        self.api = threatkb.ThreatKB(url, token, secret_key)
+        self.api = threatkb.ThreatKB(url, token, secret_key, use_https=False)
 
         super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [

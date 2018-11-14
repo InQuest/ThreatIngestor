@@ -95,7 +95,7 @@ class Config:
 
     def save_state(self, source, saved_state):
         """Save the state for a given source"""
-        self.config.set(source, 'saved_state', saved_state)
+        self.config.set(source, 'saved_state', str(saved_state or ''))
 
         # write it out immediately
         with open(self.filename, 'w+') as f:
