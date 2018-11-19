@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urlparse
+import itertools
 
 import iocextract
 
@@ -32,7 +33,11 @@ class Source:
         artifact_list = []
 
         # collect URLs and domains
-        scraped = iocextract.extract_urls(content)
+        scraped = itertools.chain(
+            iocextract.extract_unencoded_urls(content),
+            # decode encoded URLs, since we can't operate on encoded ones
+            iocextract.extract_encoded_urls(content, refang=True),
+        )
         for url in scraped:
             # dump anything with ellipses, these get through the regex
             if u'\u2026' in url:
