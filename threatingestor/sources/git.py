@@ -60,7 +60,7 @@ class Plugin(Source):
 def _git_cmd(args):
     # may raise subprocess.CalledProcessError
     git_cmdline = ['git'] + args
-    return subprocess.check_output(git_cmdline)
+    return subprocess.check_output(git_cmdline).decode('utf-8')
 
 def _git_cmd_chdir(path, args):
     cwd = os.getcwd()
