@@ -30,7 +30,7 @@ class TestGit(unittest.TestCase):
     @patch('threatingestor.sources.git.git_pull')
     @patch('threatingestor.sources.git.git_latest_hash')
     @patch('threatingestor.sources.git.git_diff_names')
-    @patch('threatingestor.sources.git.open')
+    @patch('threatingestor.sources.git.io.open')
     def test_run_with_saved_state_pulls_diffs_parses(self, m_open, git_diff_names, git_latest_hash, git_pull):
         git_latest_hash.return_value = 'test_latest'
         git_diff_names.return_value = 'test_file\ntest_file.rule'
@@ -41,14 +41,14 @@ class TestGit(unittest.TestCase):
         git_pull.assert_called_once_with(self.git.local_path)
         git_latest_hash.assert_called_once_with(self.git.local_path)
         git_diff_names.assert_called_once_with(self.git.local_path, 'test_saved')
-        m_open.assert_called_once_with(os.path.join(self.git.local_path, 'test_file.rule'), 'r')
+        m_open.assert_called_once_with(os.path.join(self.git.local_path, 'test_file.rule'), 'r', encoding='utf-8', errors='ignore')
         self.assertEqual(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 
     @patch('threatingestor.sources.git.git_clone')
     @patch('threatingestor.sources.git.git_latest_hash')
     @patch('threatingestor.sources.git.git_ls_files')
-    @patch('threatingestor.sources.git.open')
+    @patch('threatingestor.sources.git.io.open')
     def test_run_without_saved_state_clones_lists_parses(self, m_open, git_ls_files, git_latest_hash, git_clone):
         git_latest_hash.return_value = 'test_latest'
         git_ls_files.return_value = 'test_file\ntest_file.yar'
@@ -59,7 +59,7 @@ class TestGit(unittest.TestCase):
         git_clone.assert_called_once_with(self.git.url, self.git.local_path)
         git_latest_hash.assert_called_once_with(self.git.local_path)
         git_ls_files.assert_called_once_with(self.git.local_path)
-        m_open.assert_called_once_with(os.path.join(self.git.local_path, 'test_file.yar'), 'r')
+        m_open.assert_called_once_with(os.path.join(self.git.local_path, 'test_file.yar'), 'r', encoding='utf-8', errors='ignore')
         self.assertEqual(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 

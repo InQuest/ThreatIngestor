@@ -1,4 +1,5 @@
 import os
+import io
 import sys
 import subprocess
 
@@ -51,7 +52,7 @@ class Plugin(Source):
         artifact_list = []
         for filename in all_filenames:
             if any([filename.endswith(x) for x in YARA_FILE_EXTS]):
-                with open(os.path.join(self.local_path, filename), 'r') as f:
+                with io.open(os.path.join(self.local_path, filename), 'r', encoding='utf-8', errors='ignore') as f:
                     artifact_list += self.process_element(f.read(), self.url, include_nonobfuscated=True)
 
         return new_hash, artifact_list
