@@ -30,23 +30,9 @@ class Plugin(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
-        format_fn = None
-        if isinstance(artifact, threatingestor.artifacts.URL):
-            format_fn = _format_value_url
-        elif isinstance(artifact, threatingestor.artifacts.Hash):
-            format_fn = _format_value_hash
-        elif isinstance(artifact, threatingestor.artifacts.IPAddress):
-            format_fn = _format_value_ipaddress
-        elif isinstance(artifact, threatingestor.artifacts.Domain):
-            format_fn = _format_value_domain
-        elif isinstance(artifact, threatingestor.artifacts.YARASignature):
-            format_fn = _format_value_yarasignature
+        message_body = dict([(k, artifact.format_message(v)) for (k, v) in self.kwargs.items()])
 
-        if format_fn:
-            # it's an artifact type we know how to handle
-            message_body = dict([(k, format_fn(v, artifact)) for (k, v) in self.kwargs.items()])
-
-            self._sqs_put(json.dumps(message_body))
+        self._sqs_put(json.dumps(message_body))
 
     def _sqs_put(self, content):
         """Send content to an SQS queue"""
@@ -55,34 +41,3 @@ class Plugin(Operator):
                 DelaySeconds=0,
                 MessageBody=content
         )
-
-def _format_value_url(value, url):
-    """Allow interpolation from kwargs"""
-    return value.format(
-        url=str(url),
-        domain=url.domain()
-    )
-
-def _format_value_domain(value, domain):
-    """Allow interpolation from kwargs"""
-    return value.format(
-        domain=str(domain)
-    )
-
-def _format_value_ipaddress(value, ipaddress):
-    """Allow interpolation from kwargs"""
-    return value.format(
-        ipaddress=str(ipaddress)
-    )
-
-def _format_value_hash(value, hash_):
-    """Allow interpolation from kwargs"""
-    return value.format(
-        hash=str(hash_)
-    )
-
-def _format_value_yarasignature(value, yarasignature):
-    """Allow interpolation from kwargs"""
-    return value.format(
-        yarasignature=str(yarasignature)
-    )
