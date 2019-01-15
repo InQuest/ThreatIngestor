@@ -31,7 +31,7 @@ class Plugin(Source):
                 new_hash = git_latest_hash(self.local_path)
                 all_filenames = git_diff_names(self.local_path, saved_state).splitlines()
             except (subprocess.CalledProcessError, OSError) as e:
-                sys.stderr.write("error with git pull from {path}: {e}".format(path=self.local_path, e=e))
+                sys.stderr.write("error with git pull from {path}: {e}\n".format(path=self.local_path, e=e))
 
         else:
             # first time, we try cloning the repo and look at all files
@@ -40,7 +40,7 @@ class Plugin(Source):
                 new_hash = git_latest_hash(self.local_path)
                 all_filenames = git_ls_files(self.local_path).splitlines()
             except (subprocess.CalledProcessError, OSError) as e:
-                sys.stderr.write("error with git clone of {url} to {path}: {e}".format(url=self.url,
+                sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
                                                                                        path=self.local_path,
                                                                                        e=e))
 
