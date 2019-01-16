@@ -36,7 +36,8 @@ class Plugin(Operator):
         self.api.create('c2dns', {
                 'domain_name': str(domain),
                 'match_type': '',
-                'description': domain.reference_text,
+                'references': '{l}\n\n{t}'.format(l=domain.reference_link, t=domain.reference_text),
+                'description': '',
                 'expiration_type': '',
                 'state': {'state': self.state},
                 'tags': [],
@@ -47,7 +48,8 @@ class Plugin(Operator):
         """Handle a single IP address"""
         self.api.create('c2ips', {
                 'ip': str(ipaddress),
-                'description': ipaddress.reference_text,
+                'description': '',
+                'references': '{l}\n\n{t}'.format(l=ipaddress.reference_link, t=ipaddress.reference_text),
                 'expiration_type': '',
                 'state': {'state': self.state},
                 'asn': '',
@@ -65,6 +67,8 @@ class Plugin(Operator):
                 'import_text': str(yarasignature),
                 'shared_reference': yarasignature.reference_link,
                 'shared_state': {'state': self.state},
+                'extract_ip': False,
+                'extract_dns': False,
             })
 
     def handle_task(self, task):
