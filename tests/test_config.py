@@ -1,7 +1,9 @@
 import sys
 import io
 import unittest
-from unittest.mock import mock_open, patch
+from unittest.mock import mock_open, patch, Mock
+
+import yaml
 
 import threatingestor.config
 import threatingestor.artifacts
@@ -12,38 +14,94 @@ import threatingestor.operators.threatkb
 
 class TestConfig(unittest.TestCase):
 
-    @patch('configparser.ConfigParser')
-    def setUp(self, ConfigParser):
-        self.config = threatingestor.config.Config('test')
+    def setUp(self):
+        m = mock_open()
+        with patch('threatingestor.config.io.open', m, create=True):
+            self.config = threatingestor.config.Config('test')
 
     def test_daemon_returns_main_daemon_bool(self):
-        self.config.config.getboolean.return_value = True
+        # Mock true/false values for daemon variable.
+        self.config.config = {
+            'general': {
+                'daemon': True,
+            }
+        }
         self.assertTrue(self.config.daemon())
-        self.config.config.getboolean.return_value = False
+
+        self.config.config = {
+            'general': {
+                'daemon': False,
+            }
+        }
         self.assertFalse(self.config.daemon())
 
     def test_sleep_returns_main_sleep_int(self):
-        self.config.config.getint.return_value = 10
+        self.config.config = {
+            'general': {
+                'sleep': 10,
+            }
+        }
         self.assertEqual(self.config.sleep(), 10)
-        self.config.config.getint.return_value = 90
+
+        self.config.config = {
+            'general': {
+                'sleep': 90,
+            }
+        }
         self.assertEqual(self.config.sleep(), 90)
 
+
     def test_sources_returns_list_of_all_source_tuples(self):
-        self.config.config.sections.return_value = [
-            'source:test-one',
-            'source:test-two',
-            'not-a-source-or-operator',
-            'operator:test-one',
-            'operator:test-three',
-        ]
-        self.config.config.options.return_value = ['module']
-        self.config.config.get.return_value = 'rss'
+        self.config.config = {
+            'sources': [
+                {
+                    'name': 'test-one',
+                    'module': 'rss',
+                    'url': 'example',
+                },
+                {
+                    'name': 'test-two',
+                    'module': 'rss',
+                    'url': 'example',
+                },
+            ]
+        }
         expected_sources = [
-            ('source:test-one', threatingestor.sources.rss.Plugin, {'name': 'test-one'}),
-            ('source:test-two', threatingestor.sources.rss.Plugin, {'name': 'test-two'}),
+            ('test-one', threatingestor.sources.rss.Plugin, {'name': 'test-one', 'url': 'example'}),
+            ('test-two', threatingestor.sources.rss.Plugin, {'name': 'test-two', 'url': 'example'}),
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
+    def test_sources_list_includes_credentials(self):
+        self.config.config = {
+            'credentials': [
+                {
+                    'name': 'mycreds',
+                    'token': 'mytoken',
+                },
+            ],
+            'sources': [
+                {
+                    'name': 'test-one',
+                    'module': 'rss',
+                    'url': 'example',
+                    'credentials': 'mycreds',
+                },
+                {
+                    'name': 'test-two',
+                    'module': 'rss',
+                    'url': 'example',
+                },
+            ]
+        }
+        expected_sources = [
+            ('test-one', threatingestor.sources.rss.Plugin,
+                {'name': 'test-one', 'url': 'example', 'token': 'mytoken'}),
+            ('test-two', threatingestor.sources.rss.Plugin, {'name': 'test-two', 'url': 'example'}),
+        ]
+        self.assertEqual(self.config.sources(), expected_sources)
+
+    '''
     def test_sources_excludes_internal_options_from_kwargs(self):
         self.config.config.sections.return_value = [
             'source:test-one',
@@ -170,6 +228,7 @@ class TestConfig(unittest.TestCase):
                          threatingestor.sources.rss.Plugin)
         self.assertEqual(self.config._load_plugin(threatingestor.config.OPERATOR, 'csv'),
                          threatingestor.operators.csv.Plugin)
+    '''
 
     @patch('importlib.import_module')
     def test_load_plugin_raises_pluginerror_if_no_plugin(self, import_module):

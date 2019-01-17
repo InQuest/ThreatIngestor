@@ -1,9 +1,12 @@
+import io
 import importlib
 try:
     import ConfigParser as configparser
 except ImportError:
     #py3
     import configparser
+
+import yaml
 
 from threatingestor.exceptions import PluginError
 import threatingestor.artifacts
@@ -14,6 +17,8 @@ OPERATOR = 'threatingestor.operators'
 INTERNAL_OPTIONS = [
     'saved_state',
     'module',
+    'name',
+    'credentials',
 ]
 
 ARTIFACT_TYPES = 'artifact_types'
@@ -25,8 +30,8 @@ class Config:
 
     def __init__(self, filename):
         self.filename = filename
-        self.config = configparser.ConfigParser()
-        self.config.read(filename)
+        with io.open(self.filename, 'r') as f:
+            self.config = yaml.load(f.read())
 
     @staticmethod
     def _load_plugin(plugin_type, plugin):
@@ -39,25 +44,38 @@ class Config:
 
     def daemon(self):
         """Returns boolean, are we daemonizing?"""
-        return self.config.getboolean('main', 'daemon')
+        return self.config['general']['daemon']
 
     def sleep(self):
         """Returns number of seconds to sleep between iterations, if daemonizing"""
-        return self.config.getint('main', 'sleep')
+        return self.config['general']['sleep']
+
+    def credentials(self, credential_name):
+        """Return a dictionary with the specified credentials"""
+        for credential in self.config['credentials']:
+            for key, value in credential.items():
+                if key == 'name' and value == credential_name:
+                    return credential
 
     def sources(self):
         """Return a list of (name, Source class, {kwargs}) tuples"""
         sources = []
-        for section in self.config.sections():
-            if section.startswith('source:'):
-                # initialize kwargs with required name argument
-                kwargs = {'name': section.lstrip('source:')}
-                for option in self.config.options(section):
-                    if option not in INTERNAL_OPTIONS:
-                        kwargs[option] = self.config.get(section, option)
 
-                # load and initialize the plugin
-                sources.append((section, self._load_plugin(SOURCE, self.config.get(section, 'module')), kwargs))
+        for source in self.config['sources']:
+            # initialize kwargs with required name argument
+            kwargs = {'name': source['name']}
+            for key, value in source.items():
+                if key not in INTERNAL_OPTIONS:
+                    kwargs[key] = value
+                elif key == 'credentials':
+                    # Grab these named credentials
+                    credential_name = value
+                    for credential_key, credential_value in self.credentials(credential_name).items():
+                        if credential_key != 'name':
+                            kwargs[credential_key] = credential_value
+
+            # load and initialize the plugin
+            sources.append((source['name'], self._load_plugin(SOURCE, source['module']), kwargs))
 
         return sources
 
