@@ -81,33 +81,40 @@ class Config:
     def operators(self):
         """Return a list of (name, Operator class, {kwargs}) tuples"""
         operators = []
-        for section in self.config.sections():
-            if section.startswith('operator:'):
-                kwargs = {}
-                for option in self.config.options(section):
-                    if option not in INTERNAL_OPTIONS:
-                        if option == ARTIFACT_TYPES:
-                            # parse out special artifact_types option
-                            types_list = self.config.get(section, option).split(',')
-                            artifact_types = []
-                            for artifact in types_list:
-                                try:
-                                    artifact_types.append(threatingestor.artifacts.STRING_MAP[artifact.lower().strip()])
-                                except KeyError:
-                                    # ignore invalid artifact types
-                                    pass
-                            kwargs[option] = artifact_types
-                        elif option == FILTER_STRING:
-                            # pass in special filter_string option
-                            kwargs['filter_string'] = self.config.get(section, option)
-                        elif option == ALLOWED_SOURCES:
-                            kwargs[option] = [s.strip() for s in self.config.get(section, option).split(',')]
-                        else:
-                            kwargs[option] = self.config.get(section, option)
+        for operator in self.config['operators']:
+            kwargs = {}
+            for key, value in operator.items():
+                if key not in INTERNAL_OPTIONS:
+                    if key == ARTIFACT_TYPES:
+                        # parse out special artifact_types option
+                        artifact_types = []
+                        for artifact in value:
+                            try:
+                                artifact_types.append(threatingestor.artifacts.STRING_MAP[artifact.lower().strip()])
+                            except KeyError:
+                                # ignore invalid artifact types
+                                pass
+                        kwargs[key] = artifact_types
+                    elif key == FILTER_STRING:
+                        # pass in special filter_string option
+                        kwargs['filter_string'] = value
+                    elif key == ALLOWED_SOURCES:
+                        kwargs[key] = [s.strip() for s in value]
 
-                # load and initialize the plugin
-                operators.append((section, self._load_plugin(OPERATOR, self.config.get(section, 'module')), kwargs))
+                    else:
+                        kwargs[key] = value
+                elif key == 'credentials':
+                    # Grab these named credentials
+                    credential_name = value
+                    for credential_key, credential_value in self.credentials(credential_name).items():
+                        if credential_key != 'name':
+                            kwargs[credential_key] = credential_value
 
+
+
+            # load and initialize the plugin
+            operators.append((operator["name"], self._load_plugin(OPERATOR, operator['module']), kwargs))
+        
         return operators
 
     def save_state(self, source, saved_state):

@@ -140,34 +140,85 @@ class TestConfig(unittest.TestCase):
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
-    '''
+    
     def test_operators_returns_list_of_all_operator_tuples(self):
-        self.config.config.sections.return_value = [
-            'source:test-one',
-            'source:test-two',
-            'not-a-source-or-operator',
-            'operator:test-one',
-            'operator:test-three',
-        ]
-        self.config.config.options.return_value = ['module']
-        self.config.config.get.return_value = 'csv'
+        self.config.config = {
+            'operators': [
+                {
+                    'name': 'test-one',
+                    'module': 'csv',
+                    'filename': 'output.csv',
+                },
+                {
+                    
+                    'name':'test-three',
+                    'module':'csv',
+                    'filename':'output.csv',
+                }
+            ]
+        }
+
         expected_operators = [
-            ('operator:test-one', threatingestor.operators.csv.Plugin, {}),
-            ('operator:test-three', threatingestor.operators.csv.Plugin, {}),
+                ('test-one', threatingestor.operators.csv.Plugin, {'filename':'output.csv', 'name':'test-one'}),
+                ('test-three', threatingestor.operators.csv.Plugin, {'filename':'output.csv','name':'test-three'})
         ]
         self.assertEqual(self.config.operators(), expected_operators)
 
+    def test_operators_list_includes_credentials(self):
+        self.config.config = {
+            'credentials': [
+                {
+                    'name': 'mycreds',
+                    'token': 'mytoken',
+                },
+            ],
+            'operators': [
+                {
+                    'name': 'test-one',
+                    'module': 'csv',
+                    'filename': 'output.csv',
+                    'credentials':'mycreds'
+                },
+                {
+                    
+                    'name':'test-three',
+                    'module':'csv',
+                    'filename':'output.csv',
+                }],
+        }
+        
+        expected_operators = [
+                ('test-one', threatingestor.operators.csv.Plugin, {'filename':'output.csv', 'name':'test-one', 'token':'mytoken'}),
+            ('test-three', threatingestor.operators.csv.Plugin, {'filename':'output.csv','name':'test-three'})
+        ]
+        
+        self.assertEqual(self.config.operators(), expected_operators)
+     
     def test_operators_excludes_internal_options_from_kwargs(self):
-        self.config.config.sections.return_value = [
-            'operator:test-one',
-        ]
-        self.config.config.options.return_value = ['module', 'saved_state', 'another_one']
-        self.config.config.get.return_value = 'csv'
+        self.config.config = {
+            'operators': [
+                {
+                    'name': 'test-one',
+                    'module': 'csv',
+                    'filename':'output.csv',
+                    'allowed_sources': ["mysource", "myothersource"],
+                    'filter': '([^\.]google.com$|google.com[^/])',
+                    'artifact_types': ["URL", "Domain"]
+               },
+            ]
+
+        }
+
+     
         expected_operators = [
-            ('operator:test-one', threatingestor.operators.csv.Plugin, {'another_one': 'csv'}),
+                ('test-one', threatingestor.operators.csv.Plugin, {'name':'test-one', 'filename':'output.csv', 'allowed_sources':["mysource","myothersource"],'filter_string': '([^\.]google.com$|google.com[^/])','artifact_types':[threatingestor.artifacts.URL,threatingestor.artifacts.Domain]})
         ]
+        
         self.assertEqual(self.config.operators(), expected_operators)
 
+    
+
+    '''
     def test_save_state_writes_saved_state(self):
         self.config.config.set.assert_not_called()
 
@@ -183,80 +234,15 @@ class TestConfig(unittest.TestCase):
         self.config.config.read.assert_called_once()
         self.assertEqual(self.config.get_state(None), 'test')
         self.assertEqual(self.config.config.read.call_count, 2)
+    '''
 
-    def test_operators_include_artifact_list_in_kwargs(self):
-        data = u'\n'.join([l.strip() for l in u"""
-        [operator:test-one]
-        module = threatkb
-        artifact_types = URL,Domain, IPAddress , YARASignature
-        another_one = test
-
-        [operator:test-operator-two]
-        module = csv
-        artifact_types = IPAddress
-
-        [operator:test-no-types]
-        module = csv
-        """.splitlines()])
-        # can't use mock_open, since ConfigParser reacts poorly with it.
-        # mock the correct global open depending on python version.
-        open_func = '__builtin__.open'
-        if sys.version_info[0] == 3:
-            open_func = 'builtins.open'
-        with patch(open_func, return_value=io.StringIO(data)):
-            config_obj = threatingestor.config.Config('test')
-            expected_operators = [
-                ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'artifact_types': [
-                    threatingestor.artifacts.URL,
-                    threatingestor.artifacts.Domain,
-                    threatingestor.artifacts.IPAddress,
-                    threatingestor.artifacts.YARASignature,
-                ]}),
-                ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'artifact_types': [threatingestor.artifacts.IPAddress]}),
-                ('operator:test-no-types', threatingestor.operators.csv.Plugin, {}),
-            ]
-            self.assertEqual(config_obj.operators(), expected_operators)
-
-    def test_operators_include_filter_in_kwargs(self):
-        data = u'\n'.join([l.strip() for l in u"""
-        [operator:test-one]
-        module = threatkb
-        artifact_types = URL,Domain, IPAddress , YARASignature
-        filter = (some|regex.*)
-        another_one = test
-
-        [operator:test-operator-two]
-        module = csv
-        filter = is_domain, not is_ip
-
-        [operator:test-no-filter]
-        module = csv
-        """.splitlines()])
-        # can't use mock_open, since ConfigParser reacts poorly with it.
-        # mock the correct global open depending on python version.
-        open_func = '__builtin__.open'
-        if sys.version_info[0] == 3:
-            open_func = 'builtins.open'
-        with patch(open_func, return_value=io.StringIO(data)):
-            config_obj = threatingestor.config.Config('test')
-            expected_operators = [
-                ('operator:test-one', threatingestor.operators.threatkb.Plugin, {'another_one': 'test', 'filter_string': '(some|regex.*)', 'artifact_types': [
-                    threatingestor.artifacts.URL,
-                    threatingestor.artifacts.Domain,
-                    threatingestor.artifacts.IPAddress,
-                    threatingestor.artifacts.YARASignature,
-                ]}),
-                ('operator:test-operator-two', threatingestor.operators.csv.Plugin, {'filter_string': 'is_domain, not is_ip'}),
-                ('operator:test-no-filter', threatingestor.operators.csv.Plugin, {}),
-            ]
-            self.assertEqual(config_obj.operators(), expected_operators)
-
+    
     def test_load_plugin_returns_plugin_class(self):
         self.assertEqual(self.config._load_plugin(threatingestor.config.SOURCE, 'rss'),
                          threatingestor.sources.rss.Plugin)
         self.assertEqual(self.config._load_plugin(threatingestor.config.OPERATOR, 'csv'),
                          threatingestor.operators.csv.Plugin)
-    '''
+    
 
     @patch('importlib.import_module')
     def test_load_plugin_raises_pluginerror_if_no_plugin(self, import_module):
