@@ -50,6 +50,26 @@ class TestConfig(unittest.TestCase):
         }
         self.assertEqual(self.config.sleep(), 90)
 
+    def test_credentials_returns_dictionary_of_credentials(self):
+        self.config.config = {
+                'credentials': [{
+                    'name':'twitter-myuser',
+                    'token':'EXAMPLE',
+                    'token_key': 'EXAMPLE',
+                    'con_secret_key': 'EXAMPLE',
+                    'con_secret': 'EXAMPLE'
+                    }]
+                }
+
+        expected = {
+                    'name':'twitter-myuser',
+                    'token':'EXAMPLE',
+                    'token_key': 'EXAMPLE',
+                    'con_secret_key': 'EXAMPLE',
+                    'con_secret': 'EXAMPLE'
+                }
+
+        self.assertEqual(self.config.credentials('twitter-myuser') , expected)
 
     def test_sources_returns_list_of_all_source_tuples(self):
         self.config.config = {
@@ -101,18 +121,26 @@ class TestConfig(unittest.TestCase):
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
-    '''
+    
     def test_sources_excludes_internal_options_from_kwargs(self):
-        self.config.config.sections.return_value = [
-            'source:test-one',
-        ]
-        self.config.config.options.return_value = ['module', 'saved_state', 'another_one']
-        self.config.config.get.return_value = 'rss'
+        self.config.config = {
+            'sources': [
+                {
+                    'name': 'test-one',
+                    'module': 'rss',
+                    'url': 'example',
+                    'saved_state': 'test',
+                },
+            ]
+        }
+
+     
         expected_sources = [
-            ('source:test-one', threatingestor.sources.rss.Plugin, {'another_one': 'rss', 'name': 'test-one'}),
+                ('test-one', threatingestor.sources.rss.Plugin, {'url': 'example','name':'test-one'})
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
+    '''
     def test_operators_returns_list_of_all_operator_tuples(self):
         self.config.config.sections.return_value = [
             'source:test-one',

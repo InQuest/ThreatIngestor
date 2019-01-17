@@ -17,7 +17,6 @@ OPERATOR = 'threatingestor.operators'
 INTERNAL_OPTIONS = [
     'saved_state',
     'module',
-    'name',
     'credentials',
 ]
 
