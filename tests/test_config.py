@@ -35,6 +35,17 @@ class TestConfig(unittest.TestCase):
         }
         self.assertFalse(self.config.daemon())
 
+    def test_state_path_returns(self):
+        self.config.config = {
+            'general': {
+                'state_path': "/home/user/test",
+            }
+        }
+
+        self.assertEqual(self.config.state_path(), "/home/user/test")
+
+
+
     def test_sleep_returns_main_sleep_int(self):
         self.config.config = {
             'general': {
@@ -218,25 +229,7 @@ class TestConfig(unittest.TestCase):
 
     
 
-    '''
-    def test_save_state_writes_saved_state(self):
-        self.config.config.set.assert_not_called()
-
-        m = mock_open()
-        with patch('threatingestor.config.open', m, create=True):
-            m.assert_not_called()
-            self.config.save_state('test', 'state')
-            self.config.config.set.assert_called_once()
-            m.assert_called_once()
-
-    def test_get_state_reads_saved_state(self):
-        self.config.config.get.return_value = 'test'
-        self.config.config.read.assert_called_once()
-        self.assertEqual(self.config.get_state(None), 'test')
-        self.assertEqual(self.config.config.read.call_count, 2)
-    '''
-
-    
+      
     def test_load_plugin_returns_plugin_class(self):
         self.assertEqual(self.config._load_plugin(threatingestor.config.SOURCE, 'rss'),
                          threatingestor.sources.rss.Plugin)

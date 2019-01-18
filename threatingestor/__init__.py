@@ -3,7 +3,7 @@ import time
 
 import threatingestor.config
 from threatingestor.exceptions import IngestorError
-
+from threatingestor.state import State
 class Ingestor:
 
     def __init__(self, config_file):
@@ -13,6 +13,8 @@ class Ingestor:
             # error loading config
             sys.stderr.write(e.message)
             sys.exit(1)
+        
+        self.statedb = State(self.config.state_path())
 
         self.sources = dict([(name, source(**kwargs)) for name, source, kwargs in self.config.sources()])
         self.operators = dict([(name, operator(**kwargs)) for name, operator, kwargs in self.config.operators()])
@@ -25,8 +27,10 @@ class Ingestor:
 
     def run_once(self):
         for source in self.sources:
-            saved_state, artifacts = self.sources[source].run(self.config.get_state(source))
-            self.config.save_state(source, saved_state)
+            saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
+
+            self.statedb.save_state(source, saved_state)
+
 
             for operator in self.operators:
                 self.operators[operator].process(artifacts)

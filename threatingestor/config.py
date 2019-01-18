@@ -45,6 +45,10 @@ class Config:
         """Returns boolean, are we daemonizing?"""
         return self.config['general']['daemon']
 
+    def state_path(self):
+        """Returns path of state.db file"""
+        return self.config['general']['state_path']
+    
     def sleep(self):
         """Returns number of seconds to sleep between iterations, if daemonizing"""
         return self.config['general']['sleep']
