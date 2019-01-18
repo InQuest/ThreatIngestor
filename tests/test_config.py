@@ -1,9 +1,7 @@
 import sys
 import io
 import unittest
-from unittest.mock import mock_open, patch, Mock
-
-import yaml
+from unittest.mock import mock_open, patch
 
 import threatingestor.config
 import threatingestor.artifacts
