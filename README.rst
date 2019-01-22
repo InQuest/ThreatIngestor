@@ -50,7 +50,7 @@ Usage
 -----
 
 Create a new ``config.ini`` file, and configure each source and operator module
-you want to use. (See ``config.ini.example`` for layout.) Then run the script::
+you want to use. (See ``config.example.yaml`` for layout.) Then run the script::
 
     threatingestor config.ini
 
