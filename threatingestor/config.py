@@ -1,10 +1,5 @@
 import io
 import importlib
-try:
-    import ConfigParser as configparser
-except ImportError:
-    #py3
-    import configparser
 
 import yaml
 
@@ -30,7 +25,7 @@ class Config:
     def __init__(self, filename):
         self.filename = filename
         with io.open(self.filename, 'r') as f:
-            self.config = yaml.load_safe(f.read())
+            self.config = yaml.safe_load(f.read())
 
     @staticmethod
     def _load_plugin(plugin_type, plugin):
