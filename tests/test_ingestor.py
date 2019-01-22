@@ -40,8 +40,8 @@ class TestIngestor(unittest.TestCase):
         Config.return_value.state_path.return_value = ":memory:"
 
         app = threatingestor.Ingestor('test')
-        self.assertEqual(app.sources['test-twitter'].q, 'test') 
-        self.assertEqual(app.operators['test-csv'].filename, 'test') 
+        self.assertEqual(app.sources['test-twitter'].q, 'test')
+        self.assertEqual(app.operators['test-csv'].filename, 'test')
         self.assertEqual(len(app.sources), 2)
         self.assertEqual(len(app.operators), 2)
 

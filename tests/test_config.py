@@ -42,8 +42,6 @@ class TestConfig(unittest.TestCase):
 
         self.assertEqual(self.config.state_path(), "/home/user/test")
 
-
-
     def test_sleep_returns_main_sleep_int(self):
         self.config.config = {
             'general': {
@@ -61,22 +59,24 @@ class TestConfig(unittest.TestCase):
 
     def test_credentials_returns_dictionary_of_credentials(self):
         self.config.config = {
-                'credentials': [{
-                    'name':'twitter-myuser',
-                    'token':'EXAMPLE',
+            'credentials': [
+                {
+                    'name': 'twitter-myuser',
+                    'token': 'EXAMPLE',
                     'token_key': 'EXAMPLE',
                     'con_secret_key': 'EXAMPLE',
                     'con_secret': 'EXAMPLE'
-                    }]
-                }
+                },
+            ]
+        }
 
         expected = {
-                    'name':'twitter-myuser',
-                    'token':'EXAMPLE',
-                    'token_key': 'EXAMPLE',
-                    'con_secret_key': 'EXAMPLE',
-                    'con_secret': 'EXAMPLE'
-                }
+            'name': 'twitter-myuser',
+            'token': 'EXAMPLE',
+            'token_key': 'EXAMPLE',
+            'con_secret_key': 'EXAMPLE',
+            'con_secret': 'EXAMPLE'
+        }
 
         self.assertEqual(self.config.credentials('twitter-myuser') , expected)
 
@@ -130,7 +130,6 @@ class TestConfig(unittest.TestCase):
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
-    
     def test_sources_excludes_internal_options_from_kwargs(self):
         self.config.config = {
             'sources': [
@@ -143,13 +142,11 @@ class TestConfig(unittest.TestCase):
             ]
         }
 
-     
         expected_sources = [
-                ('test-one', threatingestor.sources.rss.Plugin, {'url': 'example','name':'test-one'})
+            ('test-one', threatingestor.sources.rss.Plugin, {'url': 'example','name': 'test-one'}),
         ]
         self.assertEqual(self.config.sources(), expected_sources)
 
-    
     def test_operators_returns_list_of_all_operator_tuples(self):
         self.config.config = {
             'operators': [
@@ -159,17 +156,16 @@ class TestConfig(unittest.TestCase):
                     'filename': 'output.csv',
                 },
                 {
-                    
-                    'name':'test-three',
-                    'module':'csv',
-                    'filename':'output.csv',
-                }
+                    'name': 'test-three',
+                    'module': 'csv',
+                    'filename': 'output.csv',
+                },
             ]
         }
 
         expected_operators = [
-                ('test-one', threatingestor.operators.csv.Plugin, {'filename':'output.csv', 'name':'test-one'}),
-                ('test-three', threatingestor.operators.csv.Plugin, {'filename':'output.csv','name':'test-three'})
+            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv', 'name': 'test-one'}),
+            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv','name': 'test-three'}),
         ]
         self.assertEqual(self.config.operators(), expected_operators)
 
@@ -186,54 +182,58 @@ class TestConfig(unittest.TestCase):
                     'name': 'test-one',
                     'module': 'csv',
                     'filename': 'output.csv',
-                    'credentials':'mycreds'
+                    'credentials': 'mycreds'
                 },
                 {
-                    
-                    'name':'test-three',
-                    'module':'csv',
-                    'filename':'output.csv',
-                }],
+                    'name': 'test-three',
+                    'module': 'csv',
+                    'filename': 'output.csv',
+                },
+            ],
         }
-        
+
         expected_operators = [
-                ('test-one', threatingestor.operators.csv.Plugin, {'filename':'output.csv', 'name':'test-one', 'token':'mytoken'}),
-            ('test-three', threatingestor.operators.csv.Plugin, {'filename':'output.csv','name':'test-three'})
+            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv', 'name': 'test-one', 'token': 'mytoken'}),
+            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv','name': 'test-three'}),
         ]
-        
+
         self.assertEqual(self.config.operators(), expected_operators)
-     
+
     def test_operators_excludes_internal_options_from_kwargs(self):
         self.config.config = {
             'operators': [
                 {
                     'name': 'test-one',
                     'module': 'csv',
-                    'filename':'output.csv',
+                    'filename': 'output.csv',
                     'allowed_sources': ["mysource", "myothersource"],
                     'filter': '([^\.]google.com$|google.com[^/])',
-                    'artifact_types': ["URL", "Domain"]
+                    'artifact_types': ["URL", "Domain"],
                },
             ]
 
         }
 
-     
         expected_operators = [
-                ('test-one', threatingestor.operators.csv.Plugin, {'name':'test-one', 'filename':'output.csv', 'allowed_sources':["mysource","myothersource"],'filter_string': '([^\.]google.com$|google.com[^/])','artifact_types':[threatingestor.artifacts.URL,threatingestor.artifacts.Domain]})
+            ('test-one', threatingestor.operators.csv.Plugin, {
+                'name': 'test-one',
+                'filename': 'output.csv',
+                'allowed_sources': ["mysource", "myothersource"],
+                'filter_string': '([^\.]google.com$|google.com[^/])',
+                'artifact_types': [
+                    threatingestor.artifacts.URL,
+                    threatingestor.artifacts.Domain,
+                ],
+            }),
         ]
-        
+
         self.assertEqual(self.config.operators(), expected_operators)
 
-    
-
-      
     def test_load_plugin_returns_plugin_class(self):
         self.assertEqual(self.config._load_plugin(threatingestor.config.SOURCE, 'rss'),
                          threatingestor.sources.rss.Plugin)
         self.assertEqual(self.config._load_plugin(threatingestor.config.OPERATOR, 'csv'),
                          threatingestor.operators.csv.Plugin)
-    
 
     @patch('importlib.import_module')
     def test_load_plugin_raises_pluginerror_if_no_plugin(self, import_module):

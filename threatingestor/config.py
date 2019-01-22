@@ -48,7 +48,7 @@ class Config:
     def state_path(self):
         """Returns path of state.db file"""
         return self.config['general']['state_path']
-    
+
     def sleep(self):
         """Returns number of seconds to sleep between iterations, if daemonizing"""
         return self.config['general']['sleep']
@@ -70,6 +70,7 @@ class Config:
             for key, value in source.items():
                 if key not in INTERNAL_OPTIONS:
                     kwargs[key] = value
+
                 elif key == 'credentials':
                     # Grab these named credentials
                     credential_name = value
@@ -99,14 +100,17 @@ class Config:
                                 # ignore invalid artifact types
                                 pass
                         kwargs[key] = artifact_types
+
                     elif key == FILTER_STRING:
                         # pass in special filter_string option
                         kwargs['filter_string'] = value
+
                     elif key == ALLOWED_SOURCES:
                         kwargs[key] = [s.strip() for s in value]
 
                     else:
                         kwargs[key] = value
+
                 elif key == 'credentials':
                     # Grab these named credentials
                     credential_name = value
@@ -114,11 +118,9 @@ class Config:
                         if credential_key != 'name':
                             kwargs[credential_key] = credential_value
 
-
-
             # load and initialize the plugin
             operators.append((operator["name"], self._load_plugin(OPERATOR, operator['module']), kwargs))
-        
+
         return operators
 
     def save_state(self, source, saved_state):

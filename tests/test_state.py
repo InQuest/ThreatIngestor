@@ -3,7 +3,6 @@ import unittest
 from threatingestor.state import State
 
 
-
 class TestState(unittest.TestCase):
 
     def setUp(self):
@@ -13,7 +12,7 @@ class TestState(unittest.TestCase):
         result = None
         initial= ["STATE","NAME"]
         expected = ["NEWSTATE","NAME"]
-        
+
         #inital save state
         self.state.save_state(initial[1],initial[0])
         beforeUpdate = self.state.get_state(expected[1])
@@ -33,13 +32,11 @@ class TestState(unittest.TestCase):
 
         self.assertEqual(result, expected)
 
-
-
     def test_state_saves(self):
         result = None
         expected = ["STATE","NAME"]
         self.state.save_state(expected[1],expected[0])
-         
+
         result = self.state.get_state(expected[1])
-        
+
         self.assertEqual(result, expected[0])

@@ -2,20 +2,30 @@ import sys
 import time
 
 import threatingestor.config
+import threatingestor.state
 from threatingestor.exceptions import IngestorError
-from threatingestor.state import State
+
+
 class Ingestor:
 
     def __init__(self, config_file):
+        # load config
         try:
             self.config = config.Config(config_file)
         except IngestorError as e:
             # error loading config
-            sys.stderr.write(e.message)
+            sys.stderr.write(e)
             sys.exit(1)
-        
-        self.statedb = State(self.config.state_path())
 
+        # load state db
+        try:
+            self.statedb = threatingestor.state.State(self.config.state_path())
+        except (OSError, IOError) as e:
+            # error loading state db
+            sys.stderr.write(e)
+            sys.exit(1)
+
+        # instantiate plugins
         self.sources = dict([(name, source(**kwargs)) for name, source, kwargs in self.config.sources()])
         self.operators = dict([(name, operator(**kwargs)) for name, operator, kwargs in self.config.operators()])
 
@@ -27,11 +37,13 @@ class Ingestor:
 
     def run_once(self):
         for source in self.sources:
+            # run the source to collect artifacts
             saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
 
+            # save the source state
             self.statedb.save_state(source, saved_state)
 
-
+            # process artifacts with each operator
             for operator in self.operators:
                 self.operators[operator].process(artifacts)
 
