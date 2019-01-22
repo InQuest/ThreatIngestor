@@ -19,7 +19,9 @@ class TestIngestor(unittest.TestCase):
             ['test-csv', mock_source_operator, {'filename': 'test'}],
         ]
 
+        Config.return_value.state_path.return_value = ":memory:"
         self.app = threatingestor.Ingestor('test')
+        self.app.statedb = Mock()
 
     @patch('threatingestor.config.Config')
     def test_init_creates_sources_operators_dicts(self, Config):
@@ -35,9 +37,11 @@ class TestIngestor(unittest.TestCase):
         }
         Config.return_value.configure_mock(**attrs)
 
+        Config.return_value.state_path.return_value = ":memory:"
+
         app = threatingestor.Ingestor('test')
-        self.assertEqual(app.sources['test-twitter'].q, 'test') 
-        self.assertEqual(app.operators['test-csv'].filename, 'test') 
+        self.assertEqual(app.sources['test-twitter'].q, 'test')
+        self.assertEqual(app.operators['test-csv'].filename, 'test')
         self.assertEqual(len(app.sources), 2)
         self.assertEqual(len(app.operators), 2)
 
@@ -49,10 +53,11 @@ class TestIngestor(unittest.TestCase):
     def test_run_once_calls_run_process_save_state(self):
         self.app.sources['test-twitter'].process.assert_not_called()
         self.app.sources['test-twitter'].run.assert_not_called()
-        self.app.config.save_state.assert_not_called()
+        self.app.statedb.save_state.assert_not_called()
+
         self.app.run_once()
         self.app.sources['test-twitter'].process.assert_called()
         self.app.sources['test-twitter'].run.assert_called()
-        self.app.config.save_state.assert_called()
+        self.app.statedb.save_state.assert_called()
         # should run 4 times, sources*operators.
         self.assertEqual(self.app.sources['test-twitter'].process.call_count, 4)
