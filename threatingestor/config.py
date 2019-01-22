@@ -30,7 +30,7 @@ class Config:
     def __init__(self, filename):
         self.filename = filename
         with io.open(self.filename, 'r') as f:
-            self.config = yaml.load(f.read())
+            self.config = yaml.load_safe(f.read())
 
     @staticmethod
     def _load_plugin(plugin_type, plugin):
