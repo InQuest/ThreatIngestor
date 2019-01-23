@@ -41,6 +41,15 @@ threatingestor.exceptions
    :show-inheritance:
    :member-order: bysource
 
+threatingestor.state
+~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: threatingestor.state
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
 threatingestor.operators
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
