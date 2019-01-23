@@ -1,0 +1,22 @@
+general:
+    daemon: true
+    sleep: 900
+    state_path: state.sqlite3
+
+credentials:
+  - name: github-auth
+    username: USER
+    token: MYTOKEN
+                
+sources:
+  - name: github-query
+    module: github
+    credentials: github-auth
+    saved_state: 
+    search: CVE-2018-
+
+operators:
+  - name: csv
+    # Write artifacts to a CSV file
+    module: csv
+    filename: output.csv
