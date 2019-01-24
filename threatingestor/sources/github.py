@@ -9,10 +9,10 @@ SEARCH_URL = "https://api.github.com/search/repositories"
 
 class Plugin(Source):
 
-    def __init__(self, name, search, auth_usr="", auth_pass=""):
-        self.auth = (auth_usr, auth_pass)
+    def __init__(self, name,  **kwargs):
+        self.auth = (kwargs['username'], kwargs['token'])
         self.name = name
-        self.search = search
+        self.search = kwargs['search']
 
     def run(self, saved_state):
         # if no saved_state, search max 1 day ago
@@ -23,6 +23,9 @@ class Plugin(Source):
             'q': "{search} created:>={timestamp}".format(search=self.search, timestamp=saved_state)
         }
         response = requests.get(SEARCH_URL, params=params, auth=self.auth)
+        if("message" in response.json()):
+            print("Github API Request Error: "+response.json()['message'])
+            return None
 
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + 'Z'
 

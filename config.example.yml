@@ -11,6 +11,13 @@ credentials:
     con_secret_key: 
     con_secret: 
 
+  - name: github-auth
+    username: user
+    # Could also use password instead https://github.blog/2013-05-16-personal-api-tokens/
+    # https://github.com/settings/tokens
+    token: TOKEN_OR_PASSWORD
+
+
   - name: threatkb-auth
     url: http://mythreatkb
     token: MYTOKEN
@@ -58,6 +65,13 @@ operators:
     credentials: threatkb-auth
     allowed_sources: [twitter-inquest-c2-list, rss-.*]
     state: Inbox
+
+  - name: github-query
+    module: github
+    credentials: github-auth
+    saved_state: 
+    search: CVE-2018-
+
 
   - name: inquest-threatcrawler
     module: sqs
