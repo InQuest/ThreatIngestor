@@ -212,9 +212,9 @@ and operators:
     operators:
       - name: mythreatkb
         # Send artifacts to a ThreatKB instance
-        module = threatkb
+        module: threatkb
         credentials: threatkb-auth
-        state = Inbox
+        state: Inbox
 
 Now that everything is all set up, run the ingestor:
 
