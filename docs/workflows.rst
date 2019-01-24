@@ -34,7 +34,7 @@ download the sample, and analyze it. We don't want to see VirusTotal links or
 open directories in ThreatKB though, because those aren't C2s. This config
 accomplishes all of that:
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [main]
     daemon = true
@@ -137,7 +137,7 @@ send it to the ThreatIngestor input queue, where all the IOCs will be extracted
 and sent to ThreatKB for further analysis. Here's an example config file that
 accomplishes all that:
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [main]
     daemon = true

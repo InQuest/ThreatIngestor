@@ -9,7 +9,7 @@ artifacts to only those matching a certain regex, and more.
 
 To add an operator to your configuration file, include a section like this:
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [operator:myoperator]
     module = myoperatormodule
@@ -30,7 +30,7 @@ restrictions will be sent through the operator.
 
 Example: 
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [source:mysource]
     module = mysourcemodule
@@ -79,7 +79,7 @@ Configuration Options
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [operator:mycsv]
     module = csv
@@ -105,7 +105,7 @@ Configuration Options
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [operator:mythreatkb]
     module = threatkb
@@ -141,7 +141,7 @@ exported.
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [operator:myqueue]
     module = sqs
@@ -191,7 +191,7 @@ Configuration Options
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+.. code-block:: yaml
 
     [operator:mytwitterbot]
     module = twitter

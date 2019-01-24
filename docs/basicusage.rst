@@ -183,7 +183,7 @@ we'll define next.
 Fill out the rest of the ThreatIngestor configuration file with the sources
 and operators:
 
-.. code-block:: ini
+.. code-block:: yaml
 
     sources:
       - name: twitter-inquest-c2-list
