@@ -152,9 +152,9 @@ For Twitter integration, you'll need to grab the tokens, keys, and secrets
 for your Twitter account. Follow these steps from the Twitter documentation:
 https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.
 
-For ThreatKB, click the profile dropdown in the top right of the page, then
-choose "My API Keys". Click the "+" to generate a new token/key pair, and
-copy them somewhere safe.
+For `ThreatKB`_, while logged in to your ThreatKB instance, click the profile
+dropdown in the top right of the page, then choose "My API Keys". Click the "+"
+to generate a new token/key pair, and copy them somewhere safe.
 
 Once you have all the secrets you need, create a new section in your config
 file called ``credentials``, and two list elements inside it for Twitter and
@@ -227,3 +227,4 @@ C2 IPs and domains.
 
 
 .. _YAML syntax guide: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+.. _ThreatKB: https://github.com/InQuest/ThreatKB
