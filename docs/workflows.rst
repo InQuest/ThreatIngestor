@@ -42,7 +42,6 @@ accomplishes all of that:
 
     [source:twitter-feed-c2]
     module = twitter
-    saved_state = 
     token = MYTOKEN
     token_key = MYKEY
     con_secret_key = MYSECRETKEY
@@ -52,7 +51,6 @@ accomplishes all of that:
 
     [source:twitter-search-opendir]
     module = twitter
-    saved_state = 
     token = MYTOKEN
     token_key = MYKEY
     con_secret_key = MYSECRETKEY
@@ -61,7 +59,6 @@ accomplishes all of that:
 
     [source:twitter-search-vt]
     module = twitter
-    saved_state = 
     token = MYTOKEN
     token_key = MYKEY
     con_secret_key = MYSECRETKEY
@@ -70,13 +67,11 @@ accomplishes all of that:
 
     [source:vendor-x]
     module = rss
-    saved_state = 
     url = http://example.com/rss.xml
     feed_type = messy
 
     [source:domain-masq-feed]
     module = web
-    saved_state = 
     url = http://example.com/feed.txt
 
     [operator:my-threatkb]
@@ -150,7 +145,6 @@ accomplishes all that:
 
     [source:twitter-feed-c2]
     module = twitter
-    saved_state = 
     token = MYTOKEN
     token_key = MYKEY
     con_secret_key = MYSECRETKEY
@@ -160,7 +154,6 @@ accomplishes all that:
 
     [source:twitter-search-pastebin]
     module = twitter
-    saved_state = 
     token = MYTOKEN
     token_key = MYKEY
     con_secret_key = MYSECRETKEY

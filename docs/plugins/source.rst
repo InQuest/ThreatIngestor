@@ -14,13 +14,11 @@ To add a source to your configuration file, include a section like this:
 
     [source:mysource]
     module = mysourcemodule
-    saved_state =
 
 ThreatIngestor looks for sections matching ``source:``, and uses the rest
 of the section name as the source name. The ``module`` option must match
 one of the sources listed below, or your :ref:`custom source
-<custom-source-plugins>`. Leave the ``saved_state`` value blank, and it will
-be filled in automatically when the source runs.
+<custom-source-plugins>`.
 
 .. _twitter-source:
 
@@ -34,7 +32,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``twitter``
-* ``saved_state`` (required): leave blank; will be filled with a tweet ID.
 * ``token`` (required): Twitter auth token (See `Twitter oauth docs`_).
 * ``token_key`` (required): Twitter auth token key (See `Twitter oauth docs`_).
 * ``con_secret_key`` (required): Twitter auth connection secret key (See
@@ -78,7 +75,6 @@ Mentions:
 
     [source:twitter-my-mentions]
     module = twitter
-    saved_state =
     token = MYTOKEN
     token_key = MYTOKENKEY
     con_secret_key = MYSECRETKEY
@@ -90,7 +86,6 @@ Twitter list:
 
     [source:twitter-inquest-c2-list]
     module = twitter
-    saved_state =
     token = MYTOKEN
     token_key = MYTOKENKEY
     con_secret_key = MYSECRETKEY
@@ -104,7 +99,6 @@ Twitter user timeline:
 
     [source:twitter-inquest-timeline]
     module = twitter
-    saved_state =
     token = MYTOKEN
     token_key = MYTOKENKEY
     con_secret_key = MYSECRETKEY
@@ -117,7 +111,6 @@ Twitter search:
 
     [source:twitter-open-directory]
     module = twitter
-    saved_state =
     token = MYTOKEN
     token_key = MYTOKENKEY
     con_secret_key = MYSECRETKEY
@@ -145,7 +138,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``rss``
-* ``saved_state`` (required): leave blank; will be filled with a parsable datetime.
 * ``feed_type`` (required): see above; if unsure, use ``messy``.
 * ``url`` (required): URL to the RSS or Atom feed.
 
@@ -156,7 +148,6 @@ Example Configuration
 
     [source:rss-myiocfeed]
     module = rss
-    saved_state =
     url = https://example.com/rss.xml
     feed_type = messy
 
@@ -173,8 +164,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``sqs``
-* ``saved_state`` (required): leave blank; not used (SQS jobs are deleted
-  once processed).
 * ``aws_access_key_id`` (required): Your AWS access key ID.
 * ``aws_secret_access_key`` (required): Your AWS secret access key.
 * ``aws_region`` (required): Your AWS region name.
@@ -187,7 +176,6 @@ Example Configuration
 
     [source:sqs-input]
     module = sqs
-    saved_state =
     aws_access_key_id = MYKEY
     aws_secret_access_key = MYSECRET
     aws_region = MYREGION
@@ -207,7 +195,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``web``
-* ``saved_state`` (required): leave blank; will be filled with HTTP
   ``Last-Modified`` / ``ETag`` header contents, as appropriate.
 * ``url`` (required): URL of the web content you want to poll.
 
@@ -218,7 +205,6 @@ Example Configuration
 
     [source:mylist]
     module = web
-    saved_state =
     url = http://example.com/feed.txt
 
 .. _git-source:
@@ -236,7 +222,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``git``
-* ``saved_state`` (required): leave blank; will be filled with a commit hash.
 * ``url`` (required): URL (can be https, git, ssh, etc) of remote to clone.
 * ``local_path`` (required): folder on disk (relative or absolute) to clone into.
 
@@ -247,7 +232,6 @@ Example Configuration
 
     [source:inquest-yara-rules]
     module = git
-    saved_state =
     url = https://github.com/InQuest/yara-rules.git
     local_path = /opt/threatingestor/git/yara-rules
 
@@ -263,7 +247,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``github``
-* ``saved_state`` (required): leave blank; will be filled with a timestamp.
 * ``search`` (required): search term(s).
 
 Example Configuration
@@ -273,7 +256,6 @@ Example Configuration
 
     [source:github-cve-repos]
     module = github
-    saved_state =
     search = CVE-2018-
 
 .. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens

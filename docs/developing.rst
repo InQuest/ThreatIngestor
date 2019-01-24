@@ -50,7 +50,6 @@ named keys in the ``config.ini`` section at runtime::
     [source:myexample]
     module = examplesource
     my_required_arg = Some value
-    saved_state =
 
 .. _custom-operator-plugins:
 
