@@ -23,6 +23,12 @@ the following workflow:
 
 .. image:: _static/mermaid-multiple-operators.png
    :align: center
+   :alt: Flowchart with five inputs on the left, all feeding into
+         ThreatIngestor in the center, which in turn feeds into three
+         outputs on the right. The inputs are "Twitter C2 List," "Twitter
+         Search: #opendir," "Twitter Search: virustotal.com," "Vendor X Blog,"
+         and "Domain Masquerade Feed." The outputs are "ThreatKB," "Crawler,"
+         and "Automated Analysis."
 
 We want artifacts from "Twitter C2 List" and "Vendor X Blog" to go directly to
 ThreatKB. URLs and domains from "Twitter Search: #opendir" and "Domain
@@ -131,6 +137,13 @@ extraction. Consider the following workflow:
 
 .. image:: _static/mermaid-full-circle.png
    :align: center
+   :alt: Flowchart with three inputs on the left, all feeding into
+         ThreatIngestor in the center, which in turn feeds into two outputs
+         on the right. The three inputs are "Twitter C2 List," "SQS Input
+         Queue," and "Twitter Search: pastebin.com ioc." The outputs are
+         "ThreatKB" and "SQS Pastebin Processor." The "SQS Pastebin Processor"
+         output also flows into the "SQS Input Queue," completing the circular
+         workflow.
 
 Here, we have two Twitter sources: our C2 list and a search for "pastebin.com
 ioc", and one SQS source: the input queue. We then have two operators:
