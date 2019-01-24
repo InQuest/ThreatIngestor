@@ -45,7 +45,7 @@ build the ``artifacts`` list. Check inline documentation, and see
 ``sources/twitter.py`` and ``sources/rss.py`` for examples.
 
 Any arguments specified in ``__init__`` can be passed in from correspondingly
-named keys in the ``config.ini`` section at runtime::
+named keys in the ``config.yml`` section at runtime::
 
     [source:myexample]
     module = examplesource
@@ -84,7 +84,7 @@ named ``Plugin``, overwriting the ``__init__`` and ``handle_artifact`` methods:
 Operators will only be run on artifacts in their ``artifact_types`` list.
 
 As with source modules, any arguments specified in ``__init__`` can be passed in
-from correspondingly named keys in the ``config.ini`` section at runtime::
+from correspondingly named keys in the ``config.yml`` section at runtime::
 
     [operator:myexample]
     module = exampleoperator
