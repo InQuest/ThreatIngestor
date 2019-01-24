@@ -164,8 +164,8 @@ class TestConfig(unittest.TestCase):
         }
 
         expected_operators = [
-            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv', 'name': 'test-one'}),
-            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv','name': 'test-three'}),
+            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv'}),
+            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv'}),
         ]
         self.assertEqual(self.config.operators(), expected_operators)
 
@@ -193,8 +193,8 @@ class TestConfig(unittest.TestCase):
         }
 
         expected_operators = [
-            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv', 'name': 'test-one', 'token': 'mytoken'}),
-            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv','name': 'test-three'}),
+            ('test-one', threatingestor.operators.csv.Plugin, {'filename': 'output.csv', 'token': 'mytoken'}),
+            ('test-three', threatingestor.operators.csv.Plugin, {'filename': 'output.csv'}),
         ]
 
         self.assertEqual(self.config.operators(), expected_operators)
@@ -216,7 +216,6 @@ class TestConfig(unittest.TestCase):
 
         expected_operators = [
             ('test-one', threatingestor.operators.csv.Plugin, {
-                'name': 'test-one',
                 'filename': 'output.csv',
                 'allowed_sources': ["mysource", "myothersource"],
                 'filter_string': '([^\.]google.com$|google.com[^/])',

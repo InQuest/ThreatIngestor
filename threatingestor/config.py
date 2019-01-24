@@ -18,6 +18,7 @@ INTERNAL_OPTIONS = [
 ARTIFACT_TYPES = 'artifact_types'
 FILTER_STRING = 'filter'
 ALLOWED_SOURCES = 'allowed_sources'
+NAME = 'name'
 
 
 class Config:
@@ -52,7 +53,7 @@ class Config:
         """Return a dictionary with the specified credentials"""
         for credential in self.config['credentials']:
             for key, value in credential.items():
-                if key == 'name' and value == credential_name:
+                if key == NAME and value == credential_name:
                     return credential
 
     def sources(self):
@@ -60,8 +61,7 @@ class Config:
         sources = []
 
         for source in self.config['sources']:
-            # initialize kwargs with required name argument
-            kwargs = {'name': source['name']}
+            kwargs = {}
             for key, value in source.items():
                 if key not in INTERNAL_OPTIONS:
                     kwargs[key] = value
@@ -70,11 +70,11 @@ class Config:
                     # Grab these named credentials
                     credential_name = value
                     for credential_key, credential_value in self.credentials(credential_name).items():
-                        if credential_key != 'name':
+                        if credential_key != NAME:
                             kwargs[credential_key] = credential_value
 
             # load and initialize the plugin
-            sources.append((source['name'], self._load_plugin(SOURCE, source['module']), kwargs))
+            sources.append((source[NAME], self._load_plugin(SOURCE, source['module']), kwargs))
 
         return sources
 
@@ -100,8 +100,9 @@ class Config:
                         # pass in special filter_string option
                         kwargs['filter_string'] = value
 
-                    elif key == ALLOWED_SOURCES:
-                        kwargs[key] = [s.strip() for s in value]
+                    elif key == NAME:
+                        # exclude name key from operator kwargs, since it's not used
+                        pass
 
                     else:
                         kwargs[key] = value
@@ -110,7 +111,7 @@ class Config:
                     # Grab these named credentials
                     credential_name = value
                     for credential_key, credential_value in self.credentials(credential_name).items():
-                        if credential_key != 'name':
+                        if credential_key != NAME:
                             kwargs[credential_key] = credential_value
 
             # load and initialize the plugin
