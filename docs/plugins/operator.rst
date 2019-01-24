@@ -236,7 +236,13 @@ Inside the ``operators`` section of your configuration file:
     - name: mytwitterbot
       module: twitter
       credentials: twitter-auth
-      status: {reference_text} #iocs
+      status: '{reference_text} #iocs'
+
+.. note::
+
+    When including hashtags in the status, be sure to put quotes around your
+    status text, as shown in the example above. Otherwise, the ``#``
+    character will be treated as the beginning of a YAML comment.
 
 .. _ThreatKB: https://github.com/InQuest/ThreatKB
 .. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
