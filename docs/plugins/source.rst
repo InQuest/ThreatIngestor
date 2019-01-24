@@ -198,7 +198,7 @@ Configuration Options
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-The following examples all assume AWS credentials have already been
+The following example assumes AWS credentials have already been
 configured in the ``credentials`` section of the config, like this:
 
 .. code-block:: yaml
