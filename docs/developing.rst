@@ -47,9 +47,9 @@ build the ``artifacts`` list. Check inline documentation, and see
 Any arguments specified in ``__init__`` can be passed in from correspondingly
 named keys in the ``config.yml`` section at runtime::
 
-    [source:myexample]
-    module = examplesource
-    my_required_arg = Some value
+    - name: myexample
+      module: examplesource
+      my_required_arg: Some value
 
 .. _custom-operator-plugins:
 
@@ -86,6 +86,6 @@ Operators will only be run on artifacts in their ``artifact_types`` list.
 As with source modules, any arguments specified in ``__init__`` can be passed in
 from correspondingly named keys in the ``config.yml`` section at runtime::
 
-    [operator:myexample]
-    module = exampleoperator
-    my_required_arg = Some value
+    - name: myexample
+      module: exampleoperator
+      my_required_arg: Some value
