@@ -36,75 +36,80 @@ accomplishes all of that:
 
 .. code-block:: yaml
 
-    [main]
-    daemon = true
-    sleep = 900
+    general:
+        daemon: true
+        sleep: 900
+        state_path: state.sqlite3
 
-    [source:twitter-feed-c2]
-    module = twitter
-    token = MYTOKEN
-    token_key = MYKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    owner_screen_name = InQuest
-    slug = c2-feed
+    credentials:
+      - name: twitter-auth
+        token: MYTOKEN
+        token_key: MYKEY
+        con_secret_key: MYSECRETKEY
+        con_secret: MYSECRET
 
-    [source:twitter-search-opendir]
-    module = twitter
-    token = MYTOKEN
-    token_key = MYKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    q = #opendir
+      - name: threatkb-auth
+        url: http://mythreatkb
+        token: MYTOKEN
+        secret_key: MYKEY
 
-    [source:twitter-search-vt]
-    module = twitter
-    token = MYTOKEN
-    token_key = MYKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    q = virustotal.com
+      - name: aws-auth
+        aws_access_key_id: MYKEY
+        aws_secret_access_key: MYSECRET
+        aws_region: MYREGION
 
-    [source:vendor-x]
-    module = rss
-    url = http://example.com/rss.xml
-    feed_type = messy
+    sources:
+      - name: twitter-feed-c2
+        module: twitter
+        credentials: twitter-auth
+        owner_screen_name: InQuest
+        slug: c2-feed
 
-    [source:domain-masq-feed]
-    module = web
-    url = http://example.com/feed.txt
+      - name: twitter-search-opendir
+        module: twitter
+        credentials: twitter-auth
+        q: '#opendir'
 
-    [operator:my-threatkb]
-    module = threatkb
-    allowed_sources = twitter-feed-c2, vendor-x
-    url = http://mythreatkb
-    token = MYTOKEN
-    secret_key = MYKEY
-    state = Ingestor
+      - name: twitter-search-vt
+        module: twitter
+        credentials: twitter-auth
+        q: virustotal.com
 
-    [operator:my-crawler]
-    module = sqs
-    allowed_sources = twitter-search-opendir, domain-masq-feed
-    artifact_types = URL
-    aws_access_key_id = MYKEY
-    aws_secret_access_key = MYSECRET
-    aws_region = MYREGION
-    queue_name = crawler
-    domain = {domain}
-    url = {url}
-    source_type = url
+      - name: vendor-x
+        module: rss
+        url: http://example.com/rss.xml
+        feed_type: messy
 
-    [operator:my-analyzer]
-    module = sqs
-    allowed_sources = twitter-search-vt
-    filter = https?://virustotal.com/.*/analysis
-    artifact_types = URL
-    aws_access_key_id = MYKEY
-    aws_secret_access_key = MYSECRET
-    aws_region = MYREGION
-    queue_name = analyzer
-    url = {url}
-    source_type = virustotal
+      - name: domain-masq-feed
+        module: web
+        url: http://example.com/feed.txt
+
+    operators:
+      - name: my-threatkb
+        module: threatkb
+        credentials: threatkb-auth
+        allowed_sources: [twitter-feed-c2, vendor-x]
+        state: Ingestor
+
+      - name: my-crawler
+        module: sqs
+        credentials: aws-auth
+        allowed_sources: [twitter-search-opendir, domain-masq-feed]
+        artifact_types: [URL]
+        queue_name: crawler
+        domain: {domain}
+        url: {url}
+        source_type: url
+
+      - name: my-analyzer
+        module: sqs
+        credentials: aws-auth
+        allowed_sources: [twitter-search-vt]
+        filter: https?://virustotal.com/.*/analysis
+        artifact_types: [URL]
+        queue_name: analyzer
+        url: {url}
+        source_type: virustotal
 
 Note that in this example, our Crawler and Automated Analysis systems will be
 watching the configured SQS queues for new artifacts. You can use SQS, or add
@@ -139,49 +144,57 @@ accomplishes all that:
 
 .. code-block:: yaml
 
-    [main]
-    daemon = true
-    sleep = 900
+    general:
+        daemon: true
+        sleep: 900
+        state_path: state.sqlite3
 
-    [source:twitter-feed-c2]
-    module = twitter
-    token = MYTOKEN
-    token_key = MYKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    owner_screen_name = InQuest
-    slug = c2-feed
+    credentials:
+      - name: twitter-auth
+        token: MYTOKEN
+        token_key: MYKEY
+        con_secret_key: MYSECRETKEY
+        con_secret: MYSECRET
 
-    [source:twitter-search-pastebin]
-    module = twitter
-    token = MYTOKEN
-    token_key = MYKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    q = pastebin.com ioc
+      - name: threatkb-auth
+        url: http://mythreatkb
+        token: MYTOKEN
+        secret_key: MYKEY
 
-    [source:sqs-input]
-    module = sqs
-    aws_access_key_id = MYKEY
-    aws_secret_access_key = MYSECRET
-    aws_region = MYREGION
-    queue_name = threatingestor
+      - name: aws-auth
+        aws_access_key_id: MYKEY
+        aws_secret_access_key: MYSECRET
+        aws_region: MYREGION
 
-    [operator:my-threatkb]
-    module = threatkb
-    allowed_sources = sqs-input, twitter-feed-c2
-    url = http://mythreatkb
-    token = MYTOKEN
-    secret_key = MYKEY
-    state = Ingestor
+    sources:
+      - name: twitter-feed-c2
+        module: twitter
+        credentials: twitter-auth
+        owner_screen_name: InQuest
+        slug: c2-feed
 
-    [operator:pastebin-processor]
-    module = sqs
-    allowed_sources = twitter-feed-c2, twitter-search-pastebin
-    artifact_types = URL
-    filter = https?://pastebin.com/.+
-    aws_access_key_id = MYKEY
-    aws_secret_access_key = MYSECRET
-    aws_region = MYREGION
-    queue_name = pastebin-processor
-    url = {url}
+      - name: twitter-search-pastebin
+        module: twitter
+        credentials: twitter-auth
+        q: pastebin.com ioc
+
+      - name: sqs-input
+        module: sqs
+        credentials: aws-auth
+        queue_name: threatingestor
+
+    operators:
+      - name: my-threatkb
+        module: threatkb
+        credentials: threatkb-auth
+        allowed_sources: [sqs-input, twitter-feed-c2]
+        state: Ingestor
+
+      - name: pastebin-processor
+        module: sqs
+        credentials: aws-auth
+        allowed_sources: [twitter-feed-c2, twitter-search-pastebin]
+        artifact_types: [URL]
+        filter: https?://pastebin.com/.+
+        queue_name: pastebin-processor
+        url: {url}
