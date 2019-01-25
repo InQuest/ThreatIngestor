@@ -49,10 +49,10 @@ Install ThreatIngestor and its dependencies::
 Usage
 -----
 
-Create a new ``config.ini`` file, and configure each source and operator module
-you want to use. (See ``config.example.yaml`` for layout.) Then run the script::
+Create a new ``config.yml`` file, and configure each source and operator module
+you want to use. (See ``config.example.yml`` for layout.) Then run the script::
 
-    threatingestor config.ini
+    threatingestor config.yml
 
 By default, it will run forever, polling each configured source every 15
 minutes.

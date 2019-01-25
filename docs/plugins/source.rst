@@ -3,24 +3,56 @@
 Source Plugins
 ==============
 
-For each source specified, ``ThreatIngestor`` handles artifact import. Sources may link to Twitter, Blogs, etc.
-Artifacts are imported from those sources and could include URLs, IP Addresses, YARA Signatures, etc.
-All source plugins maintain state between runs, allowing them to skip previously
-processed artifacts and get right to work finding new indicators.
+For each source specified, ``ThreatIngestor`` handles artifact import. Sources
+may link to Twitter, Blogs, etc. Artifacts are imported from those sources and
+could include URLs, IP Addresses, YARA Signatures, etc. All source plugins
+maintain state between runs, allowing them to skip previously processed
+artifacts and get right to work finding new indicators.
 
 To add a source to your configuration file, include a section like this:
 
-.. code-block:: ini
+.. code-block:: yaml
 
-    [source:mysource]
-    module = mysourcemodule
-    saved_state =
+    sources:
+      - name: mysource
+        module:  mysourcemodule
 
-ThreatIngestor looks for sections matching ``source:``, and uses the rest
-of the section name as the source name. The ``module`` option must match
-one of the sources listed below, or your :ref:`custom source
-<custom-source-plugins>`. Leave the ``saved_state`` value blank, and it will
-be filled in automatically when the source runs.
+You can add as many sources as you need, all under the same ``sources:`` list.
+
+.. code-block:: yaml
+
+    sources:
+      - name: mysource
+        module: mysourcemodule
+
+      - name: myothersource
+        module: mysourcemodule
+
+Note the use of dashes to signify the start of each item in the list, and
+matching indentation for all the keys within each item.
+
+The ``module`` option must match one of the sources listed below, or your
+:ref:`custom source <custom-source-plugins>`. The ``name`` is freeform.
+
+All sources allow credentials such as usernames, passwords, OAuth tokens, etc
+to be defined in a seperate ``credentials`` section and referenced by name with
+a ``credentials`` keyword. Consider a plugin that accepts a ``token`` and a
+``secret``. In ``config.yml``, you would set it up the ``credentials`` and
+``sources`` sections like this:
+
+.. code-block:: yaml
+
+    credentials:
+      - name: mysource-auth
+        token: MYTOKEN
+        secret: MYSECRET
+
+    sources:
+      - name: mysource
+        credentials: mysource-auth
+
+This allows the same credentials to be reused for several different sources
+(or operators) without having to duplicate them in each source definition.
 
 .. _twitter-source:
 
@@ -34,16 +66,15 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``twitter``
-* ``saved_state`` (required): leave blank; will be filled with a tweet ID.
 * ``token`` (required): Twitter auth token (See `Twitter oauth docs`_).
 * ``token_key`` (required): Twitter auth token key (See `Twitter oauth docs`_).
 * ``con_secret_key`` (required): Twitter auth connection secret key (See
   `Twitter oauth docs`_).
 * ``con_secret`` (required): Twitter auth connection secret (See `Twitter oauth
   docs`_).
-* ``defanged_only``: Defaults to true. If set to false, the Twitter source will
-  include all expanded links found in Tweets. If set to true, it will include
-  only defanged links.
+* ``defanged_only``: Defaults to ``true``. If set to ``false``, the Twitter
+  source will include all expanded links found in Tweets. If set to ``true``,
+  it will include only defanged links.
 
 After the above general options, you may include valid options for one of the
 supported Twitter endpoints, as described below. (If you do not include any
@@ -72,57 +103,63 @@ This is the default behavior.
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
+The following examples all assume Twitter credentials have already been
+configured in the ``credentials`` section of the config, like this:
+
+.. code-block:: yaml
+
+    credentials:
+      - name: twitter-auth
+        token: MYTOKEN
+        token_key: MYTOKENKEY
+        con_secret_key: MYSECRETKEY
+        con_secret: MYSECRET
+
+Inside the ``sources`` section of the config, create a new item for the source
+you wish to define. Examples for each of the supported Twitter endpoints are
+provided below.
+
 Mentions:
 
-.. code-block:: ini
+.. code-block:: yaml
 
-    [source:twitter-my-mentions]
-    module = twitter
-    saved_state =
-    token = MYTOKEN
-    token_key = MYTOKENKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
+    - name: twitter-my-mentions
+      module: twitter
+      credentials: twitter-auth
 
 Twitter list:
 
-.. code-block:: ini
+.. code-block:: yaml
 
-    [source:twitter-inquest-c2-list]
-    module = twitter
-    saved_state =
-    token = MYTOKEN
-    token_key = MYTOKENKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    owner_screen_name = InQuest
-    slug = c2-feed
+    - name: twitter-inquest-c2-list
+      module: twitter
+      credentials: twitter-auth
+      owner_screen_name: InQuest
+      slug: c2-feed
 
 Twitter user timeline:
 
-.. code-block:: ini
+.. code-block:: yaml
 
-    [source:twitter-inquest-timeline]
-    module = twitter
-    saved_state =
-    token = MYTOKEN
-    token_key = MYTOKENKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    screen_name = InQuest
+    - name:twitter-inquest-timeline
+      module: twitter
+      credentials: twitter-auth
+      screen_name: InQuest
 
 Twitter search:
 
-.. code-block:: ini
+.. code-block:: yaml
 
-    [source:twitter-open-directory]
-    module = twitter
-    saved_state =
-    token = MYTOKEN
-    token_key = MYTOKENKEY
-    con_secret_key = MYSECRETKEY
-    con_secret = MYSECRET
-    q = "open directory" #malware
+    - name: twitter-open-directory
+      module: twitter
+      credentials: twitter-auth
+      q: '"open directory" #malware'
+
+.. note::
+
+    When searching for Twitter hashtags, be sure to put quotes around your
+    search term, as shown in the example above. Otherwise, the ``#``
+    character will be treated as the beginning of a YAML comment.
 
 .. _rss-source:
 
@@ -145,20 +182,20 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``rss``
-* ``saved_state`` (required): leave blank; will be filled with a parsable datetime.
 * ``feed_type`` (required): see above; if unsure, use ``messy``.
 * ``url`` (required): URL to the RSS or Atom feed.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+Inside the ``sources`` section of your configuration file:
 
-    [source:rss-myiocfeed]
-    module = rss
-    saved_state =
-    url = https://example.com/rss.xml
-    feed_type = messy
+.. code-block:: yaml
+
+    - name: rss-myiocfeed
+      module: rss
+      url: https://example.com/rss.xml
+      feed_type: messy
 
 .. _sqs-source:
 
@@ -173,8 +210,6 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``sqs``
-* ``saved_state`` (required): leave blank; not used (SQS jobs are deleted
-  once processed).
 * ``aws_access_key_id`` (required): Your AWS access key ID.
 * ``aws_secret_access_key`` (required): Your AWS secret access key.
 * ``aws_region`` (required): Your AWS region name.
@@ -183,15 +218,25 @@ Configuration Options
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+The following example assumes AWS credentials have already been
+configured in the ``credentials`` section of the config, like this:
 
-    [source:sqs-input]
-    module = sqs
-    saved_state =
-    aws_access_key_id = MYKEY
-    aws_secret_access_key = MYSECRET
-    aws_region = MYREGION
-    queue_name = MYQUEUENAME
+.. code-block:: yaml
+
+    credentials:
+      - name: aws-auth
+        aws_access_key_id: MYKEY
+        aws_secret_access_key: MYSECRET
+        aws_region: MYREGION
+
+Inside the ``sources`` section of your configuration file:
+
+.. code-block:: yaml
+
+    - name: sqs-input
+      module: sqs
+      credentials: aws-auth
+      queue_name: MYQUEUENAME
 
 .. _web-source:
 
@@ -207,19 +252,18 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``web``
-* ``saved_state`` (required): leave blank; will be filled with HTTP
-  ``Last-Modified`` / ``ETag`` header contents, as appropriate.
 * ``url`` (required): URL of the web content you want to poll.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+Inside the ``sources`` section of your configuration file:
 
-    [source:mylist]
-    module = web
-    saved_state =
-    url = http://example.com/feed.txt
+.. code-block:: yaml
+
+    - name: mylist
+      module: web
+      url: http://example.com/feed.txt
 
 .. _git-source:
 
@@ -236,20 +280,20 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``git``
-* ``saved_state`` (required): leave blank; will be filled with a commit hash.
 * ``url`` (required): URL (can be https, git, ssh, etc) of remote to clone.
 * ``local_path`` (required): folder on disk (relative or absolute) to clone into.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+Inside the ``sources`` section of your configuration file:
 
-    [source:inquest-yara-rules]
-    module = git
-    saved_state =
-    url = https://github.com/InQuest/yara-rules.git
-    local_path = /opt/threatingestor/git/yara-rules
+.. code-block:: yaml
+
+    - name: inquest-yara-rules
+      module: git
+      url: https://github.com/InQuest/yara-rules.git
+      local_path: /opt/threatingestor/git/yara-rules
 
 .. _github-source:
 
@@ -263,18 +307,18 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``github``
-* ``saved_state`` (required): leave blank; will be filled with a timestamp.
 * ``search`` (required): search term(s).
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: ini
+Inside the ``sources`` section of your configuration file:
 
-    [source:github-cve-repos]
-    module = github
-    saved_state =
-    search = CVE-2018-
+.. code-block:: yaml
+
+    - name: github-cve-repos
+      module: github
+      search: CVE-2018-
 
 .. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
 .. _Twitter list: https://dev.twitter.com/rest/reference/get/lists/statuses
