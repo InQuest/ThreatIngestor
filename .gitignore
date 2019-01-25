@@ -5,6 +5,8 @@
 *.err
 *.log
 *.egg-info/
+*.sqlite3
+config.yml
 
 # dev sources
 .virtualenv
