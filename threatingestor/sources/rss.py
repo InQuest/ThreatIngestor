@@ -28,7 +28,11 @@ class Plugin(Source):
             try:
                 soup = bs4.BeautifulSoup(item['content'][0]['value'], 'html.parser')
             except KeyError:
-                soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
+                try:
+                    soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
+                except KeyError:
+                    # can't find any feed content, just skip this entry
+                    continue
 
             # do some preprocessing to remove common obfuscation methods
             [x.unwrap() for x in soup.find_all('strong')]
