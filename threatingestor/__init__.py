@@ -38,14 +38,22 @@ class Ingestor:
     def run_once(self):
         for source in self.sources:
             # run the source to collect artifacts
-            saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
+            try:
+                saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
+            except Exception as e:
+                sys.stderr.write("Unknown error in source {s}: {e}\n".format(s=source, e=e))
+                continue
 
             # save the source state
             self.statedb.save_state(source, saved_state)
 
             # process artifacts with each operator
             for operator in self.operators:
-                self.operators[operator].process(artifacts)
+                try:
+                    self.operators[operator].process(artifacts)
+                except Exception as e:
+                    sys.stderr.write("Unknown error in operator {o}: {e}\n".format(o=operator, e=e))
+                    continue
 
     def run_forever(self):
         while True:
