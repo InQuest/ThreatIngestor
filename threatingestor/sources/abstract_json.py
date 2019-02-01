@@ -14,12 +14,11 @@ class Plugin(Source):
         self.name = name
         self.paths=paths
         self.reference= reference
-        self.my_required_arg = my_required_arg
 
     def run(self, saved_state):
         """Run and return (saved_state, list(Artifact))"""
         artifact_list = []
-        for path in paths:
+        for path in self.paths:
             jsonpath_expr = parse(path)
             matches = jsonpath_expr.find(self.content)
 
