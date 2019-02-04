@@ -66,7 +66,7 @@ class Plugin(Operator):
                 'autocommit': 1,
                 'import_text': str(yarasignature),
                 'shared_reference': yarasignature.reference_link,
-                'shared_state': {'state': self.state},
+                'shared_state': self.state,
                 'extract_ip': False,
                 'extract_dns': False,
             })
