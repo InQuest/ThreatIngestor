@@ -6,10 +6,10 @@ from threatingestor.sources import Source
 
 class AbstractPlugin(Source):
 
-    def __init__(self, name, paths, reference=None):
-        """Args should be url, auth, etc, whatever is needed to set up the object.
+    def __init__(self, name, paths, reference=None, **kwargs):
+        """Set up JSON path expressions.
 
-        The name argument is required for all Source plugins, and is used internally.
+        Extend in child class.
         """
         self.name = name
         # Parse paths into path expressions.
