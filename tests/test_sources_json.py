@@ -44,7 +44,7 @@ class TestJSON(unittest.TestCase):
         for artifact in artifact_list:
             self.assertEqual('name', artifact.reference_link)
 
-    def test_run_uses_name_if_reference_path_not_found(self):
+    def test_run_extracts_artifacts(self):
         content_list = [{"testContent": "http://example.com", "testRef": "myReference"}]
         abs_json = threatingestor.sources.abstract_json.AbstractPlugin("name", ["testContent"], "testRef")
         abs_json.get_objects = lambda x: (None, content_list)
