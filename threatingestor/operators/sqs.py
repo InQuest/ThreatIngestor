@@ -4,12 +4,14 @@ from threatingestor.exceptions import DependencyError
 from threatingestor.operators import Operator
 import threatingestor.artifacts
 
+from threatingestor.operators import abstract_json
+
 try:
     import boto3
 except ImportError:
     raise DependencyError("Dependency boto3 required for SQS operator is not installed")
 
-class Plugin(Operator):
+class Plugin(abstract_json.AbstractPlugin):
     """Operator for Amazon SQS"""
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, aws_region, queue_name,
@@ -27,17 +29,11 @@ class Plugin(Operator):
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
-
-    def handle_artifact(self, artifact):
-        """Operate on a single artifact"""
-        message_body = dict([(k, artifact.format_message(v)) for (k, v) in self.kwargs.items()])
-
-        self._sqs_put(json.dumps(message_body))
-
-    def _sqs_put(self, content):
+        
+    def _put(self, content):
         """Send content to an SQS queue"""
         return self.sqs.send_message(
                 QueueUrl=self.queue_url,
                 DelaySeconds=0,
-                MessageBody=content
+                MessageBody=json.dumps(content)
         )
