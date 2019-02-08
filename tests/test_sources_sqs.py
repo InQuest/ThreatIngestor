@@ -11,15 +11,11 @@ import threatingestor.exceptions
 
 class TestSQS(unittest.TestCase):
 
-    @patch('boto3.client')
-    def setUp(self, boto3_client):
-        self.sqs = threatingestor.sources.sqs.Plugin('a', 'b', 'c', 'd', 'e')
+    @patch('boto3.resource')
+    def setUp(self, boto3_resource):
+        self.sqs = threatingestor.sources.sqs.Plugin('a', 'b', 'c', 'd', 'e', ['link'])
 
-    @httpretty.activate
     def test_run_reads_messages_deletes_returns_artifacts(self):
-        httpretty.register_uri(httpretty.GET, "http://example.mock/path",
-                body='http://example.com/test')
-
         message = Mock()
         message.body = '{"link": "http://example.mock/path"}'
         self.sqs.queue.receive_messages.return_value = [message]
@@ -29,4 +25,4 @@ class TestSQS(unittest.TestCase):
         self.assertEqual(saved_state, None)
         self.sqs.queue.receive_messages.assert_called_once_with()
         message.delete.assert_called_once_with()
-        self.assertIn('http://example.com/test', [str(x) for x in artifact_list])
+        self.assertIn('http://example.mock/path', [str(x) for x in artifact_list])
