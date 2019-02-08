@@ -17,7 +17,7 @@ class TestJSON(unittest.TestCase):
     def test_run(self):
         
         content = json.loads('{"testKey": "testValue"}')
-        self.abs_json.content= content
+        self.abs_json.get_content = lambda x: content
 
         saved_state, artifact_list = self.abs_json.run(None)
 

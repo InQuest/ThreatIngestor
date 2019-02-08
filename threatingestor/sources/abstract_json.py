@@ -15,12 +15,18 @@ class Plugin(Source):
         self.paths=paths
         self.reference= reference
 
+    def get_content(self):
+        """Return dict or list of raw content to process.
+
+        Override in child class."""
+        raise NotImplementedError()
+
     def run(self, saved_state):
         """Run and return (saved_state, list(Artifact))"""
         artifact_list = []
         for path in self.paths:
             jsonpath_expr = parse(path)
-            matches = jsonpath_expr.find(self.content)
+            matches = jsonpath_expr.find(self.get_content())
 
             for match in matches:
                 artifact_list += self.process_element(match.value, self.reference, include_nonobfuscated=True)
