@@ -12,7 +12,7 @@ import threatingestor.exceptions
 class TestJSON(unittest.TestCase):
 
     def setUp(self):
-        self.abs_json = threatingestor.sources.abstract_json.Plugin("name", [],"") 
+        self.abs_json = threatingestor.sources.abstract_json.AbstractPlugin("name", [],"")
 
     def test_run(self):
         

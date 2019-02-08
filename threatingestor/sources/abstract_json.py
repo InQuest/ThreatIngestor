@@ -4,7 +4,7 @@ import json
 
 from threatingestor.sources import Source
 
-class Plugin(Source):
+class AbstractPlugin(Source):
 
     def __init__(self, name, paths, reference):
         """Args should be url, auth, etc, whatever is needed to set up the object.
