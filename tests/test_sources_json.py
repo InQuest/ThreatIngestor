@@ -16,7 +16,7 @@ class TestJSON(unittest.TestCase):
 
     def test_run(self):
         content_list = [{"testKey": "testValue"}]
-        self.abs_json.get_objects = lambda x: content_list
+        self.abs_json.get_objects = lambda x: (None, content_list)
 
         saved_state, artifact_list = self.abs_json.run(None)
 
@@ -25,7 +25,7 @@ class TestJSON(unittest.TestCase):
     def test_run_uses_reference_path_if_possible(self):
         content_list = [{"testContent": "http://example.com", "testRef": "myReference"}]
         abs_json = threatingestor.sources.abstract_json.AbstractPlugin("name", ["testContent"], "testRef")
-        abs_json.get_objects = lambda x: content_list
+        abs_json.get_objects = lambda x: (None, content_list)
 
         saved_state, artifact_list = abs_json.run(None)
 
@@ -36,7 +36,7 @@ class TestJSON(unittest.TestCase):
     def test_run_uses_name_if_reference_path_not_found(self):
         content_list = [{"testContent": "http://example.com", "testRef": "myReference"}]
         abs_json = threatingestor.sources.abstract_json.AbstractPlugin("name", ["testContent"], "badRef")
-        abs_json.get_objects = lambda x: content_list
+        abs_json.get_objects = lambda x: (None, content_list)
 
         saved_state, artifact_list = abs_json.run(None)
 
@@ -47,7 +47,7 @@ class TestJSON(unittest.TestCase):
     def test_run_uses_name_if_reference_path_not_found(self):
         content_list = [{"testContent": "http://example.com", "testRef": "myReference"}]
         abs_json = threatingestor.sources.abstract_json.AbstractPlugin("name", ["testContent"], "testRef")
-        abs_json.get_objects = lambda x: content_list
+        abs_json.get_objects = lambda x: (None, content_list)
 
         saved_state, artifact_list = abs_json.run(None)
 
