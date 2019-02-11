@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import Mock, patch
 import json
 
-import httpretty
 
 import threatingestor.sources.abstract_json
 import threatingestor.artifacts

@@ -25,4 +25,4 @@ class AbstractPlugin(Operator):
         self._put(message_body)
 
     def _put(self,content):
-        raise NotImplementedErrors
+        raise NotImplementedError()

@@ -3,7 +3,6 @@ import json
 from threatingestor.exceptions import DependencyError
 from threatingestor.operators import Operator
 import threatingestor.artifacts
-
 from threatingestor.operators import abstract_json
 
 try:
