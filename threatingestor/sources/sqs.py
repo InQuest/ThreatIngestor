@@ -1,9 +1,6 @@
 import json
 
-import requests
-
 from threatingestor.exceptions import DependencyError
-from threatingestor.sources import Source
 from threatingestor.sources import abstract_json
 
 try:

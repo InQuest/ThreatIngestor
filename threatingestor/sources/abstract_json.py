@@ -1,5 +1,3 @@
-import json
-
 import jsonpath_rw
 
 from threatingestor.sources import Source
