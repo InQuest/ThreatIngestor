@@ -11,6 +11,8 @@ test*.yml
 
 # dev sources
 .virtualenv
+build/
+dist/
 
 # coverage
 cover/
