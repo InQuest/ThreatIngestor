@@ -1,7 +1,6 @@
 import json
 
 from threatingestor.exceptions import DependencyError
-from threatingestor.operators import Operator
 import threatingestor.artifacts
 from threatingestor.operators import abstract_json
 
@@ -28,7 +27,7 @@ class Plugin(abstract_json.AbstractPlugin):
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
-        
+
     def _put(self, content):
         """Send content to an SQS queue"""
         return self.sqs.send_message(

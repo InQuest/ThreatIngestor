@@ -1,6 +1,3 @@
-import json
-
-from threatingestor.exceptions import DependencyError
 from threatingestor.operators import Operator
 import threatingestor.artifacts
 
@@ -14,7 +11,7 @@ class AbstractPlugin(Operator):
         super(AbstractPlugin, self).__init__(artifact_types=artifact_types,
                                      filter_string=filter_string,
                                      allowed_sources=allowed_sources)
-        
+
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
