@@ -11,7 +11,7 @@ except ImportError:
 class Plugin(abstract_json.AbstractPlugin):
     """Source for Beanstalk work queue"""
 
-    def __init__(self, name, host, port, queue_name, paths, reference=None)
+    def __init__(self, name, host, port, queue_name, paths, reference=None):
         """Beanstalk source"""
         super(Plugin, self).__init__(name, paths, reference)
         self.queue = greenstalk.Client(host, port, watch=queue_name)
