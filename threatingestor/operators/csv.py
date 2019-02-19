@@ -22,7 +22,6 @@ class Plugin(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact"""
-        print(str(artifact))
         with open(self.filename, 'a+', encoding='utf-8') as f:
             writer = csv.writer(f)
             artifact_type = artifact.__class__.__name__
