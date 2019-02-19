@@ -114,7 +114,7 @@ class Config:
                         if credential_key != NAME:
                             kwargs[credential_key] = credential_value
 
-            # lioad and initialize the plugin
+            # load and initialize the plugin
             operators.append((operator["name"], self._load_plugin(OPERATOR, operator['module']), kwargs))
 
         return operators
