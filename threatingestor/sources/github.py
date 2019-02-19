@@ -35,7 +35,7 @@ class Plugin(Source):
                     title, self.name, reference_link=repo['html_url'], reference_text=description)
                 artifact_list.append(artifact)
 
-            if response.links.get('next') is None:
+            if not response.links.get('next'):
                 break
 
             response = requests.get(
