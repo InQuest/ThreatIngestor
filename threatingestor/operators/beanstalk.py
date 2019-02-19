@@ -17,12 +17,10 @@ class Plugin(abstract_json.AbstractPlugin):
         """Beanstalk operator"""
         self.queue = greenstalk.Client(host, port, use=queue_name)
 
-        # kwargs are used to dynamically form message body
-        self.kwargs = kwargs
-
         super(Plugin, self).__init__(artifact_types=artifact_types,
                                      filter_string=filter_string,
-                                     allowed_sources=allowed_sources)
+                                     allowed_sources=allowed_sources,
+                                     **kwargs)
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
