@@ -1,4 +1,5 @@
 import datetime
+
 import requests
 
 from threatingestor.sources import Source
@@ -6,17 +7,16 @@ import threatingestor.artifacts
 
 SEARCH_URL = "https://api.github.com/search/repositories"
 
-
 class Plugin(Source):
     """Github Source Plugin"""
     def __init__(self, name, search, username="", token=""):
-        if(username and token):
+        self.name = name
+        self.search = search
+
+        if username and token:
             self.auth = (username, token)
         else:
             self.auth = None
-
-        self.name = name
-        self.search = search
 
     def make_requests(self, url, params, auth):
         """Returns a list of artifacts"""

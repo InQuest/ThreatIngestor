@@ -17,7 +17,6 @@ credentials:
     # https://github.com/settings/tokens
     token: TOKEN_OR_PASSWORD
 
-
   - name: threatkb-auth
     url: http://mythreatkb
     token: MYTOKEN
@@ -71,7 +70,6 @@ operators:
     credentials: github-auth
     saved_state: 
     search: CVE-2018-
-
 
   - name: inquest-threatcrawler
     module: sqs
