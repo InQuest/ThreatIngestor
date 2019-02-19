@@ -8,3 +8,4 @@ sphinx
 Pygments
 collective.checkdocs
 coverage
+greenstalk
