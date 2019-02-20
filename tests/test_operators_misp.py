@@ -11,6 +11,11 @@ class TestThreatKB(unittest.TestCase):
     def setUp(self, PyMISP):
         self.misp = threatingestor.operators.misp.Plugin('a', 'b')
 
+    @patch('pymisp.PyMISP')
+    def test_tags_are_set_if_passed_in_else_default(self, PyMISP):
+        self.assertEqual(self.misp.tags, ['type:OSINT'])
+        self.assertEqual(threatingestor.operators.misp.Plugin('a', 'b', tags=['c', 'd']).tags, ['c', 'd'])
+
     def test_create_event_creates_event_and_objects(self):
         event = self.misp._create_event(threatingestor.artifacts.Domain('test.com', 'name',
                                         reference_link='link', reference_text='text'))
