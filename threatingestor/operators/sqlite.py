@@ -10,10 +10,6 @@ class Plugin(Operator):
 
     def __init__(self, file_path, artifact_types=None, filter_string=None, allowed_sources=None):
         """SQLite3 operator"""
-        self.sql = sqlite3.connect(file_path)
-        self.cursor = self.sql.cursor()
-        self._create_tables()
-
         super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.Domain,
@@ -23,6 +19,12 @@ class Plugin(Operator):
             threatingestor.artifacts.YARASignature,
             threatingestor.artifacts.Task,
         ]
+
+        # Connect to SQL and set up the tables if they aren't already.
+        self.sql = sqlite3.connect(file_path)
+        self.cursor = self.sql.cursor()
+
+        self._create_tables()
 
     def _create_tables(self):
         """Create tables for each supported artifact type"""
