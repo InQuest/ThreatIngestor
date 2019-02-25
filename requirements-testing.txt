@@ -9,3 +9,4 @@ Pygments
 collective.checkdocs
 coverage
 pymisp
+greenstalk

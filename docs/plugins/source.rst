@@ -320,6 +320,34 @@ Inside the ``sources`` section of your configuration file:
       module: github
       search: CVE-2018-
 
+Beanstalk
+---------
+
+The **Beanstalk** source can be used to read content from `Beanstalk`_ queues.
+This, combined with the :ref:`Beanstalk Operator <beanstalk-operator>`, allows
+a :ref:`full-circle workflow <full-circle-workflow>`.
+
+Configuration Options
+~~~~~~~~~~~~~~~~~~~~~
+
+* ``module`` (required): ``beanstalk``
+* ``host`` (required): Host to connect to.
+* ``port`` (required): Port to connect over.
+* ``queue_name`` (required): The name of the Beanstalk queue you want to use.
+
+Example Configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+Inside the ``sources`` section of your configuration file:
+
+.. code-block:: yaml
+
+    - name: beanstalk-input
+      module: beanstalk
+      host: 127.0.0.1
+      port: 11300
+      queue_name: MYQUEUENAME
+
 .. _Twitter oauth docs: https://dev.twitter.com/oauth/overview/application-owner-access-tokens
 .. _Twitter list: https://dev.twitter.com/rest/reference/get/lists/statuses
 .. _Twitter user timeline: https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
@@ -327,3 +355,4 @@ Inside the ``sources`` section of your configuration file:
 .. _Mentions: https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-mentions_timeline.html
 .. _Amazon SQS: https://aws.amazon.com/sqs/
 .. _repository search API: https://developer.github.com/v3/search/#search-repositories
+.. _Beanstalk: https://beanstalkd.github.io/
