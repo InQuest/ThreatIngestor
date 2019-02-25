@@ -8,4 +8,5 @@ sphinx
 Pygments
 collective.checkdocs
 coverage
+pymisp
 greenstalk
