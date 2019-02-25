@@ -18,12 +18,10 @@ class Plugin(abstract_json.AbstractPlugin):
         self.sqs = boto3.client('sqs', region_name=aws_region, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
         self.queue_url = self.sqs.get_queue_url(QueueName=queue_name)['QueueUrl']
 
-        # kwargs are used to dynamically form message body
-        self.kwargs = kwargs
-
         super(Plugin, self).__init__(artifact_types=artifact_types,
                                      filter_string=filter_string,
-                                     allowed_sources=allowed_sources)
+                                     allowed_sources=allowed_sources,
+                                     **kwargs)
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.URL,
         ]
