@@ -14,8 +14,8 @@ threatingestor
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.artifacts
-~~~~~~~~~~~~~~~~~~~~~~~~
+artifacts
+~~~~~~~~~
 
 .. automodule:: threatingestor.artifacts
    :members:
@@ -23,8 +23,8 @@ threatingestor.artifacts
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.config
-~~~~~~~~~~~~~~~~~~~~~
+config
+~~~~~~
 
 .. automodule:: threatingestor.config
    :members:
@@ -32,8 +32,8 @@ threatingestor.config
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.exceptions
-~~~~~~~~~~~~~~~~~~~~~~~~~
+exceptions
+~~~~~~~~~~
 
 .. automodule:: threatingestor.exceptions
    :members:
@@ -41,8 +41,8 @@ threatingestor.exceptions
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.state
-~~~~~~~~~~~~~~~~~~~~
+state
+~~~~~
 
 .. automodule:: threatingestor.state
    :members:
@@ -50,8 +50,8 @@ threatingestor.state
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators
-~~~~~~~~~~~~~~~~~~~~~~~~
+operators
+~~~~~~~~~
 
 .. automodule:: threatingestor.operators
    :members:
@@ -59,8 +59,8 @@ threatingestor.operators
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.abstract_json
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+abstract_json
+^^^^^^^^^^^^^
 
 .. automodule:: threatingestor.operators.abstract_json
    :members:
@@ -68,8 +68,8 @@ threatingestor.operators.abstract_json
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.beanstalk
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+beanstalk
+^^^^^^^^^
 
 .. automodule:: threatingestor.operators.beanstalk
    :members:
@@ -77,8 +77,8 @@ threatingestor.operators.beanstalk
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.csv
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+csv
+^^^
 
 .. automodule:: threatingestor.operators.csv
    :members:
@@ -86,8 +86,8 @@ threatingestor.operators.csv
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.misp
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+misp
+^^^^
 
 .. automodule:: threatingestor.operators.misp
    :members:
@@ -95,8 +95,8 @@ threatingestor.operators.misp
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.sqlite
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite
+^^^^^^
 
 .. automodule:: threatingestor.operators.sqlite
    :members:
@@ -104,8 +104,8 @@ threatingestor.operators.sqlite
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.sqs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqs
+^^^
 
 .. automodule:: threatingestor.operators.sqs
    :members:
@@ -113,8 +113,8 @@ threatingestor.operators.sqs
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.operators.threatkb
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+threatkb
+^^^^^^^^
 
 .. automodule:: threatingestor.operators.threatkb
    :members:
@@ -122,8 +122,8 @@ threatingestor.operators.threatkb
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources
-~~~~~~~~~~~~~~~~~~~~~~
+sources
+~~~~~~~
 
 .. automodule:: threatingestor.sources
    :members:
@@ -131,8 +131,8 @@ threatingestor.sources
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.abstract_json
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+abstract_json
+^^^^^^^^^^^^^
 
 .. automodule:: threatingestor.sources.abstract_json
    :members:
@@ -140,8 +140,8 @@ threatingestor.sources.abstract_json
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.beanstalk
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+beanstalk
+^^^^^^^^^
 
 .. automodule:: threatingestor.sources.beanstalk
    :members:
@@ -149,8 +149,8 @@ threatingestor.sources.beanstalk
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.git
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+git
+^^^
 
 .. automodule:: threatingestor.sources.git
    :members:
@@ -158,8 +158,8 @@ threatingestor.sources.git
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.github
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+github
+^^^^^^
 
 .. automodule:: threatingestor.sources.github
    :members:
@@ -167,8 +167,8 @@ threatingestor.sources.github
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.rss
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+rss
+^^^
 
 .. automodule:: threatingestor.sources.rss
    :members:
@@ -176,8 +176,8 @@ threatingestor.sources.rss
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.sqs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqs
+^^^
 
 .. automodule:: threatingestor.sources.sqs
    :members:
@@ -185,8 +185,8 @@ threatingestor.sources.sqs
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.twitter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+twitter
+^^^^^^^
 
 .. automodule:: threatingestor.sources.twitter
    :members:
@@ -194,8 +194,8 @@ threatingestor.sources.twitter
    :show-inheritance:
    :member-order: bysource
 
-threatingestor.sources.web
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+web
+^^^
 
 .. automodule:: threatingestor.sources.web
    :members:
