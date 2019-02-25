@@ -51,7 +51,7 @@ LIST_HTML = """
                     "dataSrc": "",
                 },
                 "columns": [
-                    {"data": "name"},
+                    {"data": "artifact"},
                     {"data": "reference_link"},
                     {"data": "reference_text"},
                     {"data": "created_date"},
@@ -84,7 +84,6 @@ LIST_HTML = """
 def list_view(table):
     cursor.execute('SELECT name FROM sqlite_master WHERE type="table"')
     tables = [e[0] for e in cursor.fetchall()]
-    print(tables)
 
     if table == 'index':
         return tables
