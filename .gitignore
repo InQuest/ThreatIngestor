@@ -6,6 +6,7 @@
 *.log
 *.egg-info/
 *.sqlite3
+*.db
 config.yml
 test*.yml
 
