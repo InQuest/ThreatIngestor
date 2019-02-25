@@ -1,0 +1,43 @@
+<html>
+<head>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#table').DataTable({
+                "ajax": {
+                    "url": `/api${window.location.pathname}`,
+                    "dataSrc": "",
+                },
+                "columns": [
+                    {"data": "name"},
+                    {"data": "reference_link"},
+                    {"data": "reference_text"},
+                    {"data": "created_date"},
+                    {"data": "state"}
+                ]
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <table id='table'>
+        <thead>
+            <tr>
+                <th>Artifact</th>
+                <th>Reference Link</th>
+                <th>Reference Text</th>
+                <th>Created Date</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>
