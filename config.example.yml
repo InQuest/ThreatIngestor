@@ -47,6 +47,12 @@ sources:
     # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
     screen_name: InQuest
 
+  - name: github-query
+    module: github
+    credentials: github-auth
+    saved_state: 
+    search: CVE-2018-
+
   - name: rss-myiocfeed
     module: rss
     url: https://example.com/rss.xml
@@ -64,12 +70,6 @@ operators:
     credentials: threatkb-auth
     allowed_sources: [twitter-inquest-c2-list, rss-.*]
     state: Inbox
-
-  - name: github-query
-    module: github
-    credentials: github-auth
-    saved_state: 
-    search: CVE-2018-
 
   - name: inquest-threatcrawler
     module: sqs
