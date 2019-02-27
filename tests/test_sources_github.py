@@ -66,3 +66,23 @@ class TestGitHub(unittest.TestCase):
         self.assertIn('Manual Task: GitHub dtrupenn/Tetris', [str(x) for x in artifact_list])
         self.assertEqual(len(artifact_list), 1)
         self.assertEqual(saved_state, '2018-04-30T17:05:13Z')
+
+    @responses.activate
+    def test_requests_until_rel_is_not_next(self):
+        responses.add(responses.GET,
+                "https://api.github.com/search/repositories?q=Test",
+                match_querystring=True, body=API_RESPONSE_DATA,
+                headers={"Link":'<https://api.github.com/search/repositories?q=Test&page=2>; rel="next"'})
+        responses.add(responses.GET,
+                'https://api.github.com/search/repositories?q=Test&page=2',
+                match_querystring=True, body=API_RESPONSE_DATA,
+                headers={"Link":'<https://api.github.com/search/repositories?q=Test&page=3>; rel="next"'})
+        responses.add(responses.GET,
+                'https://api.github.com/search/repositories?q=Test&page=3',
+                match_querystring=True, body=API_RESPONSE_DATA,
+                headers={"Link":'<https://api.github.com/search/repositories?q=Test&page=3>; rel="last"'})
+
+        params = {"q":"Test"}
+        repo_list = self.github._repository_search(params)
+        self.assertIn('Tetris', [str(x['name']) for x in repo_list])
+        self.assertEqual(len(repo_list), 3)
