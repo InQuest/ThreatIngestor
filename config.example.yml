@@ -62,6 +62,7 @@ operators:
   - name: csv
     # Write artifacts to a CSV file
     module: csv
+    artifact_types: [Task]
     filename: output.csv
     
   - name: mythreatkb

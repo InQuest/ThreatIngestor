@@ -63,5 +63,4 @@ class Plugin(Source):
 
             artifact_list.append(artifact)
 
-
         return saved_state, artifact_list

@@ -83,6 +83,6 @@ class TestGitHub(unittest.TestCase):
                 headers={"Link":'<https://api.github.com/search/repositories?q=Test&page=3>; rel="last"'})
 
         params = {"q":"Test"}
-        artifact_list = self.github.make_requests(threatingestor.sources.github.SEARCH_URL, params, {})
-        self.assertIn('Manual Task: GitHub dtrupenn/Tetris', [str(x) for x in artifact_list])
-        self.assertEqual(len(artifact_list), 3)
+        repo_list = self.github._repository_search(params)
+        self.assertIn('Tetris', [str(x['name']) for x in repo_list])
+        self.assertEqual(len(repo_list), 3)
