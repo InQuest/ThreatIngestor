@@ -27,22 +27,22 @@ class Plugin(Source):
         if saved_state:
             # pull and diff to get filenames
             try:
-                git_pull(self.local_path)
-                new_hash = git_latest_hash(self.local_path)
-                all_filenames = git_diff_names(self.local_path, saved_state).splitlines()
+                _git_pull(self.local_path)
+                new_hash = _git_latest_hash(self.local_path)
+                all_filenames = _git_diff_names(self.local_path, saved_state).splitlines()
             except (subprocess.CalledProcessError, OSError) as e:
                 sys.stderr.write("error with git pull from {path}: {e}\n".format(path=self.local_path, e=e))
 
         else:
             # first time, we try cloning the repo and look at all files
             try:
-                git_clone(self.url, self.local_path)
-                new_hash = git_latest_hash(self.local_path)
-                all_filenames = git_ls_files(self.local_path).splitlines()
+                _git_clone(self.url, self.local_path)
+                new_hash = _git_latest_hash(self.local_path)
+                all_filenames = _git_ls_files(self.local_path).splitlines()
             except (subprocess.CalledProcessError, OSError) as e:
                 sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
-                                                                                       path=self.local_path,
-                                                                                       e=e))
+                                                                                         path=self.local_path,
+                                                                                         e=e))
 
         # if not modified or any errors, return immediately
         if saved_state == new_hash:
@@ -70,17 +70,17 @@ def _git_cmd_chdir(path, args):
     os.chdir(cwd)
     return output
 
-def git_clone(remote, local_path):
+def _git_clone(remote, local_path):
     return _git_cmd(['clone', '--', remote, local_path])
 
-def git_latest_hash(local_path):
+def _git_latest_hash(local_path):
     return _git_cmd_chdir(local_path, ['rev-parse', 'HEAD']).strip()
 
-def git_pull(local_path):
+def _git_pull(local_path):
     return _git_cmd_chdir(local_path, ['pull'])
 
-def git_diff_names(local_path, prev_hash):
+def _git_diff_names(local_path, prev_hash):
     return _git_cmd_chdir(local_path, ['diff', '--name-only', '--', prev_hash])
 
-def git_ls_files(local_path):
+def _git_ls_files(local_path):
     return _git_cmd_chdir(local_path, ['ls-files'])

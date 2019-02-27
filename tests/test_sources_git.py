@@ -27,9 +27,9 @@ class TestGit(unittest.TestCase):
         chdir.assert_called_with(current_dir)
         check_output.assert_called_once_with(['git', 'test'])
 
-    @patch('threatingestor.sources.git.git_pull')
-    @patch('threatingestor.sources.git.git_latest_hash')
-    @patch('threatingestor.sources.git.git_diff_names')
+    @patch('threatingestor.sources.git._git_pull')
+    @patch('threatingestor.sources.git._git_latest_hash')
+    @patch('threatingestor.sources.git._git_diff_names')
     @patch('threatingestor.sources.git.io.open')
     def test_run_with_saved_state_pulls_diffs_parses(self, m_open, git_diff_names, git_latest_hash, git_pull):
         git_latest_hash.return_value = 'test_latest'
@@ -45,9 +45,9 @@ class TestGit(unittest.TestCase):
         self.assertEqual(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 
-    @patch('threatingestor.sources.git.git_clone')
-    @patch('threatingestor.sources.git.git_latest_hash')
-    @patch('threatingestor.sources.git.git_ls_files')
+    @patch('threatingestor.sources.git._git_clone')
+    @patch('threatingestor.sources.git._git_latest_hash')
+    @patch('threatingestor.sources.git._git_ls_files')
     @patch('threatingestor.sources.git.io.open')
     def test_run_without_saved_state_clones_lists_parses(self, m_open, git_ls_files, git_latest_hash, git_clone):
         git_latest_hash.return_value = 'test_latest'
@@ -63,9 +63,9 @@ class TestGit(unittest.TestCase):
         self.assertEqual(saved_state, 'test_latest')
         self.assertIn('rule testrule { condition: false }', [str(x) for x in artifact_list])
 
-    @patch('threatingestor.sources.git.git_pull')
-    @patch('threatingestor.sources.git.git_latest_hash')
-    @patch('threatingestor.sources.git.git_diff_names')
+    @patch('threatingestor.sources.git._git_pull')
+    @patch('threatingestor.sources.git._git_latest_hash')
+    @patch('threatingestor.sources.git._git_diff_names')
     def test_run_with_saved_state_returns_early_if_nothing_new(self, git_diff_names, git_latest_hash, git_pull):
         git_latest_hash.return_value = 'test_saved'
         git_diff_names.return_value = ''
