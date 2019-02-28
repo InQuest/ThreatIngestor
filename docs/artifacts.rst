@@ -112,7 +112,7 @@ Documentation <api.html#threatingestor.artifacts.URL.format_message>`_.
 
 URLs have access to additional `filters <operators>`_ that can be used in
 operator configuration. See the `URL API Documentation (match function)
-<api.html#threatingestor.artifacts.URL.match>` for more information.
+<api.html#threatingestor.artifacts.URL.match>`_ for more information.
 
 .. _yarasignature-artifact:
 
