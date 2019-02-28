@@ -3,35 +3,33 @@
 Artifacts
 =========
 
-Each configured :ref:`source <source-plugins>` will be run through
+At the core of ThreatIngestor is the Artifact system. Sources create Artifacts,
+and Operators operate on Artifacts.
+
+Each configured :ref:`source <source-plugins>` will run content through
 iocextract_, along with some pre-processing depending on the source.
 (E.g., the RSS source removes some HTML tags to produce better results.)
+Additional artifacts, such as "Tasks", may also be created.
 
-Extracted IOCs are then returned from the sources, and passed along to
+Extracted artifacts are then returned from the sources, and passed along to
 operators as one of the supported **Artifact** classes below. Based on your
 configuration, operators decide how to handle each artifact based on its type
 and any configured :ref:`filters <operator-plugins>`.
 
-.. _ipaddress-artifact:
-
-IP Addresses
-------------
-
-ThreatIngestor supports IPv4 and IPv6 addresses, including "defanged" IPs.
+All artifacts are context-aware, meaning they keep track of where and why they
+were created. By default, they have a "Reference Link," a "Reference Text", and
+the name of the Source that created them. Depending on the Artifact type, they
+may also have additional context: **URL** Artifacts know whether they link to
+domains or IP addresses, and what that domain or IP is; **IPAddress** Artifacts
+know whether they are IPv4 or IPv6; all network Artifacts (URL, Domain,
+IPAddress) know whether they are "defanged". For complete documentation on each
+Artifact type, see below.
 
 .. note::
 
-   When extracting from a ``Source``, IP addresses designated as private
-   (e.g. ``192.168.0.1``), loopback (e.g. ``127.0.0.1``), or reserved
-   (e.g. ``198.51.100.1``) are automatically excluded from the results.
-
-.. _url-artifact:
-
-URLs
-----
-
-ThreatIngestor will extract URLs using iocextract_'s extraction rules,
-including "defanged" URLs. 
+    For documentation on context available to every Artifact regardless of type,
+    see the `Artifact API Documentation
+    <api.html#threatingestor.artifacts.Artifact.format_message>`_.
 
 .. _domain-artifact:
 
@@ -46,12 +44,8 @@ find that valid C2 domains in one of your sources are being passed over because
 they aren't extracted by the URL regex, you should consider using a :ref:`Task
 <task-artifact>` artifact to manually find those C2s.
 
-.. _yarasignature-artifact:
-
-YARA Signatures
----------------
-
-Full YARA signatures will automatically be extracted from all sources.
+For information on available context for Domain artifacts, see the
+`Domain API Documentation <api.html#threatingestor.artifacts.Domain.format_message>`_.
 
 .. _hash-artifact:
 
@@ -64,6 +58,25 @@ The following hash types will be extracted from all sources:
 * SHA1
 * SHA256
 * SHA512
+
+For information on available context for Hash artifacts, see the
+`Hash API Documentation <api.html#threatingestor.artifacts.Hash.format_message>`_.
+
+.. _ipaddress-artifact:
+
+IP Addresses
+------------
+
+ThreatIngestor supports IPv4 and IPv6 addresses, including "defanged" IPs.
+
+.. note::
+
+   When extracting from a ``Source``, IP addresses designated as private
+   (e.g. ``192.168.0.1``), loopback (e.g. ``127.0.0.1``), or reserved
+   (e.g. ``198.51.100.1``) are automatically excluded from the results.
+
+For information on available context for IPAddress artifacts, see the
+`IPAddress API Documentation <api.html#threatingestor.artifacts.IPAddress.format_message>`_.
 
 .. _task-artifact:
 
@@ -82,5 +95,33 @@ rather than plaintext in the RSS feed itself. Configure your ThreatIngestor
 sources and operators to add a Task artifact every time **Vendor X** makes a
 new post. When an analyst sees the Task, they can follow the reference link,
 manually extract any new IOCs, and go on with their work.
+
+For information on available context for Task artifacts, see the
+`Task API Documentation <api.html#threatingestor.artifacts.Task.format_message>`_.
+
+.. _url-artifact:
+
+URLs
+----
+
+ThreatIngestor will extract URLs using iocextract_'s extraction rules,
+including "defanged" URLs.
+
+For information on available context for URL artifacts, see the `URL API
+Documentation <api.html#threatingestor.artifacts.URL.format_message>`_.
+
+URLs have access to additional `filters <operators>`_ that can be used in
+operator configuration. See the `URL API Documentation (match function)
+<api.html#threatingestor.artifacts.URL.match>` for more information.
+
+.. _yarasignature-artifact:
+
+YARA Signatures
+---------------
+
+Full YARA signatures will automatically be extracted from all sources.
+
+For information on available context for YARASignature artifacts, see the
+`YARASignature API Documentation <api.html#threatingestor.artifacts.YARASignature.format_message>`_.
 
 .. _iocextract: https://iocextract.readthedocs.io/en/latest/
