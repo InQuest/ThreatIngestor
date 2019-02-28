@@ -8,7 +8,7 @@ from threatingestor.operators import Operator
 class Plugin(Operator):
     """Operator for SQLite3"""
 
-    def __init__(self, file_path, artifact_types=None, filter_string=None, allowed_sources=None):
+    def __init__(self, filename, artifact_types=None, filter_string=None, allowed_sources=None):
         """SQLite3 operator"""
         super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [

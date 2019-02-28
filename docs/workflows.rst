@@ -45,7 +45,7 @@ accomplishes all of that:
     general:
         daemon: true
         sleep: 900
-        state_path: state.sqlite3
+        state_path: state.db
 
     credentials:
       - name: twitter-auth
@@ -129,7 +129,8 @@ Full-Circle
 
 ThreatIngestor can both :ref:`read from <sqs-source>` and :ref:`write to
 <sqs-operator>` SQS queues, which allows us to set up a "full circle" workflow.
-(Note that you can also replace SQS with :ref:`custom plugins <developing>` to
+(Note that you can also replace SQS with :ref:`Beanstalk <beanstalk-source>` or
+:ref:`custom plugins <developing>` to
 achieve the same effect.) In this workflow, we can extract artifacts from a
 source, send them off to some SQS listener for processing, and that listener
 can send the processed content back into ThreatIngestor's input queue for
@@ -160,7 +161,7 @@ accomplishes all that:
     general:
         daemon: true
         sleep: 900
-        state_path: state.sqlite3
+        state_path: state.db
 
     credentials:
       - name: twitter-auth
@@ -211,3 +212,108 @@ accomplishes all that:
         filter: https?://pastebin.com/.+
         queue_name: pastebin-processor
         url: {url}
+
+.. _queue-worker-workflow:
+
+Queue Workers
+-------------
+
+The ThreatIngestor :ref:`plugin architecture <developing>` lets developers
+integrate with external systems with relative ease - but not everything makes
+sense as a plugin. Both source and operator plugins are expected to run to
+completion quickly, then exit and wait for the next run before working again.
+For long-running tasks (think VirusTotal / MultiAV scan, malware sandbox, web
+crawler, domain brute force, etc), implementing them as plugins that block
+until completion would break the workflow. Instead, consider using a queue
+workflow.
+
+In a typical queue workflow, an operator should queue up jobs for each artifact
+it receives (typically with `SQS <sqs-operator>` or `Beanstalk
+<beanstalk-operator>`), and an external tool we'll call a **queue worker**
+should read from that queue and perform any necessary long-running tasks. When
+the tasks are complete, the queue worker should send a job to another queue,
+where it can be picked up by a ThreatIngestor queue source (like the `SQS
+<sqs-source>` and `Beanstalk <beanstalk-source>` sources).
+
+.. note::
+
+    In the "Full-Circle" workflow above, the "SQS Pastebin Processor" is a queue
+    worker.
+
+Lets look at an example of a queue workflow using one of the provided queue
+workers, the **File System Watcher**.
+
+.. image:: _static/mermaid-queue-worker.png
+   :align: center
+   :alt: Flowchart with one input on the left (the File System Watcher),
+         feeding into ThreatIngestor in the center, which in turn outputs
+         into a MISP operator on the right.
+
+Let's say we want to watch a directory for new YARA rules, and automatically
+send them to our MISP server. Here's how the ThreatIngestor config would look:
+
+.. code-block:: yaml
+
+    general:
+        daemon: true
+        sleep: 900
+        state_path: state.db
+
+    credentials:
+      - name: misp-auth
+        url: http://mymisp
+        key: MYKEY
+        ssl: false
+
+      - name: aws-auth
+        aws_access_key_id: MYKEY
+        aws_secret_access_key: MYSECRET
+        aws_region: MYREGION
+
+    sources:
+      - name: fs-watcher
+        module: sqs
+        credentials: aws-auth
+        queue_name: yara-rules
+        paths: [content]
+        reference: filename
+
+    operators:
+      - name: misp
+        module: misp
+        credentials: misp-auth
+        artifact_types: [YARASignature]
+
+In a separate file (we'll use ``fswatcher.yml``), set up the config for the
+queue worker:
+
+.. code-block:: yaml
+
+    module: sqs
+    aws_access_key_id: MYKEY
+    aws_secret_access_key: MYSECRET
+    aws_region: MYREGION
+    queue_name: yara-rules
+    watch_path: MY_RULES_FOLDER
+
+Run the included File System Watcher::
+
+    python3 -m threatingestor.extras.fswatcher fswatcher.yml
+
+When new YARA rules are added to ``MY_RULES_FOLDER``, the File System Watcher
+sends jobs to the ``yara-rules`` queue:
+
+.. code-block:: json
+
+    {
+        "content": "rule myNewRule { condition: false }",
+        "filename": "mynewrule.yara"
+    }
+
+Run ThreatIngestor, and it'll read from the ``yara-rules`` queue, extracting
+artifacts from the ``content`` field in the job, and using the ``filename`` as
+the artifact's reference text. When it finds YARA rules, it will send them off
+through the MISP operator.
+
+By combining custom plugins with custom queue workers, developers can extend
+ThreatIngestor functionality to fit arbitrarily complex intel workflows.

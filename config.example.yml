@@ -50,7 +50,6 @@ sources:
   - name: github-query
     module: github
     credentials: github-auth
-    saved_state: 
     search: CVE-2018-
 
   - name: rss-myiocfeed

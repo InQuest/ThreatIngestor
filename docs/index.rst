@@ -40,10 +40,10 @@ User Guide
    artifacts
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   plugins/source
-   plugins/operator
+   sources
+   operators
 
 .. toctree::
    :maxdepth: 2
