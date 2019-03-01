@@ -1,0 +1,83 @@
+graph LR
+
+A[Twitter C2 Feed]
+B[Twitter Search: OpenDir]
+C[Twitter Search: Pastebin]
+D[Twitter Search: Masq]
+E[Twitter Search: VT]
+F[GitHub CVEs]
+G[Git YARA Rule Repo]
+H[RSS IOC Feed]
+I[RSS Vendor X Blog]
+J[SQS Input]
+K[SQS FSWatcher]
+L[Web Masq Feed]
+M[Web Attack Feed]
+
+
+Q(Known-Good Check)
+R(ThreatKB)
+S(MISP)
+T(Pastebin Processor)-->|Paste Contents|J
+U(Crawler)
+V(OSINT Enrich Domain)
+W(OSINT Enrich IP)
+X(RepDB Check)
+Y(YARA Scan)
+Z(VirusTotal Downloader)
+
+1(Queue Worker: Sandbox Analysis)-->|Sandbox Report IOCs|J
+2(Queue Worker: VT Analysis)-->|VirusTotal Report IOCs|J
+3(Queue Worker: Static Analysis)-->|Extracted IOCs|J
+
+A-->R
+A-->S
+B-->S
+B-->U
+C-->T
+D-->S
+D-->U
+E-->Z
+F-->|Tasks|R
+G-->R
+G-->S
+G-->Y
+H-->R
+H-->S
+I-->R
+I-->S
+J-->R
+J-->S
+K-->R
+K-->S
+K-->Y
+L-->S
+L-->U
+M-->S
+
+R-->Q
+R-->X
+R-->V
+R-->W
+U-->|Files|1
+U-->|Files|2
+U-->|Files|3
+V-->|Extra Context|S
+W-->|Extra Context|S
+V-->|Extra Context|R
+W-->|Extra Context|R
+
+Q-->|Delete False Positives|R
+X-->|Delete False Positives|R
+
+Y-->|Files|1
+Y-->|Files|2
+Y-->|Files|3
+
+Z-->|Files|1
+Z-->|Files|2
+Z-->|Files|3
+
+1-->|Full Report|S
+2-->|Full Report|S
+3-->|Full Report|S
