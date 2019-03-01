@@ -28,8 +28,8 @@ Artifact type, see below.
 .. note::
 
     For documentation on context available to every Artifact regardless of type,
-    see the `Artifact API Documentation
-    <api.html#threatingestor.artifacts.Artifact.format_message>`_.
+    see the :py:mod:`Artifact API Documentation
+    <threatingestor.artifacts.Artifact.format_message>`.
 
 .. _domain-artifact:
 
@@ -45,7 +45,7 @@ they aren't extracted by the URL regex, you should consider using a :ref:`Task
 <task-artifact>` artifact to manually find those C2s.
 
 For information on available context for Domain artifacts, see the
-`Domain API Documentation <api.html#threatingestor.artifacts.Domain.format_message>`_.
+:py:mod:`Domain API Documentation <threatingestor.artifacts.Domain.format_message>`.
 
 .. _hash-artifact:
 
@@ -60,7 +60,7 @@ The following hash types will be extracted from all sources:
 * SHA512
 
 For information on available context for Hash artifacts, see the
-`Hash API Documentation <api.html#threatingestor.artifacts.Hash.format_message>`_.
+:py:mod:`Hash API Documentation <threatingestor.artifacts.Hash.format_message>`.
 
 .. _ipaddress-artifact:
 
@@ -76,7 +76,7 @@ ThreatIngestor supports IPv4 and IPv6 addresses, including "defanged" IPs.
    (e.g. ``198.51.100.1``) are automatically excluded from the results.
 
 For information on available context for IPAddress artifacts, see the
-`IPAddress API Documentation <api.html#threatingestor.artifacts.IPAddress.format_message>`_.
+:py:mod:`IPAddress API Documentation <threatingestor.artifacts.IPAddress.format_message>`.
 
 .. _task-artifact:
 
@@ -97,7 +97,7 @@ new post. When an analyst sees the Task, they can follow the reference link,
 manually extract any new IOCs, and go on with their work.
 
 For information on available context for Task artifacts, see the
-`Task API Documentation <api.html#threatingestor.artifacts.Task.format_message>`_.
+`Task API Documentation <threatingestor.artifacts.Task.format_message>`.
 
 .. _url-artifact:
 
@@ -107,12 +107,12 @@ URLs
 ThreatIngestor will extract URLs using iocextract_'s extraction rules,
 including "defanged" URLs.
 
-For information on available context for URL artifacts, see the `URL API
-Documentation <api.html#threatingestor.artifacts.URL.format_message>`_.
+For information on available context for URL artifacts, see the :py:mod:`URL API
+Documentation <threatingestor.artifacts.URL.format_message>`.
 
-URLs have access to additional `filters <operators>`_ that can be used in
-operator configuration. See the `URL API Documentation (match function)
-<api.html#threatingestor.artifacts.URL.match>`_ for more information.
+URLs have access to additional :ref:`filters <operator-plugins>` that can be used in
+operator configuration. See the :py:mod:`URL API Documentation (match function)
+<threatingestor.artifacts.URL.match>` for more information.
 
 .. _yarasignature-artifact:
 
@@ -122,6 +122,6 @@ YARA Signatures
 Full YARA signatures will automatically be extracted from all sources.
 
 For information on available context for YARASignature artifacts, see the
-`YARASignature API Documentation <api.html#threatingestor.artifacts.YARASignature.format_message>`_.
+:py:mod:`YARASignature API Documentation <threatingestor.artifacts.YARASignature.format_message>`.
 
 .. _iocextract: https://iocextract.readthedocs.io/en/latest/

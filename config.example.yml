@@ -1,7 +1,7 @@
 general:
     daemon: true
     sleep: 900
-    state_path: state.sqlite3
+    state_path: state.db
 
 credentials:
   - name: twitter-auth
@@ -61,7 +61,6 @@ operators:
   - name: csv
     # Write artifacts to a CSV file
     module: csv
-    artifact_types: [Task]
     filename: output.csv
     
   - name: mythreatkb
