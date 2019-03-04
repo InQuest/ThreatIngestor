@@ -13,11 +13,11 @@ class TestBeanstalk(unittest.TestCase):
     def test_run_reads_messages_deletes_returns_artifacts(self):
         message = Mock()
         message.body = '{"content": "http://example.mock/path"}'
-        self.beanstalk.queue.reserve.return_value = message
+        self.beanstalk.queue.reserve.return_value = [message]
 
         saved_state, artifact_list = self.beanstalk.run(None)
 
         self.assertEqual(saved_state, None)
-        self.beanstalk.queue.reserve.assert_called_once_with()
+        self.beanstalk.queue.reserve.assert_called_once_with(timeout=1)
         self.beanstalk.queue.delete.assert_called_once()
         self.assertIn('http://example.mock/path', [str(x) for x in artifact_list])

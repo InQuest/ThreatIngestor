@@ -21,7 +21,7 @@ class Plugin(Operator):
         ]
 
         # Connect to SQL and set up the tables if they aren't already.
-        self.sql = sqlite3.connect(file_path)
+        self.sql = sqlite3.connect(filename)
         self.cursor = self.sql.cursor()
 
         self._create_tables()

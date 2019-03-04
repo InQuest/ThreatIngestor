@@ -17,13 +17,21 @@ class Plugin(abstract_json.AbstractPlugin):
         self.queue = greenstalk.Client(host, port, watch=queue_name)
 
     def get_objects(self, saved_state):
+        job_list = []
+
         # Just do one job at a time, so we don't have to worry about batching
         # or TTL timeouts.
-        message = self.queue.reserve()
-        job = json.loads(message.body)
+        try:
+            for message in self.queue.reserve(timeout=1):
+                job = json.loads(message.body)
+                job_list.append(job)
 
-        # Let the queue know that the message is processed.
-        self.queue.delete(message)
+                # Let the queue know that the message is processed.
+                self.queue.delete(message)
 
-        # Return the job inside a list.
-        return saved_state, [job]
+        except greenstalk.TimedOutError:
+            # No more jobs.
+            pass
+
+        # Return the job list.
+        return saved_state, job_list
