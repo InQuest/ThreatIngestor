@@ -64,7 +64,7 @@ class QueueWorker:
 
 
 class SQSInterface:
-
+    """A consistent Queue interface for SQS."""
     def __init__(self, aws_access_key_id, aws_secret_access_key,
                  aws_region, in_queue=None, out_queue=None):
         """Set up SQS connections.
@@ -123,7 +123,7 @@ class SQSInterface:
 
 
 class BeanstalkInterface:
-
+    """A consistent Queue interface for Beanstalk."""
     def __init__(self, host, port, in_queue=None, out_queue=None):
         """Set up Beanstalk connections.
 
