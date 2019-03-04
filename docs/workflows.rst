@@ -293,7 +293,7 @@ queue worker:
     aws_access_key_id: MYKEY
     aws_secret_access_key: MYSECRET
     aws_region: MYREGION
-    queue_name: yara-rules
+    out_queue: yara-rules
     watch_path: MY_RULES_FOLDER
 
 Run the included File System Watcher::

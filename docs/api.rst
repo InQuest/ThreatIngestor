@@ -202,3 +202,42 @@ web
    :undoc-members:
    :show-inheritance:
    :member-order: bysource
+
+extras
+~~~~~~
+
+webapp
+^^^^^^
+
+.. automodule:: threatingestor.extras.webapp
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+queueworker
+^^^^^^^^^^^
+
+.. automodule:: threatingestor.extras.queueworker
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+fswatcher
+^^^^^^^^^
+
+.. automodule:: threatingestor.extras.fswatcher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+pasteprocessor
+^^^^^^^^^^^^^^
+
+.. automodule:: threatingestor.extras.pasteprocessor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
