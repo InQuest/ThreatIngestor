@@ -26,7 +26,7 @@ First create a new ``config.yml`` file, and add the ``general`` section:
     general:
         daemon: true
         sleep: 900
-        state_path: state.sqlite3
+        state_path: state.db
 
 Configure ThreatIngestor to run continuously or manually. If you set ``daemon``
 to ``true``, ThreatIngestor will watch your sources in a loop; set it to
@@ -90,7 +90,7 @@ Putting it all together, here's our completed ``config.yml`` file:
     general:
         daemon: true
         sleep: 900
-        state_path: state.sqlite3
+        state_path: state.db
 
     sources:
       - name: inquest-rss
@@ -146,7 +146,7 @@ Create your ``config.yml``:
     general:
         daemon: true
         sleep: 900
-        state_path: state.sqlite3
+        state_path: state.db
 
 For Twitter integration, you'll need to grab the tokens, keys, and secrets
 for your Twitter account. Follow these steps from the Twitter documentation:
