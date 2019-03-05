@@ -1,57 +1,40 @@
+import io
 import sys
 import time
-from watchdog.observers import Observer
-from watchdog.events import PatternMatchingEventHandler
-import boto3
-import json
-
-REGION_NAME = ''
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
-QUEUE_NAME = ''
 
 
-class YARAHandler(PatternMatchingEventHandler):
+import watchdog.events
+import watchdog.observers
 
+
+import threatingestor.extras.queueworker
+
+
+class FSWatcher(
+        watchdog.events.PatternMatchingEventHandler,
+        threatingestor.extras.queueworker.QueueWorker):
+
+    # Only match YARA rules.
     patterns = ["*.yar", "*.yara", "*.rule", "*.rules"]
 
-    def sendYARA(self, rule_content):
-        # connect to sqs
-
-        sqs_client = boto3.client(
-            'sqs',
-            region_name=REGION_NAME,
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-        queue_url = sqs_client.get_queue_url(QueueName=QUEUE_NAME)['QueueUrl']
-        content = json.dumps({'rule': rule_content})
-        sqs_client.send_message(
-            QueueUrl=queue_url,
-            DelaySeconds=0,
-            MessageBody=content
-        )
-        print("Sent successfully")
-
     def process(self, event):
-        with open(event.src_path, 'r') as rule_source:
+        """Handle a file event."""
+        with io.open(event.src_path, 'r') as rule_source:
             rule_content = rule_source.read()
-            self.sendYARA(rule_content)
-            print("Rule: " + rule_content)
-            self.retrieveYARA()
+            self.write_one(rule_content)
 
     def on_modified(self, event):
-        print("Modified")
         self.process(event)
 
     def on_created(self, event):
-        print("Created")
         self.process(event)
 
 
 if __name__ == '__main__':
-    args = sys.argv[1:]
-    observer = Observer()
-    observer.schedule(YARAHandler(), path=args[0] if args else '.')
+    observer = watchdog.observers.Observer()
+    worker = FSWatcher()
+    worker.read_config(sys.argv[1])
+    observer.schedule(worker, worker.config['watch_path'])
     observer.start()
 
     try:
