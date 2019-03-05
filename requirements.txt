@@ -6,4 +6,5 @@ ipaddress>=1.0.18
 iocextract>=1.12.1
 PyYAML>=3.13
 jsonpath_rw>=1.4.0
+sgmllib3k
 git+https://github.com/InQuest/python-threatkb#egg=threatkb

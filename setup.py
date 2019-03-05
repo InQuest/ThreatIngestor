@@ -11,14 +11,6 @@ setup(
     version='1.0.0',
     include_package_data=True,
     install_requires=[],
-    extras_require={
-        ':python_version <= "2.7"': [
-            'ipaddress',
-        ],
-        ':python_version >= "3.0"': [
-            'sgmllib3k',
-        ],
-    },
     entry_points={
           'console_scripts': [
               'threatingestor = threatingestor:main'
