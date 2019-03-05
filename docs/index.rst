@@ -35,11 +35,6 @@ User Guide
    workflows
 
 .. toctree::
-   :maxdepth: 2
-
-   artifacts
-
-.. toctree::
    :maxdepth: 1
 
    sources
@@ -48,11 +43,12 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   developing
+   artifacts
 
 .. toctree::
    :maxdepth: 1
 
+   developing
    api
 
 .. toctree::
