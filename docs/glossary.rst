@@ -27,7 +27,7 @@ Commonly used terms and their definitions.
         ``http://example[.]com``.
 
     IOC
-        Indicator of Compromise: a piece of information that shows evidence
+        `Indicator of Compromise`_: a piece of information that shows evidence
         of a malicious actor, such as a file hash for a piece of malware, or
         a domain used as a :term:`C2`. See also :term:`Threat Intelligence`.
 
@@ -50,3 +50,4 @@ Commonly used terms and their definitions.
 
 
 .. _virustotal.github.io/yara/: https://virustotal.github.io/yara/
+.. _Indicator of Compromise: https://en.wikipedia.org/wiki/Indicator_of_compromise
