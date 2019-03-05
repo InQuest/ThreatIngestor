@@ -8,6 +8,7 @@ import threatingestor.extras.queueworker
 
 
 class PasteProcessor(threatingestor.extras.queueworker.QueueWorker):
+    """Read pastebin URLs from a queue, write raw content to a queue."""
 
     def do_work(self, job):
         """From a paste URL, get the raw contents."""
