@@ -3,9 +3,7 @@
 Operator Plugins
 ================
 
-Operator plugins handle artifact export. They can be configured to only send
-certain artifact types, only send artifacts from certain sources, filter down
-artifacts to only those matching a certain regex, and more.
+Operator plugins handle artifact export. They can be configured to only send certain artifact types, only send artifacts from certain sources, filter down artifacts to only those matching a certain regex, and more.
 
 To add an operator to your configuration file, include a section like this:
 
@@ -15,20 +13,17 @@ To add an operator to your configuration file, include a section like this:
       - name: myoperator
         module: myoperatormodule
 
-The ``module`` option must match one of the operators listed below, or your
-:ref:`custom operator <custom-operator-plugins>`.
+The ``module`` option must match one of the operators listed below, or your :ref:`custom operator <custom-operator-plugins>`.
 
 The following options are globally accepted by all operators:
 
 * ``allowed_sources``: List (`in YAML syntax`_) of source names to allow.
 * ``artifact_types``: List (`in YAML syntax`_) of artifact types to allow.
-* ``filter``: A regex, or **comma-separated list** (*not* in YAML syntax)
-  of some `special keywords <../api.html#threatingestor.artifacts.URL.match>`_.
+* ``filter``: A regex, or **comma-separated list** (*not* in YAML syntax) of some `special keywords <../api.html#threatingestor.artifacts.URL.match>`_.
 
-All of these options are *inclusive*, so only artifacts matching the
-restrictions will be sent through the operator.
+All of these options are *inclusive*, so only artifacts matching the restrictions will be sent through the operator.
 
-Example: 
+Example:
 
 .. code-block:: yaml
 
@@ -52,15 +47,9 @@ Example:
         filter: ([^\.]google.com$|google.com[^/])
         artifact_types: [URL, Domain]
 
-By combining these three options, you can include any number of different
-sources and operators in your config, and still only send exactly the artifacts
-you want to each operator.
+By combining these three options, you can include any number of different sources and operators in your config, and still only send exactly the artifacts you want to each operator.
 
-All operators allow credentials such as usernames, passwords, OAuth tokens, etc
-to be defined in a seperate ``credentials`` section and referenced by name with
-a ``credentials`` keyword. Consider a plugin that accepts a ``token`` and a
-``secret``. In ``config.yml``, you would set it up the ``credentials`` and
-``operators`` sections like this:
+All operators allow credentials such as usernames, passwords, OAuth tokens, etc to be defined in a seperate ``credentials`` section and referenced by name with a ``credentials`` keyword. Consider a plugin that accepts a ``token`` and a ``secret``. In ``config.yml``, you would set it up the ``credentials`` and ``operators`` sections like this:
 
 .. code-block:: yaml
 
@@ -73,8 +62,7 @@ a ``credentials`` keyword. Consider a plugin that accepts a ``token`` and a
       - name: myoperator
         credentials: myoperator-auth
 
-This allows the same credentials to be reused for several different operators
-(or sources), without having to duplicate them in each operator definition.
+This allows the same credentials to be reused for several different operators (or sources), without having to duplicate them in each operator definition.
 
 
 Available Plugins
