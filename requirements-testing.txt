@@ -11,3 +11,4 @@ coverage
 hug
 pymisp
 greenstalk
+watchdog
