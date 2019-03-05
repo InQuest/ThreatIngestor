@@ -55,6 +55,11 @@ User Guide
 
    api
 
+.. toctree::
+   :hidden:
+
+   glossary
+
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`glossary`
