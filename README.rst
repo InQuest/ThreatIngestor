@@ -22,15 +22,12 @@ ThreatIngestor
 
 An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
-Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into
-any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
+Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
 
 Overview
 --------
 
-ThreatIngestor can be configured to watch Twitter, RSS feeds, or other
-sources, extract meaningful information such as malicious IPs/domains and YARA
-signatures, and send that information to another system for analysis.
+ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
 
 Installation
 ------------
@@ -47,22 +44,18 @@ View the `full installation instructions`_ for more information.
 Usage
 -----
 
-Create a new ``config.yml`` file, and configure each source and operator module
-you want to use. (See ``config.example.yml`` for layout.) Then run the script::
+Create a new ``config.yml`` file, and configure each source and operator module you want to use. (See ``config.example.yml`` for layout.) Then run the script::
 
     threatingestor config.yml
 
-By default, it will run forever, polling each configured source every 15
-minutes.
+By default, it will run forever, polling each configured source every 15 minutes.
 
 View the `full ThreatIngestor documentation`_ for more information.
 
 Contributing
 ------------
 
-Issues and pull requests are welcomed. Please keep Python code PEP8 compliant.
-By submitting a pull request you agree to release your submissions under the
-terms of the LICENSE_.
+Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. By submitting a pull request you agree to release your submissions under the terms of the LICENSE_.
 
 .. _ThreatKB: https://github.com/InQuest/ThreatKB
 .. _LICENSE: https://github.com/InQuest/threat-ingestors/blob/master/LICENSE
