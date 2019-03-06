@@ -24,12 +24,12 @@ An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
 Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
 
-`Try it out!`_
-
 Overview
 --------
 
 ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
+
+`Try it out!`_
 
 Installation
 ------------
