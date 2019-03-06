@@ -32,12 +32,15 @@ ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, 
 Installation
 ------------
 
-ThreatIngestor requires Python 3.6+.
+ThreatIngestor requires Python 3.6+, with development headers.
 
-Install ThreatIngestor and its dependencies::
+Install ThreatIngestor from PyPI::
 
-    pip3 install -r requirements-testing.txt
-    python3 setup.py install
+    pip install threatingestor
+
+Install optional dependencies for using some plugins, as needed::
+
+    pip install threatingestor[all]
 
 View the `full installation instructions`_ for more information.
 

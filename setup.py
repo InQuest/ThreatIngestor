@@ -6,11 +6,30 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+requirements = open(os.path.join(os.path.dirname(__file__),
+            'requirements.txt')).read()
+requires = requirements.strip().split('\n')
+
+
+extra_requirements = open(os.path.join(os.path.dirname(__file__),
+            'requirements-testing.txt')).read()
+extra_requires = requirements.strip().split('\n')
+
 setup(
     name='threatingestor',
-    version='1.0.0',
+    version='1.0.0-alpha1',
     include_package_data=True,
-    install_requires=[],
+    install_requires=requires,
+    extras_requires=[
+        'twitter': ['twitter'],
+        'rss': ['feedparser'],
+        'misp': ['PyMISP'],
+        'threatkb': ['threatkb'],
+        'beanstalk': ['greenstalk'],
+        'sqs': ['boto3'],
+        'extras': ['hug', 'boto3', 'greenstalk', 'watchdog'],
+        'all': extra_requires,
+    ],
     entry_points={
           'console_scripts': [
               'threatingestor = threatingestor:main'
