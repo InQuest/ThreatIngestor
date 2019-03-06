@@ -20,7 +20,6 @@ class Source:
     additional methods to child classes, consider prefixing the method name
     with an underscore to denote a ``_private_method``.
     """
-
     def __init__(self, name, *args, **kwargs):
         """Override this constructor in child classes.
 
@@ -30,6 +29,7 @@ class Source:
         up the object.
         """
         raise NotImplementedError()
+
 
     def run(self, saved_state):
         """Run and return ``(saved_state, list(Artifact))``.
@@ -45,6 +45,7 @@ class Source:
         ``None``.
         """
         raise NotImplementedError()
+
 
     def process_element(self, content, reference_link, include_nonobfuscated=False):
         """Take a single source content/url and return a list of Artifacts.
