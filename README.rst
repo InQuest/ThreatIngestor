@@ -79,7 +79,7 @@ Operators
 * ThreatKB
 * Twitter
 
-View the `full ThreatIngestor documentation`_ for more information.
+View the `full ThreatIngestor documentation`_ for more information on included plugins, and how to create your own.
 
 Support
 -------
