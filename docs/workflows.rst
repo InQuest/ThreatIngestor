@@ -174,7 +174,7 @@ Queue Workers
 
 The ThreatIngestor :ref:`plugin architecture <developing>` lets developers integrate with external systems with relative ease - but not everything makes sense as a plugin. Both source and operator plugins are expected to run to completion quickly, then exit and wait for the next run before working again. For long-running tasks (think VirusTotal / MultiAV scan, malware sandbox, web crawler, domain brute force, etc), implementing them as plugins that block until completion would break the workflow. Instead, consider using a queue workflow.
 
-In a typical queue workflow, an operator should queue up jobs for each artifact it receives (typically with `SQS <sqs-operator>` or `Beanstalk <beanstalk-operator>`), and an external tool we'll call a **queue worker** should read from that queue and perform any necessary long-running tasks. When the tasks are complete, the queue worker should send a job to another queue, where it can be picked up by a ThreatIngestor queue source (like the `SQS <sqs-source>` and `Beanstalk <beanstalk-source>` sources).
+In a typical queue workflow, an operator should queue up jobs for each artifact it receives (typically with :ref:`SQS <sqs-operator>` or :ref:`Beanstalk <beanstalk-operator>`), and an external tool we'll call a **queue worker** should read from that queue and perform any necessary long-running tasks. When the tasks are complete, the queue worker should send a job to another queue, where it can be picked up by a ThreatIngestor queue source (like the :ref:`SQS <sqs-source>` and :ref:`Beanstalk <beanstalk-source>` sources).
 
 .. note::
 

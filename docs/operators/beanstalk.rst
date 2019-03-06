@@ -7,7 +7,7 @@ Beanstalk_ is a simple work queue server, that may be easier to get started
 with than Amazon SQS for those who don't already have AWS accounts.
 
 The Beanstalk operator enables you to send output to work queues, which you can
-then consume from `Beanstalk sources <beanstalk-source>`_, or external
+then consume from :ref:`Beanstalk sources <beanstalk-source>`, or external
 applications. This operator is extremely flexible, as it accepts arbitrary
 config options and passes them through to the queue.
 
