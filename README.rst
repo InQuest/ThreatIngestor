@@ -52,6 +52,42 @@ By default, it will run forever, polling each configured source every 15 minutes
 
 View the `full ThreatIngestor documentation`_ for more information.
 
+Plugins
+-------
+
+ThreatIngestor uses a plugin architecture with "source" (input) and "operator" (output) plugins. The currently supported integrations are:
+
+Sources
+~~~~~~~
+
+* Beanstalk work queues
+* Git repositories
+* GitHub repository search
+* RSS feeds
+* Amazon SQS queues
+* Twitter
+* Generic web pages
+
+Operators
+~~~~~~~~~
+
+* Beanstalk work queues
+* CSV files
+* MISP
+* SQLite database
+* Amazon SQS queues
+* ThreatKB
+* Twitter
+
+View the `full ThreatIngestor documentation`_ for more information.
+
+Support
+-------
+
+If you need help getting set up, or run into any issues, feel free to open an Issue_. You can also reach out to `@InQuest`_ on Twitter.
+
+We'd love to hear any feedback you have on ThreatIngestor, its documentation, or how you're putting it to work for you!
+
 Contributing
 ------------
 
@@ -66,3 +102,5 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _custom plugins: https://threatingestor.readthedocs.io/en/latest/developing.html
 .. _IOCs: https://en.wikipedia.org/wiki/Indicator_of_compromise
 .. _full installation instructions: https://threatingestor.readthedocs.io/en/latest/installation.html
+.. _Issue: https://github.com/InQuest/ThreatIngestor/issues
+.. _@InQuest: https://twitter.com/InQuest
