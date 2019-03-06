@@ -1,11 +1,11 @@
 class IngestorError(Exception):
-    """Base exception class"""
+    """Base exception class."""
     pass
 
 class DependencyError(IngestorError):
-    """Missing dependency"""
+    """Missing dependency."""
     pass
 
 class PluginError(IngestorError):
-    """Missing plugin"""
+    """Missing plugin."""
     pass
