@@ -1,20 +1,23 @@
 import json
 
-from threatingestor.exceptions import DependencyError
-from threatingestor.sources import abstract_json
 
 try:
     import greenstalk
 except ImportError:
     raise DependencyError("Dependency greenstalk required for Beastalk operator is not installed")
 
-class Plugin(abstract_json.AbstractPlugin):
-    """Source for Beanstalk work queue"""
 
+from threatingestor.exceptions import DependencyError
+from threatingestor.sources import abstract_json
+
+
+class Plugin(abstract_json.AbstractPlugin):
+    """Source for Beanstalk work queue."""
     def __init__(self, name, host, port, queue_name, paths, reference=None):
-        """Beanstalk source"""
+        """Beanstalk source."""
         super(Plugin, self).__init__(name, paths, reference)
         self.queue = greenstalk.Client(host, port, watch=queue_name)
+
 
     def get_objects(self, saved_state):
         job_list = []
