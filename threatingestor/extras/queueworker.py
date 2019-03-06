@@ -94,7 +94,7 @@ class SQSInterface:
     def read_one(self):
         """Read one or zero messages from the queue.
 
-        :return: Message body or None.
+        :returns: Message body or None.
         """
         if not self.in_queue:
             return
@@ -145,7 +145,7 @@ class BeanstalkInterface:
     def read_one(self):
         """Read one or zero messages from the queue.
 
-        :return: Message body or None.
+        :returns: Message body or None.
         """
         if not self.in_queue:
             return
