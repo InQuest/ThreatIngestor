@@ -18,7 +18,6 @@ INDEX_HTML = """
     <script type="text/javascript">
         $(document).ready(function() {
             $.ajax('/api/index').done(function(tables) {
-                console.log(tables);
                 tables.forEach(function(table) {
                     $("body").append(`<p><a href="/${table}">${table}</a></p>`);
                 });
