@@ -20,7 +20,7 @@ setup(
     version='1.0.0-alpha1',
     include_package_data=True,
     install_requires=requires,
-    extras_requires=[
+    extras_require={
         'twitter': ['twitter'],
         'rss': ['feedparser'],
         'misp': ['PyMISP'],
@@ -29,7 +29,7 @@ setup(
         'sqs': ['boto3'],
         'extras': ['hug', 'boto3', 'greenstalk', 'watchdog'],
         'all': extra_requires,
-    ],
+        },
     entry_points={
           'console_scripts': [
               'threatingestor = threatingestor:main'
