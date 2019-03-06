@@ -30,7 +30,7 @@ class Plugin(abstract_json.AbstractPlugin):
         try:
             batch_count = 0
             while batch_count < BATCH_SIZE:
-                message = self.queue.reserve(timeout=1):
+                message = self.queue.reserve(timeout=1)
                 job = json.loads(message.body)
                 job_list.append(job)
 
