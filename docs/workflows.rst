@@ -240,7 +240,7 @@ When new YARA rules are added to ``MY_RULES_FOLDER``, the File System Watcher se
 .. code-block:: json
 
     {
-        "content": "rule myNewRule { condition: false }",
+        "rules": "rule myNewRule { condition: false }",
         "filename": "mynewrule.yara"
     }
 

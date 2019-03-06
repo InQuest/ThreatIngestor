@@ -25,6 +25,7 @@ class FSWatcher(
         with io.open(event.src_path, 'r') as rule_source:
             rule_content = rule_source.read()
             self.queue.write_one({
+                'filename': event.src_path,
                 'rules': rule_content,
             })
 
