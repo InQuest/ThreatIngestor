@@ -34,7 +34,8 @@ class PasteProcessor(threatingestor.extras.queueworker.QueueWorker):
         # Fetch and return.
         response = requests.get(url)
         return {
-            'content': response.content
+            'content': response.content,
+            'reference': response.url,
         }
 
 

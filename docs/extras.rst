@@ -38,12 +38,26 @@ Here's an example YAML config file using SQS, writing to the ``yara-rules`` queu
     out_queue: yara-rules
     watch_path: MY_RULES_FOLDER
 
+Note that FSWatcher doesn't use an ``in_queue``, since its input comes from the file system changes themselves.
+
 Example Usage
 ^^^^^^^^^^^^^
 
 .. code-block:: sh
 
     python3 -m threatingestor.extras.fswatcher fswatcher.yml
+
+Expected Results
+^^^^^^^^^^^^^^^^
+
+When you change or create rule files, FSWatcher should detect those changes and send the contents of the rules to the queue, with a JSON message like this:
+
+.. code-block:: json
+
+    {
+        "rules": "rule myNewRule { condition: false }",
+        "filename": "mynewrule.yara"
+    }
 
 PasteProcessor
 ~~~~~~~~~~~~~~
@@ -63,7 +77,7 @@ Here's an example YAML config file using Beanstalk, reading from the ``pastebin-
 
     module: beanstalk
     host: localhost
-    port: 1130
+    port: 11300
     in_queue: pastebin-processor
     out_queue: threatingestor-input
 
@@ -75,3 +89,23 @@ Example Usage
 .. code-block:: sh
 
     python3 -m threatingestor.extras.pasteprocessor pasteprocessor.yml
+
+Expected Results
+^^^^^^^^^^^^^^^^
+
+When you (or ThreatIngestor) send JSON jobs to the ``pastebin-processor`` queue that look like this:
+
+.. code-block:: json
+
+    {
+        "url": "https://pastebin.com/EXAMPLE"
+    }
+
+PasteProcessor will kick off and send you back the contents of that paste, in the ``threatingestor-input`` tube:
+
+.. code-block:: json
+
+    {
+        "content": "EXAMPLE TEXT",
+        "reference": "https://pastebin.com/raw/EXAMPLE"
+    }
