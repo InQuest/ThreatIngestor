@@ -1,15 +1,15 @@
 import json
 
 
+from threatingestor.exceptions import DependencyError
+import threatingestor.artifacts
+from threatingestor.operators import abstract_json
+
+
 try:
     import greenstalk
 except ImportError:
     raise DependencyError("Dependency greenstalk required for Beanstalk operator is not installed")
-
-
-from threatingestor.exceptions import DependencyError
-import threatingestor.artifacts
-from threatingestor.operators import abstract_json
 
 
 class Plugin(abstract_json.AbstractPlugin):

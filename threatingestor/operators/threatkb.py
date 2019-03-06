@@ -1,9 +1,16 @@
 from __future__ import absolute_import
 
-import threatkb
 
 import threatingestor.artifacts
 from threatingestor.operators import Operator
+from threatingestor.exceptions import DependencyError
+
+
+try:
+    import threatkb
+except ImportError:
+    raise DependencyError("Dependency boto3 required for SQS operator is not installed")
+
 
 class Plugin(Operator):
     """Operator for InQuest ThreatKB"""
