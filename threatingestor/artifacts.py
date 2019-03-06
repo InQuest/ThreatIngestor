@@ -2,16 +2,18 @@ import re
 import ipaddress
 from urllib.parse import urlparse
 
+
 import iocextract
 
-class Artifact(object):
-    """Base class"""
 
+class Artifact(object):
+    """Artifact base class."""
     def __init__(self, artifact, source_name, reference_link=None, reference_text=None):
         self.artifact = artifact
         self.source_name = source_name
         self.reference_link = reference_link or ''
         self.reference_text = reference_text or ''
+
 
     def match(self, pattern):
         """Return True if regex pattern matches the deobfuscated artifact, else False.
@@ -20,6 +22,7 @@ class Artifact(object):
         """
         regex = re.compile(pattern)
         return True if regex.search(self.__str__()) else False
+
 
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
@@ -40,6 +43,7 @@ class Artifact(object):
             **kwargs
         )
 
+
     def _stringify(self):
         """Return str representation of the artifact.
 
@@ -47,12 +51,13 @@ class Artifact(object):
         """
         return self.artifact
 
+
     def __str__(self):
         return self._stringify()
 
-class URL(Artifact):
-    """URL artifact abstraction, unicode-safe"""
 
+class URL(Artifact):
+    """URL artifact abstraction, unicode-safe."""
     def _match_expression(self, pattern):
         """Process pattern as a condition expression.
 
@@ -71,6 +76,7 @@ class URL(Artifact):
                 elif not condition.startswith(NOT) and not result:
                     return False
         return True
+
 
     def match(self, pattern):
         """Filter on some predefined conditions or a regex pattern.
@@ -99,6 +105,7 @@ class URL(Artifact):
             # not a valid condition expression, treat as regex instead
             return super(URL, self).match(pattern)
 
+
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
 
@@ -113,12 +120,14 @@ class URL(Artifact):
                                                domain=self.domain(),
                                                defanged=iocextract.defang(str(self)))
 
+
     def _stringify(self):
-        """Always returns deobfuscated url"""
+        """Always returns deobfuscated URL."""
         return iocextract.refang_url(self.artifact)
 
+
     def is_obfuscated(self):
-        """Boolean: is an obfuscated URL"""
+        """Boolean: is an obfuscated URL?"""
         stringlike = self._stringify()
         if stringlike != self.artifact:
             # don't treat "example.com" as obfuscated
@@ -126,8 +135,9 @@ class URL(Artifact):
                 return True
         return False
 
+
     def is_ipv4(self):
-        """Boolean: URL network location is an IPv4 address, not a domain"""
+        """Boolean: URL network location is an IPv4 address, not a domain?"""
         parsed = urlparse(iocextract.refang_url(self.artifact))
 
         try:
@@ -137,8 +147,9 @@ class URL(Artifact):
 
         return True
 
+
     def is_ipv6(self):
-        """Boolean: URL network location is an IPv6 address, not a domain"""
+        """Boolean: URL network location is an IPv6 address, not a domain?"""
         # fix urlparse exception
         parsed = urlparse(iocextract.refang_url(self.artifact))
 
@@ -155,16 +166,19 @@ class URL(Artifact):
 
         return True
 
+
     def is_ip(self):
-        """Boolean: URL network location is an IP address, not a domain"""
+        """Boolean: URL network location is an IP address, not a domain?"""
         return self.is_ipv4() or self.is_ipv6()
 
+
     def domain(self):
-        """Deobfuscated domain; undefined behavior if self.is_ip()"""
+        """Deobfuscated domain; undefined behavior if self.is_ip()."""
         return urlparse(self._stringify()).netloc.split(':')[0]
 
+
     def is_domain(self):
-        """Boolean: URL network location might be a valid domain"""
+        """Boolean: URL network location might be a valid domain?"""
         try:
             # can't have non-ascii
             self.domain().encode('ascii')
@@ -174,17 +188,17 @@ class URL(Artifact):
                all([x.isalnum() or x in '-.' for x in self.domain()]) and \
                self.domain()[self.domain().rfind('.')+1:].isalpha() and len(self.domain()[self.domain().rfind('.')+1:]) > 1
 
+
     def deobfuscated(self):
-        """Named method for clarity, same as str(my_url_object)"""
+        """Named method for clarity, same as str(my_url_object)."""
         return self.__str__()
 
 
 class IPAddress(Artifact):
-    """IP address artifact abstraction
+    """IP address artifact abstraction.
 
     Use version and ipaddress() for processing.
     """
-
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
 
@@ -197,13 +211,15 @@ class IPAddress(Artifact):
         return super(IPAddress, self).format_message(message, ipaddress=str(self),
                                                      defanged=iocextract.defang(str(self)))
 
+
     def _stringify(self):
-        """Always returns deobfuscated IP"""
+        """Always returns deobfuscated IP."""
         return self.artifact.replace('[', '').replace(']', '').split('/')[0].split(':')[0].split(' ')[0]
+
 
     @property
     def version(self):
-        """Returns 4, 6, or None"""
+        """Returns 4, 6, or None."""
         try:
             return ipaddress.IPv4Address(self._stringify()).version
         except ValueError:
@@ -212,8 +228,9 @@ class IPAddress(Artifact):
             except ValueError:
                 return None
 
+
     def ipaddress(self):
-        """Return ipaddress.IPv4Address or ipaddress.IPv6Address object, or raise ValueError"""
+        """Return ipaddress.IPv4Address or ipaddress.IPv6Address object, or raise ValueError."""
         version = self.version
         if version == 4:
             return ipaddress.IPv4Address(self._stringify())
@@ -225,7 +242,6 @@ class IPAddress(Artifact):
 
 class Domain(Artifact):
     """Domain artifact abstraction"""
-
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
 
@@ -240,13 +256,13 @@ class Domain(Artifact):
 
 
 class Hash(Artifact):
-    """Hash artifact abstraction"""
-
+    """Hash artifact abstraction."""
     # Types
     MD5 = 'md5'
     SHA1 = 'sha1'
     SHA256 = 'sha256'
     SHA512 = 'sha512'
+
 
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
@@ -260,8 +276,9 @@ class Hash(Artifact):
         return super(Hash, self).format_message(message, hash=str(self),
                                                 hash_type=self.hash_type() or 'hash')
 
+
     def hash_type(self):
-        """Return the hash type as a string, or None"""
+        """Return the hash type as a string, or None."""
         if len(self.artifact) == 32:
             return self.MD5
         elif len(self.artifact) == 40:
@@ -275,8 +292,7 @@ class Hash(Artifact):
 
 
 class YARASignature(Artifact):
-    """YARA signature artifact abstraction"""
-
+    """YARA signature artifact abstraction."""
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
 
@@ -290,8 +306,7 @@ class YARASignature(Artifact):
 
 
 class Task(Artifact):
-    """Generic Task artifact abstraction"""
-
+    """Generic Task artifact abstraction."""
     def format_message(self, message, **kwargs):
         """Allow string interpolation with artifact contents.
 
@@ -303,7 +318,8 @@ class Task(Artifact):
         return super(Task, self).format_message(message, task=str(self))
 
 
-# Define string mappings for artifact types
+# Define string mappings for artifact types.
+# At the bottom because it uses the classes we just defined.
 STRING_MAP = {
     'url': URL,
     'ipaddress': IPAddress,
