@@ -1,5 +1,6 @@
 import requests
 
+
 from threatingestor.sources import Source
 
 
@@ -9,12 +10,13 @@ class Plugin(Source):
         self.name = name
         self.url = url
 
+
     def run(self, saved_state):
-        # read saved state and set HTTP headers
+        # Read saved state and set HTTP headers.
         headers = {}
         if saved_state:
-            # if both last modified and etag, set both
-            # otherwise just interpret the whole field as last modified
+            # If both last modified and etag, set both.
+            # Otherwise just interpret the whole field as last modified.
             last_modified = saved_state
 
             if len(saved_state.split(';')) == 2:
@@ -23,17 +25,17 @@ class Plugin(Source):
 
             headers['If-Modified-Since'] = last_modified
 
-        # send head first to check 304
+        # Send head first to check 304.
         response = requests.head(self.url, headers=headers)
 
-        # if not modified, return immediately
+        # If not modified, return immediately.
         if response.status_code == 304:
             return saved_state, []
 
-        # otherwise, do the full request
+        # Otherwise, do the full request.
         response = requests.get(self.url, headers=headers)
 
-        # form saved state
+        # Form saved state.
         last_modified = response.headers.get('Last-Modified')
         etag = response.headers.get('Etag')
 
@@ -42,7 +44,7 @@ class Plugin(Source):
         else:
             saved_state = last_modified
 
-        # process text
+        # Process text.
         artifact_list = self.process_element(response.text, self.url, include_nonobfuscated=True)
 
         return saved_state, artifact_list
