@@ -29,7 +29,7 @@ setup(
         'sqs': ['boto3'],
         'extras': ['hug', 'boto3', 'greenstalk', 'watchdog'],
         'all': extra_requires,
-        },
+    },
     entry_points={
           'console_scripts': [
               'threatingestor = threatingestor:main'
