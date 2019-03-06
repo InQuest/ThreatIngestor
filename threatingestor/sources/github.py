@@ -1,11 +1,15 @@
 import datetime
 
+
 import requests
+
 
 from threatingestor.sources import Source
 import threatingestor.artifacts
 
+
 SEARCH_URL = "https://api.github.com/search/repositories"
+
 
 class Plugin(Source):
     """Github Source Plugin"""
@@ -18,9 +22,10 @@ class Plugin(Source):
         else:
             self.auth = None
 
+
     def _repository_search(self, params):
-        """Returns a list of repository results"""
-        # Iterates through pages of results from query
+        """Returns a list of repository results."""
+        # Iterates through pages of results from query.
         response = requests.get(SEARCH_URL, params=params, auth=self.auth)
 
         repo_list = []
@@ -37,9 +42,10 @@ class Plugin(Source):
 
         return repo_list
 
+
     def run(self, saved_state):
         """Returns a list of artifacts and the saved state"""
-        # if no saved_state, search max 1 day ago
+        # If no saved_state, search max 1 day ago.
         if not saved_state:
             saved_state = (datetime.datetime.utcnow() -
                            datetime.timedelta(days=10)).isoformat()[:-7] + 'Z'

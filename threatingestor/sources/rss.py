@@ -1,6 +1,7 @@
 import feedparser
 import bs4
 
+
 from threatingestor.sources import Source
 
 
@@ -14,13 +15,13 @@ class Plugin(Source):
         self.url = url
         self.feed_type = feed_type
 
-    def run(self, saved_state):
 
+    def run(self, saved_state):
         feed = feedparser.parse(self.url)
 
         artifacts = []
         for item in list(reversed(feed['items'])):
-            # only new items
+            # Only new items.
             published_parsed = item.get('published_parsed') or item.get('updated_parsed')
             if published_parsed and published_parsed <= feedparser._parse_date(saved_state or '0000-00-00'):
                 continue
@@ -31,7 +32,7 @@ class Plugin(Source):
                 try:
                     soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
                 except KeyError:
-                    # can't find any feed content, just skip this entry
+                    # Can't find any feed content, just skip this entry.
                     continue
 
             # do some preprocessing to remove common obfuscation methods
@@ -49,7 +50,7 @@ class Plugin(Source):
                 text = soup.get_text(separator=' ')
                 artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
             else:
-                # default: self.feed_type == 'messy'
+                # Default: self.feed_type == 'messy'.
                 text = soup.get_text(separator=' ')
                 artifacts += self.process_element(text, item.get('link') or self.url)
 
