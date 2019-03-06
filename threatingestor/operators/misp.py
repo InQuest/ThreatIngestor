@@ -1,15 +1,21 @@
 from __future__ import absolute_import
 
-import pymisp
 
 import threatingestor.artifacts
 from threatingestor.operators import Operator
+from threatingestor.exceptions import DependencyError
+
+
+try:
+    import pymisp
+except ImportError:
+    raise DependencyError("Dependency PyMISP required for MISP operator is not installed")
+
 
 class Plugin(Operator):
-    """Operator for MISP"""
-
+    """Operator for MISP."""
     def __init__(self, url, key, ssl=True, tags=None, artifact_types=None, filter_string=None, allowed_sources=None):
-        """MISP operator"""
+        """MISP operator."""
         self.api = pymisp.PyMISP(url, key, ssl, 'json')
         if tags:
             self.tags = tags
@@ -26,8 +32,9 @@ class Plugin(Operator):
             threatingestor.artifacts.YARASignature,
         ]
 
+
     def handle_artifact(self, artifact):
-        """Operate on a single artifact"""
+        """Operate on a single artifact."""
         if isinstance(artifact, threatingestor.artifacts.Domain):
             self.handle_domain(artifact)
         if isinstance(artifact, threatingestor.artifacts.Hash):
@@ -39,8 +46,9 @@ class Plugin(Operator):
         elif isinstance(artifact, threatingestor.artifacts.YARASignature):
             self.handle_yarasignature(artifact)
 
+
     def _create_event(self, artifact):
-        """Create an event in MISP, return an Event object"""
+        """Create an event in MISP, return an Event object."""
         event = self.api.new_event(info=self.event_info.format(
             source_name=artifact.source_name))
 
@@ -55,13 +63,14 @@ class Plugin(Operator):
 
         return event
 
+
     def handle_domain(self, domain):
-        """Handle a single domain"""
+        """Handle a single domain."""
         event = self._create_event(domain)
         self.api.add_domain(event, str(domain))
 
     def handle_hash(self, hash_):
-        """Handle a single hash"""
+        """Handle a single hash."""
         if hash_.hash_type() == hash_.MD5:
             event = self._create_event(hash_)
             self.api.add_hashes(event, md5=str(hash_))
@@ -72,17 +81,20 @@ class Plugin(Operator):
             event = self._create_event(hash_)
             self.api.add_hashes(event, sha256=str(hash_))
 
+
     def handle_ipaddress(self, ipaddress):
-        """Handle a single IP address"""
+        """Handle a single IP address."""
         event = self._create_event(ipaddress)
         self.api.add_ipdst(event, str(ipaddress))
 
+
     def handle_url(self, url):
-        """Handle a single URL"""
+        """Handle a single URL."""
         event = self._create_event(url)
         self.api.add_url(event, str(url))
 
+
     def handle_yarasignature(self, yarasignature):
-        """Handle a single YARA signature"""
+        """Handle a single YARA signature."""
         event = self._create_event(yarasignature)
         self.api.add_yara(event, str(yarasignature))
