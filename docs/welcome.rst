@@ -1,6 +1,8 @@
 Welcome to ThreatIngestor!
 ==========================
 
+.. _what-is-it:
+
 What is ThreatIngestor?
 -----------------------
 
@@ -14,6 +16,8 @@ There is a never-ending stream of publicly available information on malicious ac
    A screenshot of Twitter user `@MalwareConfig`_'s feed, showing two tweets with :term:`defanged` :term:`C2` domains and IP addresses.
 
 Because it is completely modular and configuration-driven, ThreatIngestor is super flexible, and should fit easily into any threat intel workflow.
+
+.. _try-it-out:
 
 Try it out!
 -----------

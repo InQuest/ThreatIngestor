@@ -39,6 +39,7 @@ User Guide
    :maxdepth: 2
 
    artifacts
+   extras
 
 .. toctree::
    :maxdepth: 1
