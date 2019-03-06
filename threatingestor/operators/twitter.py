@@ -1,8 +1,9 @@
 from __future__ import absolute_import
-
 import re
 
+
 import twitter
+
 
 from threatingestor.operators import Operator
 import threatingestor.artifacts
@@ -13,7 +14,6 @@ TWEET_URL = re.compile(r'https://twitter\.com/\w{1,15}/status/\d+')
 
 class Plugin(Operator):
     """Operator for Twitter."""
-
     def __init__(self, token, token_key, con_secret_key, con_secret, status, **kwargs):
         self.api = twitter.Twitter(auth=twitter.OAuth(token, token_key, con_secret, con_secret_key))
         self.status = status
@@ -28,6 +28,7 @@ class Plugin(Operator):
             threatingestor.artifacts.IPAddress,
         ]
 
+
     def handle_artifact(self, artifact):
         """Operate on a single artifact."""
         status = artifact.format_message(self.status)
@@ -38,6 +39,7 @@ class Plugin(Operator):
             quote_tweet = artifact.reference_link
 
         self._tweet(status, quote_tweet=quote_tweet)
+
 
     def _tweet(self, status, quote_tweet=None):
         """Send content to Twitter as a status update."""
