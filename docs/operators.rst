@@ -19,7 +19,7 @@ The following options are globally accepted by all operators:
 
 * ``allowed_sources``: List (`in YAML syntax`_) of source names to allow.
 * ``artifact_types``: List (`in YAML syntax`_) of artifact types to allow.
-* ``filter``: A regex, or **comma-separated list** (*not* in YAML syntax) of some `special keywords <../api.html#threatingestor.artifacts.URL.match>`_.
+* ``filter``: A regex, or **comma-separated list** (*not* in YAML syntax) of some :py:mod:`special keywords <threatingestor.artifacts.URL.match>`.
 
 All of these options are *inclusive*, so only artifacts matching the restrictions will be sent through the operator.
 
