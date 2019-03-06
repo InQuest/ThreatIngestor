@@ -1,6 +1,8 @@
 import jsonpath_rw
 
+
 from threatingestor.sources import Source
+
 
 class AbstractPlugin(Source):
 
@@ -15,11 +17,13 @@ class AbstractPlugin(Source):
         # Try to parse reference as a path, fall back to name.
         self.reference = jsonpath_rw.parse(reference) if reference else None
 
+
     def get_objects(self, saved_state):
         """Produce an iterable of dict or list objectcs containing raw content to process.
 
         Override in child class."""
         raise NotImplementedError()
+
 
     def run(self, saved_state):
         """Run and return (saved_state, list(Artifact))"""
