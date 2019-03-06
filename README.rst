@@ -24,6 +24,8 @@ An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
 Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
 
+`Try it out!`_
+
 Overview
 --------
 
@@ -107,3 +109,4 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _full installation instructions: https://threatingestor.readthedocs.io/en/latest/installation.html
 .. _Issue: https://github.com/InQuest/ThreatIngestor/issues
 .. _@InQuest: https://twitter.com/InQuest
+.. _Try it out!: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out
