@@ -13,7 +13,7 @@ import threatingestor.exceptions
 
 class QueueWorker:
     """Abstract base class for Queue Workers.
-        
+
     Override do_work to implement child classes.
     """
     def __init__(self):
