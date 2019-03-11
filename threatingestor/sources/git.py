@@ -43,7 +43,20 @@ class Plugin(Source):
                 _git_clone(self.url, self.local_path)
                 new_hash = _git_latest_hash(self.local_path)
                 all_filenames = _git_ls_files(self.local_path).splitlines()
-            except (subprocess.CalledProcessError, OSError) as e:
+
+            except subprocess.CalledProcessError:
+                # Clone failed, maybe the repo already exists?
+                # If so, update the saved state so we can pull on the next run.
+                try:
+                    new_hash = _git_latest_hash(self.local_path)
+
+                except subprocess.CalledProcessError as e:
+                    # That also failed, so this is just a generic error.
+                    sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
+                                                                                             path=self.local_path,
+                                                                                             e=e))
+
+            except OSError as e:
                 sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
                                                                                          path=self.local_path,
                                                                                          e=e))
