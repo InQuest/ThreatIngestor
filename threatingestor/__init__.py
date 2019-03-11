@@ -1,5 +1,6 @@
 import sys
 import time
+import traceback
 
 
 import threatingestor.config
@@ -53,6 +54,7 @@ class Ingestor:
                 saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
             except Exception as e:
                 sys.stderr.write("Unknown error in source {s}: {e}\n".format(s=source, e=e))
+                sys.stderr.write(traceback.format_exc())
                 continue
 
             # Save the source state.
@@ -64,6 +66,7 @@ class Ingestor:
                     self.operators[operator].process(artifacts)
                 except Exception as e:
                     sys.stderr.write("Unknown error in operator {o}: {e}\n".format(o=operator, e=e))
+                    sys.stderr.write(traceback.format_exc())
                     continue
 
 
