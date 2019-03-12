@@ -1,5 +1,5 @@
-Welcome to ThreatIngestor!
-==========================
+Welcome to ThreatIngestor
+=========================
 
 .. _what-is-it:
 
@@ -19,8 +19,8 @@ Because it is completely modular and configuration-driven, ThreatIngestor is sup
 
 .. _try-it-out:
 
-Try it out!
------------
+Try it out
+----------
 
 If you want to try ThreatIngestor right now, here's the quickest way to get up and running:
 
