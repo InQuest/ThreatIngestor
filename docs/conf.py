@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'ThreatIngestor'
-copyright = u'2018 InQuest, LLC'
+copyright = u'2019 InQuest, LLC'
 author = u'InQuest Labs'
 
 # The short X.Y version
