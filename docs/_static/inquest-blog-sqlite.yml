@@ -1,0 +1,17 @@
+general:
+    daemon: false
+    sleep: 900
+    state_path: state.db
+
+sources:
+  - name: inquest-blog
+    # Read from the InQuest blog.
+    module: rss
+    url: http://feeds.feedburner.com/Inquestblog?format=xml
+    feed_type: messy
+
+operators:
+  - name: sqlite-artifacts
+    # Write artifacts to a SQLite database.
+    module: sqlite
+    file_path: artifacts.db

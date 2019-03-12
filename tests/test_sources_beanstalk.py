@@ -18,6 +18,6 @@ class TestBeanstalk(unittest.TestCase):
         saved_state, artifact_list = self.beanstalk.run(None)
 
         self.assertEqual(saved_state, None)
-        self.beanstalk.queue.reserve.assert_called_once_with()
-        self.beanstalk.queue.delete.assert_called_once()
+        self.beanstalk.queue.reserve.assert_called_with(timeout=1)
+        self.beanstalk.queue.delete.assert_called()
         self.assertIn('http://example.mock/path', [str(x) for x in artifact_list])

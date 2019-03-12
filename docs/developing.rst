@@ -6,18 +6,14 @@ Developing
 Overview
 --------
 
-ThreatIngestor can be easily extended to support other input and output
-mechanisms through *Source* (input) and *Operator* (output) Python plugins.
+ThreatIngestor can be easily extended to support other input and output mechanisms through *Source* (input) and *Operator* (output) Python plugins.
 
 .. _custom-source-plugins:
 
 Source Plugins
 --------------
 
-To add support for a new source, simply create a new Python file in the
-``sources`` folder (e.g. ``examplesource.py``) and extend the ``sources.Source``
-class with a class called ``Plugin``, overwriting both the ``__init__`` and
-``run`` methods:
+To add support for a new source, simply create a new Python file in the ``sources`` folder (e.g. ``examplesource.py``) and extend the ``sources.Source`` class with a class called ``Plugin``, overwriting both the ``__init__`` and ``run`` methods:
 
 .. code-block:: python
 
@@ -40,12 +36,9 @@ class with a class called ``Plugin``, overwriting both the ``__init__`` and
            return saved_state, artifact_list
 
 
-You will most likely want to use the ``sources.Source.process_element`` method to
-build the ``artifacts`` list. Check inline documentation, and see
-``sources/twitter.py`` and ``sources/rss.py`` for examples.
+You will most likely want to use the ``sources.Source.process_element`` method to build the ``artifacts`` list. Check inline documentation, and see ``sources/twitter.py`` and ``sources/rss.py`` for examples.
 
-Any arguments specified in ``__init__`` can be passed in from correspondingly
-named keys in the ``config.yml`` section at runtime::
+Any arguments specified in ``__init__`` can be passed in from correspondingly named keys in the ``config.yml`` section at runtime::
 
     - name: myexample
       module: examplesource
@@ -56,11 +49,7 @@ named keys in the ``config.yml`` section at runtime::
 Operator Plugins
 ----------------
 
-Once artifacts are collected by a source plugin, they're sent to any
-configured operator plugins for processing or export. Adding an operator
-plugin is much the same as adding a source. Create a Python file in the
-``operators`` folder and extend the ``operators.Operator`` class, with a class
-named ``Plugin``, overwriting the ``__init__`` and ``handle_artifact`` methods:
+Once artifacts are collected by a source plugin, they're sent to any configured operator plugins for processing or export. Adding an operator plugin is much the same as adding a source. Create a Python file in the ``operators`` folder and extend the ``operators.Operator`` class, with a class named ``Plugin``, overwriting the ``__init__`` and ``handle_artifact`` methods:
 
 .. code-block:: python
 
@@ -83,8 +72,7 @@ named ``Plugin``, overwriting the ``__init__`` and ``handle_artifact`` methods:
 
 Operators will only be run on artifacts in their ``artifact_types`` list.
 
-As with source modules, any arguments specified in ``__init__`` can be passed in
-from correspondingly named keys in the ``config.yml`` section at runtime::
+As with source modules, any arguments specified in ``__init__`` can be passed in from correspondingly named keys in the ``config.yml`` section at runtime::
 
     - name: myexample
       module: exampleoperator

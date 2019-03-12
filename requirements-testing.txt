@@ -1,4 +1,3 @@
--r requirements.txt
 httpretty
 responses
 mock
@@ -11,3 +10,7 @@ coverage
 hug
 pymisp
 greenstalk
+watchdog
+twitter>=1.17.1
+feedparser>=5.2.1
+threatkb

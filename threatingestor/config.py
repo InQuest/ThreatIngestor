@@ -1,10 +1,13 @@
 import io
 import importlib
 
+
 import yaml
+
 
 from threatingestor.exceptions import PluginError
 import threatingestor.artifacts
+
 
 SOURCE = 'threatingestor.sources'
 OPERATOR = 'threatingestor.operators'
@@ -22,42 +25,49 @@ NAME = 'name'
 
 
 class Config:
-
+    """Config read/write operations, and convenience methods."""
     def __init__(self, filename):
+        """Read a config file."""
         self.filename = filename
         with io.open(self.filename, 'r') as f:
             self.config = yaml.safe_load(f.read())
 
+
     @staticmethod
     def _load_plugin(plugin_type, plugin):
-        """Returns plugin class or raises an exception"""
+        """Returns plugin class or raises an exception."""
         try:
             module = importlib.import_module('.'.join([plugin_type, plugin]))
             return module.Plugin
         except (ImportError, AttributeError):
             raise PluginError("No valid plugin '{p}' in '{t}'".format(p=plugin, t=plugin_type))
 
+
     def daemon(self):
         """Returns boolean, are we daemonizing?"""
         return self.config['general']['daemon']
 
+
     def state_path(self):
-        """Returns path of state.db file"""
+        """Returns path of state.db file."""
         return self.config['general']['state_path']
 
+
     def sleep(self):
-        """Returns number of seconds to sleep between iterations, if daemonizing"""
+        """Returns number of seconds to sleep between iterations, if daemonizing."""
         return self.config['general']['sleep']
 
+
     def credentials(self, credential_name):
-        """Return a dictionary with the specified credentials"""
+        """Return a dictionary with the specified credentials."""
         for credential in self.config['credentials']:
             for key, value in credential.items():
                 if key == NAME and value == credential_name:
                     return credential
 
+
     def sources(self):
-        """Return a list of (name, Source class, {kwargs}) tuples"""
+        """Return a list of (name, Source class, {kwargs}) tuples."""
         sources = []
 
         for source in self.config['sources']:
@@ -78,8 +88,9 @@ class Config:
 
         return sources
 
+
     def operators(self):
-        """Return a list of (name, Operator class, {kwargs}) tuples"""
+        """Return a list of (name, Operator class, {kwargs}) tuples."""
         operators = []
         for operator in self.config['operators']:
             kwargs = {}
@@ -118,17 +129,3 @@ class Config:
             operators.append((operator["name"], self._load_plugin(OPERATOR, operator['module']), kwargs))
 
         return operators
-
-    def save_state(self, source, saved_state):
-        """Save the state for a given source"""
-        self.config.set(source, 'saved_state', str(saved_state or ''))
-
-        # write it out immediately
-        with open(self.filename, 'w+') as f:
-            self.config.write(f)
-
-    def get_state(self, source):
-        """Return saved_state for a given source"""
-        # refresh the config
-        self.config.read(self.filename)
-        return self.config.get(source, 'saved_state')

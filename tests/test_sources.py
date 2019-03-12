@@ -19,7 +19,7 @@ class TestSources(unittest.TestCase):
 
     def test_init_raises_not_implemented(self):
         with self.assertRaises(NotImplementedError):
-            self.orig_init(self.source)
+            self.orig_init(self.source, self.source.name)
 
     def test_run_raises_not_implemented(self):
         with self.assertRaises(NotImplementedError):

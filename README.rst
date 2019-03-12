@@ -1,10 +1,5 @@
-.. raw:: html
-
-    <p align="center">
-      <img height="128" src="https://inquest.readthedocs.io/projects/threatingestor/en/latest/_static/threatingestor.png"  alt="threatingestor" title="threatingestor">
-    </p>
-
-    <h1 align="center">ThreatIngestor</h1>
+ThreatIngestor
+==============
 
 .. image:: https://inquest.net/images/inquest-badge.svg
     :target: https://inquest.net/
@@ -25,47 +20,93 @@
     :target: https://pypi.python.org/pypi/ThreatIngestor
     :alt: PyPi Version
 
-An extendable tool to extract and aggregate IOCs from threat feeds.
+An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
-Designed for use with `InQuest ThreatKB`_, but can be used without it.
+Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
 
 Overview
 --------
 
-ThreatIngestor can be configured to watch Twitter, RSS feeds, or other
-sources, extract meaningful information such as C2 IPs/domains and YARA
-signatures, and send that information to another system for analysis.
+ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
+
+`Try it out!`_
 
 Installation
 ------------
 
-ThreatIngestor requires Python 3.6+.
+ThreatIngestor requires Python 3.6+, with development headers.
 
-Install ThreatIngestor and its dependencies::
+Install ThreatIngestor from PyPI::
 
-    pip3 install -r requirements.txt
-    python3 setup.py install
+    pip install threatingestor
+
+Install optional dependencies for using some plugins, as needed::
+
+    pip install threatingestor[all]
+
+View the `full installation instructions`_ for more information.
 
 Usage
 -----
 
-Create a new ``config.yml`` file, and configure each source and operator module
-you want to use. (See ``config.example.yml`` for layout.) Then run the script::
+Create a new ``config.yml`` file, and configure each source and operator module you want to use. (See ``config.example.yml`` for layout.) Then run the script::
 
     threatingestor config.yml
 
-By default, it will run forever, polling each configured source every 15
-minutes.
+By default, it will run forever, polling each configured source every 15 minutes.
 
-For full documentation, see the `ThreatIngestor ReadTheDocs site`_.
+View the `full ThreatIngestor documentation`_ for more information.
+
+Plugins
+-------
+
+ThreatIngestor uses a plugin architecture with "source" (input) and "operator" (output) plugins. The currently supported integrations are:
+
+Sources
+~~~~~~~
+
+* Beanstalk work queues
+* Git repositories
+* GitHub repository search
+* RSS feeds
+* Amazon SQS queues
+* Twitter
+* Generic web pages
+
+Operators
+~~~~~~~~~
+
+* Beanstalk work queues
+* CSV files
+* MISP
+* SQLite database
+* Amazon SQS queues
+* ThreatKB
+* Twitter
+
+View the `full ThreatIngestor documentation`_ for more information on included plugins, and how to create your own.
+
+Support
+-------
+
+If you need help getting set up, or run into any issues, feel free to open an Issue_. You can also reach out to `@InQuest`_ on Twitter.
+
+We'd love to hear any feedback you have on ThreatIngestor, its documentation, or how you're putting it to work for you!
 
 Contributing
 ------------
 
-Issues and pull requests are welcomed. Please keep Python code PEP8 compliant.
-By submitting a pull request you agree to release your submissions under the
-terms of the LICENSE_.
+Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. By submitting a pull request you agree to release your submissions under the terms of the LICENSE_.
 
-.. _InQuest ThreatKB: https://github.com/InQuest/ThreatKB
+.. _ThreatKB: https://github.com/InQuest/ThreatKB
 .. _LICENSE: https://github.com/InQuest/threat-ingestors/blob/master/LICENSE
-.. _ThreatIngestor ReadTheDocs site: https://threatingestor.readthedocs.io/
+.. _full ThreatIngestor Documentation: https://threatingestor.readthedocs.io/
+.. _SQS: https://aws.amazon.com/sqs/
+.. _Beanstalk: https://beanstalkd.github.io/
+.. _MISP: https://www.misp-project.org/
+.. _custom plugins: https://threatingestor.readthedocs.io/en/latest/developing.html
+.. _IOCs: https://en.wikipedia.org/wiki/Indicator_of_compromise
+.. _full installation instructions: https://threatingestor.readthedocs.io/en/latest/installation.html
+.. _Issue: https://github.com/InQuest/ThreatIngestor/issues
+.. _@InQuest: https://twitter.com/InQuest
+.. _Try it out!: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out

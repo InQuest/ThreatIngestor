@@ -2,7 +2,9 @@ import re
 from urllib.parse import urlparse
 import itertools
 
+
 import iocextract
+
 
 import threatingestor.artifacts
 
@@ -11,35 +13,63 @@ TRUNCATE_LENGTH = 140
 
 
 class Source:
-    """Base class, see method documentation"""
+    """Base class for all Source plugins.
 
-    def __init__(self, name=None):
-        """Args should be url, auth, etc, whatever is needed to set up the object."""
-        self.name = name
+    Note: This is an abstract class. You must override ``__init__`` and ``run``
+    in child classes. You should not override ``process_element``. When adding
+    additional methods to child classes, consider prefixing the method name
+    with an underscore to denote a ``_private_method``.
+    """
+    def __init__(self, name, *args, **kwargs):
+        """Override this constructor in child classes.
+
+        The first argument must always be ``name``.
+
+        Other argumentss should be url, auth, etc, whatever is needed to set
+        up the object.
+        """
         raise NotImplementedError()
+
 
     def run(self, saved_state):
-        """Run and return (saved_state, list(Artifact)).
+        """Run and return ``(saved_state, list(Artifact))``.
 
-        Attempts to pick up where we left off using saved_state, if supported."""
+        Override this method in child classes.
+
+        The method signature and return values must remain consistent.
+
+        The method should attempt to pick up where we left off using
+        ``saved_state``, if supported. If ``saved_state`` is ``None``, you can
+        assume this is a first run. If state is maintained by the remote
+        resource (e.g. as it is with SQS), ``saved_state`` should always be
+        ``None``.
+        """
         raise NotImplementedError()
 
-    def process_element(self, content, reference_link, include_nonobfuscated=False):
-        """Take a single source content/url and return a list of Artifacts"""
 
-        # truncate content to a reasonable length for reference_text
+    def process_element(self, content, reference_link, include_nonobfuscated=False):
+        """Take a single source content/url and return a list of Artifacts.
+
+        This is the main work block of Source plugins, which handles
+        IOC extraction and artifact creation.
+
+        :param content: String content to extract from.
+        :param reference_link: Reference link to attach to all artifacts.
+        :param include_nonobfuscated: Include non-defanged URLs in output?
+        """
+        # Truncate content to a reasonable length for reference_text.
         reference_text = content[:TRUNCATE_LENGTH] + ('...' if len(content) > TRUNCATE_LENGTH else '')
 
         artifact_list = []
 
-        # collect URLs and domains
+        # Collect URLs and domains.
         scraped = itertools.chain(
             iocextract.extract_unencoded_urls(content),
-            # decode encoded URLs, since we can't operate on encoded ones
+            # Decode encoded URLs, since we can't operate on encoded ones.
             iocextract.extract_encoded_urls(content, refang=True),
         )
         for url in scraped:
-            # dump anything with ellipses, these get through the regex
+            # Dump anything with ellipses, these get through the regex.
             if u'\u2026' in url:
                 continue
 
@@ -47,22 +77,28 @@ class Source:
                                                     reference_link=reference_link,
                                                     reference_text=reference_text)
 
-            # dump urls that appear to have the same domain as reference_url
-            if artifact.domain() == urlparse(reference_link).netloc:
-                continue
+            # Dump URLs that appear to have the same domain as reference_url.
+            try:
+                if artifact.domain() == urlparse(reference_link).netloc:
+                    continue
+            except ValueError:
+                # Error parsing reference_link as a URL. Ignoring.
+                pass
 
             if artifact.is_obfuscated() or include_nonobfuscated:
-                # do URL collection
+                # Do URL collection.
                 artifact_list.append(artifact)
 
-                # do domain collection in the same pass
+                # Do domain collection in the same pass.
+                # Note: domains will always be a subset of URLs. There is no
+                # domain extraction.
                 if artifact.is_domain():
                     artifact_list.append(
                             threatingestor.artifacts.Domain(artifact.domain(), self.name,
                                                             reference_link=reference_link,
                                                             reference_text=reference_text))
 
-        # collect IPs
+        # Collect IPs.
         scraped = iocextract.extract_ips(content)
         for ip in scraped:
             artifact = threatingestor.artifacts.IPAddress(ip, self.name,
@@ -72,16 +108,16 @@ class Source:
             try:
                 ipaddress = artifact.ipaddress()
                 if ipaddress.is_private or ipaddress.is_loopback or ipaddress.is_reserved:
-                    # don't care
+                    # Skip private, loopback, reserved IPs.
                     continue
 
             except ValueError:
-                # invalid IP
+                # Skip invalid IPs.
                 continue
 
             artifact_list.append(artifact)
 
-        # collect yara rules
+        # Collect YARA rules.
         scraped = iocextract.extract_yara_rules(content)
         for rule in scraped:
             artifact = threatingestor.artifacts.YARASignature(rule, self.name,
@@ -90,7 +126,7 @@ class Source:
 
             artifact_list.append(artifact)
 
-        # collect hashes
+        # Collect hashes.
         scraped = iocextract.extract_hashes(content)
         for hash_ in scraped:
             artifact = threatingestor.artifacts.Hash(hash_, self.name,
@@ -99,9 +135,9 @@ class Source:
 
             artifact_list.append(artifact)
 
-        # generate generic task
-        title = "Manual Task: {u}".format(u=reference_link)
-        description = 'URL: {u}\nTask autogenerated by ThreatIngestor from source: {s}'.format(s=self.name, u=reference_link)
+        # Generate generic task.
+        title = f"Manual Task: {reference_link}"
+        description = f"URL: {reference_link}\nTask autogenerated by ThreatIngestor from source: {self.name}"
         artifact = threatingestor.artifacts.Task(title, self.name,
                                                  reference_link=reference_link,
                                                  reference_text=description)

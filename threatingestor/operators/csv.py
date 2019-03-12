@@ -1,15 +1,15 @@
 from __future__ import absolute_import
-
 import csv
+
 
 import threatingestor.artifacts
 from threatingestor.operators import Operator
 
-class Plugin(Operator):
-    """Operator for output to flat CSV file"""
 
+class Plugin(Operator):
+    """Operator for output to flat CSV file."""
     def __init__(self, filename, artifact_types=None, filter_string=None, allowed_sources=None):
-        """CSV operator"""
+        """CSV operator."""
         self.filename = filename
 
         super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
@@ -20,8 +20,9 @@ class Plugin(Operator):
             threatingestor.artifacts.URL,
         ]
 
+
     def handle_artifact(self, artifact):
-        """Operate on a single artifact"""
+        """Operate on a single artifact."""
         with open(self.filename, 'a+', encoding='utf-8') as f:
             writer = csv.writer(f)
             artifact_type = artifact.__class__.__name__

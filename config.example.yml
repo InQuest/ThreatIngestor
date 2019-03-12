@@ -1,7 +1,7 @@
 general:
     daemon: true
     sleep: 900
-    state_path: state.sqlite3
+    state_path: state.db
 
 credentials:
   - name: twitter-auth
@@ -27,6 +27,11 @@ credentials:
     aws_secret_access_key: MY_SECRET
     aws_region: MY_REGION
 
+  - name: misp-auth
+    url: https://mymisp
+    key: MY_API_KEY
+    ssl: False
+
 sources:
   - name: twitter-inquest-c2-list
     module: twitter
@@ -50,7 +55,6 @@ sources:
   - name: github-query
     module: github
     credentials: github-auth
-    saved_state: 
     search: CVE-2018-
 
   - name: rss-myiocfeed
@@ -58,11 +62,16 @@ sources:
     url: https://example.com/rss.xml
     feed_type: messy
 
+  - name: beanstalk-input
+    module: beanstalk
+    host: 127.0.0.1
+    port: 11300
+    queue_name: threatingestor-input
+
 operators:
   - name: csv
     # Write artifacts to a CSV file
     module: csv
-    artifact_types: [Task]
     filename: output.csv
     
   - name: mythreatkb
@@ -71,6 +80,14 @@ operators:
     credentials: threatkb-auth
     allowed_sources: [twitter-inquest-c2-list, rss-.*]
     state: Inbox
+
+  - name: beanstalk-output
+    module: beanstalk
+    host: 127.0.0.1
+    port: 11300
+    queue_name: my-queue-worker-input
+    artifact_types: [URL]
+    url: {url}
 
   - name: inquest-threatcrawler
     module: sqs
@@ -84,3 +101,10 @@ operators:
     source_type: url
     download_path: /var/crawler/ingestor
     source_type_tags: dir
+
+  - name: sqlite-db
+    module: sqlite
+    filename: artifacts.db
+
+  - name: misp-instance
+    module: misp
