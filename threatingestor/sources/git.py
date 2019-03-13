@@ -5,6 +5,16 @@ import subprocess
 
 
 from threatingestor.sources import Source
+from threatingestor.exceptions import DependencyError
+
+
+try:
+    subprocess.check_output('git')
+except FileNotFoundError:
+    raise DependencyError("System dependency Git required for Git source is not installed")
+except subprocess.CalledProcessError:
+    # Non-zero exit codes are fine.
+    pass
 
 
 YARA_FILE_EXTS = [
