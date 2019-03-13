@@ -24,3 +24,7 @@ If you want to use Beanstalk and Twitter::
 Or if you don't know what you might need, and want to just pull in everything::
 
     pip install threatingestor[all]
+
+.. note::
+
+    If you'd like to use the ``git`` source, you will also need to have Git installed.
