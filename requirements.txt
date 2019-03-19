@@ -5,3 +5,4 @@ iocextract>=1.12.1
 PyYAML>=3.13
 jsonpath_rw>=1.4.0
 sgmllib3k
+loguru

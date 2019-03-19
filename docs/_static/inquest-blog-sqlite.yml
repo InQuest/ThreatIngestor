@@ -14,4 +14,4 @@ operators:
   - name: sqlite-artifacts
     # Write artifacts to a SQLite database.
     module: sqlite
-    file_path: artifacts.db
+    filename: artifacts.db

@@ -3,9 +3,12 @@ import time
 import traceback
 
 
+from loguru import logger
+
+
 import threatingestor.config
 import threatingestor.state
-from threatingestor.exceptions import IngestorError
+import threatingestor.exceptions
 
 
 class Ingestor:
@@ -17,32 +20,44 @@ class Ingestor:
     def __init__(self, config_file):
         # Load config.
         try:
+            logger.debug(f"Reading config from '{config_file}'")
             self.config = config.Config(config_file)
-        except IngestorError as e:
+        except (OSError, threatingestor.exceptions.IngestorError):
             # Error loading config.
-            sys.stderr.write(e)
+            logger.exception("Couldn't read config")
             sys.exit(1)
 
         # Load state DB.
         try:
+            logger.debug(f"Opening state database '{self.config.state_path()}'")
             self.statedb = threatingestor.state.State(self.config.state_path())
-        except (OSError, IOError) as e:
+        except (OSError, IOError, threatingestor.exceptions.IngestorError):
             # Error loading state DB.
-            sys.stderr.write(e)
+            logger.exception("Error reading state database")
             sys.exit(1)
 
         # Instantiate plugins.
-        self.sources = {name: source(**kwargs)
-                        for name, source, kwargs in self.config.sources()}
-        self.operators = {name: operator(**kwargs)
-                          for name, operator, kwargs in self.config.operators()}
+        try:
+            logger.debug("Initializing sources")
+            self.sources = {name: source(**kwargs)
+                            for name, source, kwargs in self.config.sources()}
+
+            logger.debug("Initializing operators")
+            self.operators = {name: operator(**kwargs)
+                              for name, operator, kwargs in self.config.operators()}
+
+        except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
+            logger.exception("Error initializing plugins")
+            sys.exit(1)
 
 
     def run(self):
         """Run once, or forever, depending on config."""
         if self.config.daemon():
+            logger.debug("Running forever, in a loop")
             self.run_forever()
         else:
+            logger.debug("Running once, to completion")
             self.run_once()
 
 
@@ -50,11 +65,11 @@ class Ingestor:
         """Run each source once, passing artifacts to each operator."""
         for source in self.sources:
             # Run the source to collect artifacts.
+            logger.debug(f"Running source '{source}'")
             try:
                 saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
-            except Exception as e:
-                sys.stderr.write("Unknown error in source {s}: {e}\n".format(s=source, e=e))
-                sys.stderr.write(traceback.format_exc())
+            except Exception:
+                logger.exception(f"Unknown error in source '{source}'")
                 continue
 
             # Save the source state.
@@ -62,11 +77,13 @@ class Ingestor:
 
             # Process artifacts with each operator.
             for operator in self.operators:
+                print(source, operator)
+                print(artifacts)
+                logger.debug(f"Processing {len(artifacts)} artifacts from source '{source}' with operator '{operator}'")
                 try:
                     self.operators[operator].process(artifacts)
-                except Exception as e:
-                    sys.stderr.write("Unknown error in operator {o}: {e}\n".format(o=operator, e=e))
-                    sys.stderr.write(traceback.format_exc())
+                except Exception:
+                    logger.exception(f"Unknown error in operator '{operator}'")
                     continue
 
 
@@ -74,13 +91,14 @@ class Ingestor:
         """Run forever, sleeping for the configured interval between each run."""
         while True:
             self.run_once()
+            logger.debug(f"Sleeping for {self.config.sleep()} seconds")
             time.sleep(self.config.sleep())
 
 
 def main():
     """CLI entry point, uses sys.argv directly."""
     if len(sys.argv) < 2:
-        print("You must specify a config file")
+        logger.error("You must specify a config file")
         sys.exit(1)
 
     app = Ingestor(sys.argv[1])

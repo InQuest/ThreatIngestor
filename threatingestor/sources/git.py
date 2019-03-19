@@ -1,7 +1,9 @@
 import os
 import io
-import sys
 import subprocess
+
+
+from loguru import logger
 
 
 from threatingestor.sources import Source
@@ -44,8 +46,8 @@ class Plugin(Source):
                 _git_pull(self.local_path)
                 new_hash = _git_latest_hash(self.local_path)
                 all_filenames = _git_diff_names(self.local_path, saved_state).splitlines()
-            except (subprocess.CalledProcessError, OSError) as e:
-                sys.stderr.write("error with git pull from {path}: {e}\n".format(path=self.local_path, e=e))
+            except (OSError, subprocess.CalledProcessError):
+                logger.exception(f"Error with git pull from '{self.local_path}'")
 
         else:
             # First run, we try cloning the repo and look at all files.
@@ -60,16 +62,12 @@ class Plugin(Source):
                 try:
                     new_hash = _git_latest_hash(self.local_path)
 
-                except subprocess.CalledProcessError as e:
+                except (OSError, subprocess.CalledProcessError):
                     # That also failed, so this is just a generic error.
-                    sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
-                                                                                             path=self.local_path,
-                                                                                             e=e))
+                    logger.exception(f"Error with git clone of '{self.url}' to '{self.local_path}'")
 
-            except OSError as e:
-                sys.stderr.write("error with git clone of {url} to {path}: {e}\n".format(url=self.url,
-                                                                                         path=self.local_path,
-                                                                                         e=e))
+            except OSError:
+                logger.exception(f"Error with git clone of '{self.url}' to '{self.local_path}'")
 
         # If not modified or any errors, return immediately.
         if saved_state == new_hash:

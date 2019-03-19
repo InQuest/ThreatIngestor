@@ -4,6 +4,7 @@ import itertools
 
 
 import iocextract
+from loguru import logger
 
 
 import threatingestor.artifacts
@@ -57,10 +58,21 @@ class Source:
         :param reference_link: Reference link to attach to all artifacts.
         :param include_nonobfuscated: Include non-defanged URLs in output?
         """
+        logger.debug(f"Processing in source '{self.name}'")
+
         # Truncate content to a reasonable length for reference_text.
         reference_text = content[:TRUNCATE_LENGTH] + ('...' if len(content) > TRUNCATE_LENGTH else '')
 
+        # Initialize an empty list and a map of counters to track each artifact type.
         artifact_list = []
+        artifact_type_count = {
+            'domain': 0,
+            'hash': 0,
+            'ipaddress': 0,
+            'task': 0,
+            'url': 0,
+            'yarasignature': 0,
+        }
 
         # Collect URLs and domains.
         scraped = itertools.chain(
@@ -88,6 +100,7 @@ class Source:
             if artifact.is_obfuscated() or include_nonobfuscated:
                 # Do URL collection.
                 artifact_list.append(artifact)
+                artifact_type_count['url'] += 1
 
                 # Do domain collection in the same pass.
                 # Note: domains will always be a subset of URLs. There is no
@@ -97,6 +110,7 @@ class Source:
                             threatingestor.artifacts.Domain(artifact.domain(), self.name,
                                                             reference_link=reference_link,
                                                             reference_text=reference_text))
+                    artifact_type_count['domain'] += 1
 
         # Collect IPs.
         scraped = iocextract.extract_ips(content)
@@ -116,6 +130,7 @@ class Source:
                 continue
 
             artifact_list.append(artifact)
+            artifact_type_count['ipaddress'] += 1
 
         # Collect YARA rules.
         scraped = iocextract.extract_yara_rules(content)
@@ -125,6 +140,7 @@ class Source:
                                                               reference_text=reference_text)
 
             artifact_list.append(artifact)
+            artifact_type_count['yarasignature'] += 1
 
         # Collect hashes.
         scraped = iocextract.extract_hashes(content)
@@ -134,6 +150,7 @@ class Source:
                                                      reference_text=reference_text)
 
             artifact_list.append(artifact)
+            artifact_type_count['hash'] += 1
 
         # Generate generic task.
         title = f"Manual Task: {reference_link}"
@@ -142,5 +159,8 @@ class Source:
                                                  reference_link=reference_link,
                                                  reference_text=description)
         artifact_list.append(artifact)
+        artifact_type_count['task'] += 1
 
+        logger.debug(f"Found {len(artifact_list)} total artifacts")
+        logger.debug(f"Type breakdown: {artifact_type_count}")
         return artifact_list
