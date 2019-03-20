@@ -65,6 +65,21 @@ class Config:
         return self.config['general']['sleep']
 
 
+    def statsd(self):
+        """Returns statsd config dictionary."""
+        return self.config.get('statsd', {})
+
+
+    def notifiers(self):
+        """Returns notifiers config dictionary."""
+        return self.config.get('notifiers', {})
+
+
+    def logging(self):
+        """Returns logging config dictionary."""
+        return self.config.get('logging', {})
+
+
     def credentials(self, credential_name):
         """Return a dictionary with the specified credentials."""
         for credential in self.config['credentials']:

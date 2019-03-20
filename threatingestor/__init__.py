@@ -1,9 +1,12 @@
 import sys
 import time
-import traceback
+import collections
 
 
 from loguru import logger
+import notifiers
+from notifiers.logging import NotificationHandler
+import statsd
 
 
 import threatingestor.config
@@ -25,6 +28,29 @@ class Ingestor:
         except (OSError, threatingestor.exceptions.IngestorError):
             # Error loading config.
             logger.exception("Couldn't read config")
+            sys.exit(1)
+
+        # Configure logging with optional notifiers.
+        notifier_config = self.config.notifiers()
+        notifier = notifiers.get_notifier(notifier_config.get('provider'))
+
+        logger.configure(**self.config.logging())
+        logger.level("NOTIFY", no=35, color="<yellow>", icon="\U0001F514")
+
+        if notifier:
+            logger.debug(f"Adding notification handler '{notifier_config.get('provider')}'")
+            # Notifier 'provider_name' is set and valid.
+            handler = NotificationHandler(**notifier_config)
+            logger.add(handler, level="NOTIFY")
+
+        logger.debug("Log handler reconfigured")
+
+        # Configure statsd.
+        try:
+            self.statsd = statsd.StatsClient(**self.config.statsd())
+            self.statsd.incr('start')
+        except TypeError:
+            logger.exception("Couldn't initialize statsd client; bad config?")
             sys.exit(1)
 
         # Load state DB.
@@ -58,17 +84,24 @@ class Ingestor:
             self.run_forever()
         else:
             logger.debug("Running once, to completion")
-            self.run_once()
+            with self.statsd.timer('run_once'):
+                self.run_once()
 
 
     def run_once(self):
         """Run each source once, passing artifacts to each operator."""
+        # Track some statistics about artifacts in a summary object.
+        summary = collections.Counter()
+
         for source in self.sources:
             # Run the source to collect artifacts.
             logger.debug(f"Running source '{source}'")
             try:
-                saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
+                with self.statsd.timer(f'source.{source}'):
+                    saved_state, artifacts = self.sources[source].run(self.statedb.get_state(source))
+
             except Exception:
+                self.statsd.incr(f'error.source.{source}')
                 logger.exception(f"Unknown error in source '{source}'")
                 continue
 
@@ -77,22 +110,48 @@ class Ingestor:
 
             # Process artifacts with each operator.
             for operator in self.operators:
-                print(source, operator)
-                print(artifacts)
                 logger.debug(f"Processing {len(artifacts)} artifacts from source '{source}' with operator '{operator}'")
                 try:
-                    self.operators[operator].process(artifacts)
+                    with self.statsd.timer(f'operator.{operator}'):
+                        self.operators[operator].process(artifacts)
+
                 except Exception:
+                    self.statsd.incr(f'error.operator.{operator}')
                     logger.exception(f"Unknown error in operator '{operator}'")
                     continue
+
+            # Record stats and update the summary.
+            types = artifact_types(artifacts)
+            summary.update(types)
+            for artifact_type in types:
+                self.statsd.incr(f'source.{source}.{artifact_type}', types[artifact_type])
+                self.statsd.incr(f'artifacts.{artifact_type}', types[artifact_type])
+
+        # Log the summary.
+        logger.log('NOTIFY', f"New artifacts: {dict(summary)}")
 
 
     def run_forever(self):
         """Run forever, sleeping for the configured interval between each run."""
         while True:
-            self.run_once()
+            with self.statsd.timer('run_once'):
+                self.run_once()
+
             logger.debug(f"Sleeping for {self.config.sleep()} seconds")
             time.sleep(self.config.sleep())
+
+
+def artifact_types(artifact_list):
+    """Return a dictionary with counts of each artifact type."""
+    types = {}
+    for artifact in artifact_list:
+        artifact_type = artifact.__class__.__name__.lower()
+        if artifact_type in types:
+            types[artifact_type] += 1
+        else:
+            types[artifact_type] = 1
+
+    return types
 
 
 def main():
