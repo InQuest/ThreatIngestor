@@ -1,5 +1,5 @@
 beautifulsoup4>=4.4.1
-requests>=2.4.3
+requests
 ipaddress>=1.0.18
 iocextract>=1.12.1
 PyYAML>=3.13
