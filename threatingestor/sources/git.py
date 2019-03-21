@@ -113,7 +113,7 @@ def _git_pull(local_path):
 
 
 def _git_diff_names(local_path, prev_hash):
-    return _git_cmd_chdir(local_path, ['diff', '--name-only', '--', prev_hash])
+    return _git_cmd_chdir(local_path, ['diff', '--name-only', prev_hash])
 
 
 def _git_ls_files(local_path):
