@@ -60,7 +60,7 @@ class Plugin(Operator):
                 `reference_text`,
                 `state`
             )
-            VALUES (?, ?, ?, ?, NULL)
+            VALUES (%s, %s, %s, %s, NULL)
         """
         self.cursor.execute(query, (
             str(artifact),
