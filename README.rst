@@ -65,25 +65,25 @@ ThreatIngestor uses a plugin architecture with "source" (input) and "operator" (
 Sources
 ~~~~~~~
 
-* `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/beanstalk.html>`_
-* `Git repositories <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/git.html>`_
-* `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`_
-* `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`_
-* `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`_
-* `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`_
-* `Generic web pages <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/web.html>`_
+* `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/beanstalk.html>`__
+* `Git repositories <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/git.html>`__
+* `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`__
+* `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`__
+* `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`__
+* `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`__
+* `Generic web pages <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/web.html>`__
 
 Operators
 ~~~~~~~~~
 
-* `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/beanstalk.html>`_
-* `CSV files <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/csv.html>`_
-* `MISP <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/misp.html>`_
-* `MySQL table <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/mysql.html>`_
-* `SQLite database <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/sqlite.html>`_
-* `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/sqs.html>`_
-* `ThreatKB <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/threatkb.html>`_
-* `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/twitter.html>`_
+* `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/beanstalk.html>`__
+* `CSV files <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/csv.html>`__
+* `MISP <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/misp.html>`__
+* `MySQL table <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/mysql.html>`__
+* `SQLite database <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/sqlite.html>`__
+* `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/sqs.html>`__
+* `ThreatKB <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/threatkb.html>`__
+* `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators/twitter.html>`__
 
 View the `full ThreatIngestor documentation`_ for more information on included plugins, and how to create your own.
 
