@@ -37,7 +37,8 @@ class Plugin(Operator):
         """Create the table defined in the config if it does not already exist."""
         query = f"""
             CREATE TABLE IF NOT EXISTS `{self.table}` (
-                `artifact` TEXT PRIMARY KEY,
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `artifact` TEXT,
                 `reference_link` TExT,
                 `reference_text` TEXT,
                 `created_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
