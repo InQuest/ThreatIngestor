@@ -27,6 +27,7 @@ setup(
         'threatkb': ['threatkb'],
         'beanstalk': ['greenstalk'],
         'sqs': ['boto3'],
+        'mysql': ['pymysql'],
         'extras': ['hug', 'boto3', 'greenstalk', 'watchdog'],
         'all': extra_requires,
     },
