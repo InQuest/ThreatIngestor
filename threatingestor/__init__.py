@@ -4,9 +4,13 @@ import collections
 
 
 from loguru import logger
-import notifiers
-from notifiers.logging import NotificationHandler
 import statsd
+try:
+    import notifiers
+    from notifiers.logging import NotificationHandler
+except ImportError:
+    logger.info("Notifiers is not installed.")
+    notifiers = None
 
 
 import threatingestor.config
@@ -31,17 +35,18 @@ class Ingestor:
             sys.exit(1)
 
         # Configure logging with optional notifiers.
-        notifier_config = self.config.notifiers()
-        notifier = notifiers.get_notifier(notifier_config.get('provider'))
-
         logger.configure(**self.config.logging())
         logger.level("NOTIFY", no=35, color="<yellow>", icon="\U0001F514")
 
-        if notifier:
-            logger.debug(f"Adding notification handler '{notifier_config.get('provider')}'")
-            # Notifier 'provider_name' is set and valid.
-            handler = NotificationHandler(**notifier_config)
-            logger.add(handler, level="NOTIFY")
+        if notifiers:
+            notifier_config = self.config.notifiers()
+            notifier = notifiers.get_notifier(notifier_config.get('provider'))
+
+            if notifier:
+                logger.debug(f"Adding notification handler '{notifier_config.get('provider')}'")
+                # Notifier 'provider_name' is set and valid.
+                handler = NotificationHandler(**notifier_config)
+                logger.add(handler, level="NOTIFY")
 
         logger.debug("Log handler reconfigured")
 

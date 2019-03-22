@@ -6,5 +6,4 @@ jsonpath_rw>=1.4.0
 sgmllib3k
 loguru
 statsd
-notifiers
 requests
