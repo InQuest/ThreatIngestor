@@ -7,6 +7,7 @@ import twitter
 
 from threatingestor.operators import Operator
 import threatingestor.artifacts
+import threatingestor.exceptions
 
 
 TWEET_URL = re.compile(r'https://twitter\.com/\w{1,15}/status/\d+')
@@ -17,6 +18,10 @@ class Plugin(Operator):
     def __init__(self, token, token_key, con_secret_key, con_secret, status, **kwargs):
         self.api = twitter.Twitter(auth=twitter.OAuth(token, token_key, con_secret, con_secret_key))
         self.status = status
+
+        # Validate status, for better error handling.
+        if not isinstance(self.status, str):
+            raise threatingestor.exceptions.IngestorError(f"Invalid 'status' config: {self.status}")
 
         super(Plugin, self).__init__(kwargs.get('artifact_types'),
                                      kwargs.get('filter_string'),

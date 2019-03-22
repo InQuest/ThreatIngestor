@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 
 import threatingestor.operators.twitter
 import threatingestor.artifacts
+import threatingestor.exceptions
 
 
 class TestTwitter(unittest.TestCase):
@@ -55,3 +56,10 @@ class TestTwitter(unittest.TestCase):
                                                            allowed_sources=['test-one'])
         self.assertEqual(operator.filter_string, 'test')
         self.assertEqual(operator.allowed_sources, ['test-one'])
+
+    def test_init_raises_if_bad_status(self):
+        with self.assertRaises(threatingestor.exceptions.IngestorError):
+            operator = threatingestor.operators.twitter.Plugin('a', 'b', 'c', 'd',
+                                                               filter_string='test',
+                                                               allowed_sources=['test-one'],
+                                                               status=[])
