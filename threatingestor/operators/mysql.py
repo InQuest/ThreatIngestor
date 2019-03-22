@@ -39,6 +39,7 @@ class Plugin(Operator):
             CREATE TABLE IF NOT EXISTS `{self.table}` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `artifact` TEXT,
+                `artifact_type` VARCHAR(50),
                 `reference_link` TExT,
                 `reference_text` TEXT,
                 `created_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
