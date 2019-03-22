@@ -8,7 +8,7 @@ class TestIngestor(unittest.TestCase):
     @patch('threatingestor.config.Config')
     def setUp(self, Config):
         mock_source_operator = Mock()
-        mock_source_operator.return_value.run.return_value = (1,2)
+        mock_source_operator.return_value.run.return_value = (1,[])
 
         Config.return_value.sources.return_value = [
             ['test-twitter', mock_source_operator, {'q': 'test'}],

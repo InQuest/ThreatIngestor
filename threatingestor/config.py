@@ -3,9 +3,10 @@ import importlib
 
 
 import yaml
+from loguru import logger
 
 
-from threatingestor.exceptions import PluginError
+from threatingestor.exceptions import IngestorError, PluginError
 import threatingestor.artifacts
 
 
@@ -30,12 +31,18 @@ class Config:
         """Read a config file."""
         self.filename = filename
         with io.open(self.filename, 'r') as f:
-            self.config = yaml.safe_load(f.read())
+            try:
+                self.config = yaml.safe_load(f.read())
+            except yaml.error.YAMLError:
+                raise IngestorError("YAML error in config")
 
 
     @staticmethod
     def _load_plugin(plugin_type, plugin):
-        """Returns plugin class or raises an exception."""
+        """Returns plugin class or raises an exception.
+
+        :raises: threatingestor.exceptions.PluginError
+        """
         try:
             module = importlib.import_module('.'.join([plugin_type, plugin]))
             return module.Plugin
@@ -58,16 +65,35 @@ class Config:
         return self.config['general']['sleep']
 
 
+    def statsd(self):
+        """Returns statsd config dictionary."""
+        return self.config.get('statsd', {})
+
+
+    def notifiers(self):
+        """Returns notifiers config dictionary."""
+        return self.config.get('notifiers', {})
+
+
+    def logging(self):
+        """Returns logging config dictionary."""
+        return self.config.get('logging', {})
+
+
     def credentials(self, credential_name):
         """Return a dictionary with the specified credentials."""
         for credential in self.config['credentials']:
             for key, value in credential.items():
                 if key == NAME and value == credential_name:
                     return credential
+        return {}
 
 
     def sources(self):
-        """Return a list of (name, Source class, {kwargs}) tuples."""
+        """Return a list of (name, Source class, {kwargs}) tuples.
+
+        :raises: threatingestor.exceptions.PluginError
+        """
         sources = []
 
         for source in self.config['sources']:
@@ -84,13 +110,18 @@ class Config:
                             kwargs[credential_key] = credential_value
 
             # load and initialize the plugin
+            logger.debug(f"Found source '{source[NAME]}'")
             sources.append((source[NAME], self._load_plugin(SOURCE, source['module']), kwargs))
 
+        logger.debug(f"Found {len(sources)} total sources")
         return sources
 
 
     def operators(self):
-        """Return a list of (name, Operator class, {kwargs}) tuples."""
+        """Return a list of (name, Operator class, {kwargs}) tuples.
+
+        :raises: threatingestor.exceptions.PluginError
+        """
         operators = []
         for operator in self.config['operators']:
             kwargs = {}
@@ -126,6 +157,8 @@ class Config:
                             kwargs[credential_key] = credential_value
 
             # load and initialize the plugin
-            operators.append((operator["name"], self._load_plugin(OPERATOR, operator['module']), kwargs))
+            logger.debug(f"Found operator '{operator[NAME]}'")
+            operators.append((operator[NAME], self._load_plugin(OPERATOR, operator['module']), kwargs))
 
+        logger.debug(f"Found {len(operators)} total operators")
         return operators

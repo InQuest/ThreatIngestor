@@ -1,7 +1,10 @@
 beautifulsoup4>=4.4.1
-requests>=2.4.3
 ipaddress>=1.0.18
 iocextract>=1.12.1
 PyYAML>=3.13
 jsonpath_rw>=1.4.0
 sgmllib3k
+loguru
+statsd
+notifiers
+requests
