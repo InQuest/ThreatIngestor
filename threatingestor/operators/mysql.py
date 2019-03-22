@@ -52,7 +52,7 @@ class Plugin(Operator):
         """Insert the given artifact into the table."""
         type_name = artifact.__class__.__name__.lower()
         query = f"""
-            INSERT IGNORE INTO `{type_name}` (
+            INSERT IGNORE INTO `{self.table}` (
                 `artifact`,
                 `artifact_type`,
                 `reference_link`,
