@@ -79,7 +79,7 @@ Operators
 * Beanstalk work queues
 * CSV files
 * MISP
-* MySQL
+* MySQL table
 * SQLite database
 * Amazon SQS queues
 * ThreatKB
