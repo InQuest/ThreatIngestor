@@ -42,6 +42,33 @@ class TestConfig(unittest.TestCase):
 
         self.assertEqual(self.config.state_path(), "/home/user/test")
 
+    def test_logging_returns_full_section(self):
+        self.config.config = {
+            'logging': {
+                'arbitrary': 'test',
+            }
+        }
+
+        self.assertEqual(self.config.logging(), {'arbitrary': 'test'})
+
+    def test_notifiers_returns_full_section(self):
+        self.config.config = {
+            'notifiers': {
+                'arbitrary': 'test',
+            }
+        }
+
+        self.assertEqual(self.config.notifiers(), {'arbitrary': 'test'})
+
+    def test_statsd_returns_full_section(self):
+        self.config.config = {
+            'statsd': {
+                'arbitrary': 'test',
+            }
+        }
+
+        self.assertEqual(self.config.statsd(), {'arbitrary': 'test'})
+
     def test_sleep_returns_main_sleep_int(self):
         self.config.config = {
             'general': {
