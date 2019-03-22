@@ -58,10 +58,9 @@ class Plugin(Operator):
                 `artifact_type`,
                 `reference_link`,
                 `reference_text`,
-                `created_date`,
                 `state`
             )
-            VALUES (?, ?, ?, ?, datetime('now', 'utc'), NULL)
+            VALUES (?, ?, ?, ?, NULL)
         """
         self.cursor.execute(query, (
             str(artifact),
