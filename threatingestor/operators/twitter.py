@@ -3,6 +3,7 @@ import re
 
 
 import twitter
+from loguru import logger
 
 
 from threatingestor.operators import Operator
@@ -52,6 +53,6 @@ class Plugin(Operator):
             return self.api.statuses.update(status=status,
                                             attachment_url=quote_tweet,
                                             tweet_mode='extended')
-        except twitter.api.TwitterHTTPError:
-            # TODO: log this. for now, just ignore.
+        except twitter.api.TwitterHTTPError as e:
+            logger.warning(f"Twitter API Error: {e}")
             return None

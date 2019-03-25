@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 
 import twitter
+from loguru import logger
 
 
 from threatingestor.sources import Source
@@ -47,7 +48,7 @@ class Plugin(Source):
             response = self.endpoint(**self.kwargs)
         except twitter.api.TwitterHTTPError as e:
             # API error; log and return early.
-            print("Twitter API Error: {e}".format(e=e))
+            logger.warning(f"Twitter API Error: {e}")
 
             return saved_state, []
 
