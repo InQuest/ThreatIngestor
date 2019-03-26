@@ -28,7 +28,6 @@ class Plugin(Operator):
         self.sql = pymysql.connect(host=host, port=port, user=user,
                                    password=password, database=database)
         self.table = table
-        self.cursor = self.sql.cursor()
 
         self._create_table()
 
@@ -46,8 +45,10 @@ class Plugin(Operator):
                 `state` TEXT
             ) 
         """
+        self.cursor = self.sql.cursor()
         self.cursor.execute(query)
         self.sql.commit()
+        self.cursor.close()
 
 
     def _insert_artifact(self, artifact):
@@ -70,6 +71,16 @@ class Plugin(Operator):
             artifact.reference_text
         ))
         self.sql.commit()
+
+
+    def process(self, artifacts):
+        """Override parent method to better handle SQL cursor."""
+        # Create a cursor and call the parent method.
+        self.cursor = self.sql.cursor()
+        super(Plugin, self).process(artifacts)
+
+        # Close the connection
+        self.cursor.close()
 
 
     def handle_artifact(self, artifact):
