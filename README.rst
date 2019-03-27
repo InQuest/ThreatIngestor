@@ -29,7 +29,7 @@ Overview
 
 ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
 
-`Try it out!`_
+Try it out now with this `quick walkthrough`_, or see more `ThreatIngestor walkthroughs`_ on the InQuest blog.
 
 Installation
 ------------
@@ -110,4 +110,5 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _full installation instructions: https://inquest.readthedocs.io/projects/threatingestor/en/latest/installation.html
 .. _Issue: https://github.com/InQuest/ThreatIngestor/issues
 .. _@InQuest: https://twitter.com/InQuest
-.. _Try it out!: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out
+.. _quick walkthrough: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out
+.. _ThreatIngestor walkthroughs: https://inquest.net/taxonomy/term/42

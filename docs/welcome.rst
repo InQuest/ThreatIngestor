@@ -65,6 +65,8 @@ That's it!
 
 In a real environment, you would probably use something like ThreatKB_ or MISP_ to store your artifacts, instead of just an SQLite database like the one this quick web interface is reading from. If you wanted to do some automated investigation of the things you find, instead of just tossing them into a database, you could do that too.
 
+For more ThreatIngestor tutorials, take a look at the `InQuest blog`_.
+
 Support
 -------
 
@@ -78,3 +80,4 @@ We'd love to hear any feedback you have on ThreatIngestor, its documentation, or
 .. _MISP: https://www.misp-project.org/
 .. _Issue: https://github.com/InQuest/ThreatIngestor/issues
 .. _@InQuest: https://twitter.com/InQuest
+.. _InQuest blog: https://inquest.net/taxonomy/term/42
