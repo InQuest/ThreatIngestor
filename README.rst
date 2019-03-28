@@ -92,6 +92,13 @@ Operators
 
 View the `full ThreatIngestor documentation`_ for more information on included plugins, and how to create your own.
 
+Threat Intel Sources
+--------------------
+
+Looking for some threat intel sources to get started? InQuest has a Twitter List with several accounts that post C2 domains and IPs: https://twitter.com/InQuest/lists/c2-feed. Note that you will need to apply for a Twitter developer account to use the ThreatIngestor Twitter Source. Take a look at `config.example.yml` to see how to set this list up as a source.
+
+For quicker setup, RSS feeds can be a great source of intelligence. Check out this example `RSS config file`_ for a few pre-configured security blogs.
+
 Support
 -------
 
@@ -117,3 +124,4 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _@InQuest: https://twitter.com/InQuest
 .. _quick walkthrough: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out
 .. _ThreatIngestor walkthroughs: https://inquest.net/taxonomy/term/42
+.. _RSS config file: https://github.com/InQuest/ThreatIngestor/blob/master/rss.example.yml

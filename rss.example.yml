@@ -1,0 +1,132 @@
+general:
+    daemon: true
+    sleep: 3600
+    state_path: state.db
+
+sources:
+    # A few threat intel blogs to get you started!
+  - name: rss-inquest
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+
+  - name: rss-carbonblack
+    module: rss
+    url: http://www.carbonblack.com/feed/
+    feed_type: messy
+
+  - name: rss-paloaltonetworks
+    module: rss
+    url: https://researchcenter.paloaltonetworks.com/unit42/feed/
+    feed_type: messy
+
+  - name: rss-securelist
+    module: rss
+    url: https://securelist.com/feed/
+    feed_type: messy
+
+  - name: rss-volexity
+    module: rss
+    url: https://www.volexity.com/blog/feed/
+    feed_type: messy
+
+  - name: rss-fireeye
+    module: rss
+    url: https://www.fireeye.com/blog/threat-research/_jcr_content.feed
+    feed_type: messy
+
+  - name: rss-threatconnect
+    module: rss
+    url: http://feeds.feedburner.com/threatconnect-blogs?format=xml
+    feed_type: messy
+
+  - name: rss-baesystemsai
+    module: rss
+    url: http://baesystemsai.blogspot.com/feeds/posts/default?alt=rss
+    feed_type: messy
+
+  - name: rss-talos
+    module: rss
+    url: http://feeds.feedburner.com/feedburner/Talos
+    feed_type: messy
+
+  - name: rss-clearskysec
+    module: rss
+    url: http://www.clearskysec.com/feed/
+    feed_type: messy
+
+  - name: rss-anomali
+    module: rss
+    url: https://www.anomali.com/site/blog-rss
+    feed_type: messy
+
+  - name: rss-volexity
+    module: rss
+    url: https://www.volexity.com/blog/feed/
+    feed_type: messy
+
+  - name: rss-blog-malwarebytes
+    module: rss
+    url: https://blog.malwarebytes.com/feed/
+    feed_type: messy
+
+  - name: rss-blog-malwaremustdie
+    module: rss
+    url: http://blog.malwaremustdie.org/atom.xml
+    feed_type: messy
+
+  - name: rss-us-cert-gov
+    module: rss
+    url: https://www.us-cert.gov/ncas/alerts.xml
+    feed_type: messy
+
+  - name: rss-blog-fox-it
+    module: rss
+    url: https://blog.fox-it.com/feed/
+    feed_type: messy
+
+  - name: rss-citizenlab-ca
+    module: rss
+    url: https://citizenlab.ca/feed/
+    feed_type: messy
+
+  - name: rss-blog-shadowserver
+    module: rss
+    url: http://blog.shadowserver.org/feed/
+    feed_type: messy
+
+  - name: rss-riskiq
+    module: rss
+    url: https://www.riskiq.com/feed/
+    feed_type: messy
+
+  - name: rss-thembits
+    module: rss
+    url: http://thembits.blogspot.com/feeds/posts/default
+    feed_type: messy
+
+  - name: rss-feeds-trendmicro
+    module: rss
+    url: http://feeds.trendmicro.com/Anti-MalwareBlog/
+    feed_type: messy
+
+  - name: rss-techhelplist
+    module: rss
+    url: http://techhelplist.com/index.php/spam-list?format=feed&amp;type=rss
+    feed_type: clean
+
+  - name: rss-vxsecurity-sg
+    module: rss
+    url: http://www.vxsecurity.sg/feed/
+    feed_type: messy
+
+  - name: rss-malwarebreakdown
+    module: rss
+    url: https://malwarebreakdown.com/feed/
+    feed_type: messy
+
+operators:
+    # This is just an example CSV output, to make this a valid config.
+  - name: csvfile
+    module: csv
+    filename: output.csv
