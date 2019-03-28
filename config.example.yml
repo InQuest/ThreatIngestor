@@ -1,9 +1,19 @@
+# This example config file shows some of the features available in ThreatIngestor.
+# It will not run as-is, since it's missing credentials and several of the
+# plugins point to services you probably don't have.
+# See the ThreatIngestor documentation for more information on how to create
+# a real config.yml: https://inquest.readthedocs.io/projects/threatingestor/en/latest/.
+
 general:
+    # You always need this section!
+    # Here are some sane values to include:
     daemon: true
     sleep: 900
     state_path: state.db
 
 credentials:
+    # This section is optional. Use it to define credentials to reference below
+    # in the source and operator sections.
   - name: twitter-auth
     # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
     token:
@@ -33,6 +43,9 @@ credentials:
     ssl: False
 
 sources:
+    # This section defines each of the input sources for ThreatIngestor.
+    # Define as many as you want. ThreatIngestor maintains a "state" for each of
+    # your sources, which helps pull in only new content since the last run.
   - name: twitter-inquest-c2-list
     module: twitter
     credentials: twitter-auth
@@ -67,8 +80,12 @@ sources:
     host: 127.0.0.1
     port: 11300
     queue_name: threatingestor-input
+    paths: [content]
 
 operators:
+    # This section defines outputs for the information extracted from your
+    # sources. All filtering and flow control is done here, with options like
+    # "allowed_sources", "artifact_types", and "filter".
   - name: csv
     # Write artifacts to a CSV file
     module: csv
