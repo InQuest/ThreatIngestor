@@ -29,4 +29,4 @@ Or if you don't know what you might need, and want to just pull in everything::
 
     If you'd like to use the ``git`` source, you will also need to have Git installed.
 
-    If you want to use the notifiction support, install Notifiers separately: ``pip install notifiers``.
+    If you want to use the notification support, install Notifiers separately: ``pip install notifiers``.
