@@ -25,9 +25,12 @@ class Plugin(Operator):
         ]
 
         # Connect to SQL and set up the tables if they aren't already.
-        self.sql = pymysql.connect(host=host, port=port, user=user,
-                                   password=password, database=database)
         self.table = table
+        self.host = host
+        self.database = database
+        self.user = user
+        self.password = password
+        self.port = port
 
         self._create_table()
 
@@ -45,6 +48,9 @@ class Plugin(Operator):
                 `state` TEXT
             ) 
         """
+        # See note in process() on why we connect to SQL here.
+        self.sql = pymysql.connect(host=self.host, port=self.port, user=self.user,
+                                   password=self.password, database=self.database)
         self.cursor = self.sql.cursor()
         self.cursor.execute(query)
         self.sql.commit()
@@ -75,7 +81,12 @@ class Plugin(Operator):
 
     def process(self, artifacts):
         """Override parent method to better handle SQL cursor."""
-        # Create a cursor and call the parent method.
+        # Connect to MySQL and call the parent method.
+        # Note: We do this here and in _create_table rather than in the constructor
+        # because it seems the SQL connection is prone to timeouts, and
+        # establishing the connection here is the most efficient way to avoid that.
+        self.sql = pymysql.connect(host=self.host, port=self.port, user=self.user,
+                                   password=self.password, database=self.database)
         self.cursor = self.sql.cursor()
         super(Plugin, self).process(artifacts)
 
