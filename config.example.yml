@@ -70,9 +70,9 @@ sources:
     credentials: github-auth
     search: CVE-2018-
 
-  - name: rss-myiocfeed
+  - name: rss-inquest-blog
     module: rss
-    url: https://example.com/rss.xml
+    url: https://inquest.net/blog/rss
     feed_type: messy
 
   - name: beanstalk-input
