@@ -1,4 +1,7 @@
+# This is an example ThreatIngestor config file with some preconfigured RSS
+# sources, feeding extracted artifacts into a CSV file.
 general:
+    # Run forever, check feeds once an hour.
     daemon: true
     sleep: 3600
     state_path: state.db
