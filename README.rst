@@ -95,7 +95,7 @@ View the `full ThreatIngestor documentation`_ for more information on included p
 Threat Intel Sources
 --------------------
 
-Looking for some threat intel sources to get started? InQuest has a Twitter List with several accounts that post C2 domains and IPs: https://twitter.com/InQuest/lists/c2-feed. Note that you will need to apply for a Twitter developer account to use the ThreatIngestor Twitter Source. Take a look at `config.example.yml` to see how to set this list up as a source.
+Looking for some threat intel sources to get started? InQuest has a Twitter List with several accounts that post C2 domains and IPs: https://twitter.com/InQuest/lists/c2-feed. Note that you will need to apply for a Twitter developer account to use the ThreatIngestor Twitter Source. Take a look at ``config.example.yml`` to see how to set this list up as a source.
 
 For quicker setup, RSS feeds can be a great source of intelligence. Check out this example `RSS config file`_ for a few pre-configured security blogs.
 
