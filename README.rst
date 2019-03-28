@@ -31,7 +31,6 @@ ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, 
 
 .. image:: https://inquest.readthedocs.io/projects/threatingestor/en/latest/_images/mermaid-multiple-operators.png
     :target: https://inquest.readthedocs.io/projects/threatingestor/en/latest/workflows.html
-    :scale: 50%
     :alt: ThreatIngestor flowchart with several sources feeding into multiple operators.
 
 Try it out now with this `quick walkthrough`_, or see more `ThreatIngestor walkthroughs`_ on the InQuest blog.
