@@ -40,7 +40,7 @@ class Plugin(Source):
         etag = response.headers.get('Etag')
 
         if etag:
-            saved_state = ';'.join([last_modified, etag])
+            saved_state = ';'.join([str(last_modified), etag])
         else:
             saved_state = last_modified
 
