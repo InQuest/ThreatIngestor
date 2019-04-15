@@ -20,7 +20,7 @@ sources:
 
   - name: rss-paloaltonetworks
     module: rss
-    url: https://researchcenter.paloaltonetworks.com/unit42/feed/
+    url: http://feeds.feedburner.com/Unit42
     feed_type: messy
 
   - name: rss-securelist
