@@ -77,8 +77,12 @@ class Plugin(Source):
         artifact_list = []
         for filename in all_filenames:
             if any([filename.endswith(x) for x in YARA_FILE_EXTS]):
-                with io.open(os.path.join(self.local_path, filename), 'r', encoding='utf-8', errors='ignore') as f:
-                    artifact_list += self.process_element(f.read(), self.url, include_nonobfuscated=True)
+                try:
+                    with io.open(os.path.join(self.local_path, filename), 'r', encoding='utf-8', errors='ignore') as f:
+                        artifact_list += self.process_element(f.read(), self.url, include_nonobfuscated=True)
+                except OSError:
+                    # The file was most likely deleted.
+                    pass
 
         return new_hash, artifact_list
 
