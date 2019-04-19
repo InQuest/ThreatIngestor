@@ -16,10 +16,10 @@ credentials:
     # in the source and operator sections.
   - name: twitter-auth
     # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
-    token:
-    token_key:
-    con_secret_key: 
-    con_secret: 
+    api_key:
+    api_key_secret:
+    access_token:
+    access_token_secret:
 
   - name: github-auth
     username: user
