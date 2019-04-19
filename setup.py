@@ -17,7 +17,7 @@ extra_requires = requirements.strip().split('\n')
 
 setup(
     name='threatingestor',
-    version='1.0.0-beta4',
+    version='1.0.0-beta5',
     include_package_data=True,
     install_requires=requires,
     extras_require={
