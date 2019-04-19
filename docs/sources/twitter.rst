@@ -11,7 +11,7 @@ Configuration Options
 
 * ``module`` (required): ``twitter``
 * ``api_key`` (required): Consumer API key (See `Twitter oauth docs`_).
-* ``api_key_secret`` (required): Consumer API secret key (See `Twitter oauth docs`_).
+* ``api_secret_key`` (required): Consumer API secret key (See `Twitter oauth docs`_).
 * ``access_token`` (required): Twitter access token (See `Twitter oauth docs`_).
 * ``access_token_secret`` (required): Twitter access token secret (See `Twitter oauth docs`_).
 * ``defanged_only``: Defaults to ``true``. If set to ``false``, the Twitter
@@ -53,7 +53,7 @@ configured in the ``credentials`` section of the config, like this:
     credentials:
       - name: twitter-auth
         api_key: MY_KEY
-        api_key_secret: MY_SECRET_KEY
+        api_secret_key: MY_SECRET_KEY
         access_token: MY_TOKEN
         access_token_secret: MY_TOKEN_SECRET
 

@@ -13,9 +13,9 @@ TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 
 class Plugin(Source):
 
-    def __init__(self, name, api_key, api_key_secret, access_token, access_token_secret, defanged_only=True, **kwargs):
+    def __init__(self, name, api_key, api_secret_key, access_token, access_token_secret, defanged_only=True, **kwargs):
         self.name = name
-        self.api = twitter.Twitter(auth=twitter.OAuth(api_key, api_key_secret, access_token, access_token_secret))
+        self.api = twitter.Twitter(auth=twitter.OAuth(api_key, api_secret_key, access_token, access_token_secret))
 
         # Let the user decide whether to include non-obfuscated URLs or not.
         self.include_nonobfuscated = not defanged_only
