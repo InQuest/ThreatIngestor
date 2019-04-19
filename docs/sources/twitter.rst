@@ -10,12 +10,10 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``twitter``
-* ``token`` (required): Twitter auth token (See `Twitter oauth docs`_).
-* ``token_key`` (required): Twitter auth token key (See `Twitter oauth docs`_).
-* ``con_secret_key`` (required): Twitter auth connection secret key (See
-  `Twitter oauth docs`_).
-* ``con_secret`` (required): Twitter auth connection secret (See `Twitter oauth
-  docs`_).
+* ``api_key`` (required): Consumer API key (See `Twitter oauth docs`_).
+* ``api_secret_key`` (required): Consumer API secret key (See `Twitter oauth docs`_).
+* ``access_token`` (required): Twitter access token (See `Twitter oauth docs`_).
+* ``access_token_secret`` (required): Twitter access token secret (See `Twitter oauth docs`_).
 * ``defanged_only``: Defaults to ``true``. If set to ``false``, the Twitter
   source will include all expanded links found in Tweets. If set to ``true``,
   it will include only defanged links.
@@ -54,10 +52,10 @@ configured in the ``credentials`` section of the config, like this:
 
     credentials:
       - name: twitter-auth
-        token: MYTOKEN
-        token_key: MYTOKENKEY
-        con_secret_key: MYSECRETKEY
-        con_secret: MYSECRET
+        api_key: MY_KEY
+        api_secret_key: MY_SECRET_KEY
+        access_token: MY_TOKEN
+        access_token_secret: MY_TOKEN_SECRET
 
 Inside the ``sources`` section of the config, create a new item for the source
 you wish to define. Examples for each of the supported Twitter endpoints are

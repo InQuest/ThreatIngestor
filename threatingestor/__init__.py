@@ -78,6 +78,7 @@ class Ingestor:
                               for name, operator, kwargs in self.config.operators()}
 
         except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
+            logger.warning("Twitter config format has recently changed. See https://github.com/InQuest/ThreatIngestor/releases/tag/v1.0.0b5")
             logger.exception("Error initializing plugins")
             sys.exit(1)
 

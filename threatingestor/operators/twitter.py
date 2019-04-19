@@ -16,8 +16,8 @@ TWEET_URL = re.compile(r'https://twitter\.com/\w{1,15}/status/\d+')
 
 class Plugin(Operator):
     """Operator for Twitter."""
-    def __init__(self, token, token_key, con_secret_key, con_secret, status, **kwargs):
-        self.api = twitter.Twitter(auth=twitter.OAuth(token, token_key, con_secret, con_secret_key))
+    def __init__(self, api_key, api_secret_key, access_token, access_token_secret, status, **kwargs):
+        self.api = twitter.Twitter(auth=twitter.OAuth(access_token, access_token_secret, api_key, api_secret_key))
         self.status = status
 
         # Validate status, for better error handling.
