@@ -27,10 +27,10 @@ We want artifacts from "Twitter C2 List" and "Vendor X Blog" to go directly to T
 
     credentials:
       - name: twitter-auth
-        token: MYTOKEN
-        token_key: MYKEY
-        con_secret_key: MYSECRETKEY
-        con_secret: MYSECRET
+        api_key:
+        api_secret_key:
+        access_token:
+        access_token_secret:
 
       - name: threatkb-auth
         url: http://mythreatkb
@@ -119,10 +119,10 @@ Here, we have two Twitter sources: our C2 list and a search for "pastebin.com io
 
     credentials:
       - name: twitter-auth
-        token: MYTOKEN
-        token_key: MYKEY
-        con_secret_key: MYSECRETKEY
-        con_secret: MYSECRET
+        api_key:
+        api_secret_key:
+        access_token:
+        access_token_secret:
 
       - name: threatkb-auth
         url: http://mythreatkb
@@ -330,10 +330,10 @@ And the ThreatIngestor config file:
     credentials:
       - name: twitter-auth
         # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
-        token:
-        token_key:
-        con_secret_key:
-        con_secret:
+        api_key:
+        api_secret_key:
+        access_token:
+        access_token_secret:
 
       - name: github-auth
         username: user

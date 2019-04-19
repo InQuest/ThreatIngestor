@@ -124,10 +124,10 @@ Once you have all the secrets you need, create a new section in your config file
     credentials:
       - name: twitter-auth
         # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
-        token: MYTOKEN
-        token_key: MYTOKENKEY
-        con_secret_key: MYSECRETKEY
-        con_secret: MYSECRET
+        api_key:
+        api_secret_key:
+        access_token:
+        access_token_secret:
 
       - name: threatkb-auth
         url: https://mythreatkb
