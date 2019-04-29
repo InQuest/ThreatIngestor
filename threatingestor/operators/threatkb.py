@@ -44,8 +44,8 @@ class Plugin(Operator):
         self.api.create('c2dns', {
                 'domain_name': str(domain),
                 'match_type': '',
-                'references': '{l}\n\n{t}'.format(l=domain.reference_link, t=domain.reference_text),
-                'description': '',
+                'description': '{l}\n\n{t}'.format(l=domain.reference_link, t=domain.reference_text),
+                'references': '',
                 'expiration_type': '',
                 'state': {'state': self.state},
                 'tags': [],
@@ -57,8 +57,8 @@ class Plugin(Operator):
         """Handle a single IP address."""
         self.api.create('c2ips', {
                 'ip': str(ipaddress),
-                'description': '',
-                'references': '{l}\n\n{t}'.format(l=ipaddress.reference_link, t=ipaddress.reference_text),
+                'references': '',
+                'description': '{l}\n\n{t}'.format(l=ipaddress.reference_link, t=ipaddress.reference_text),
                 'expiration_type': '',
                 'state': {'state': self.state},
                 'asn': '',
