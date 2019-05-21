@@ -12,6 +12,7 @@ test*.yml
 
 # dev sources
 .virtualenv
+env/
 build/
 dist/
 
