@@ -14,10 +14,10 @@ except ImportError:
 
 class Plugin(Operator):
     """Operator for InQuest ThreatKB."""
-    def __init__(self, url, token, secret_key, state, artifact_types=None, filter_string=None, allowed_sources=None):
+    def __init__(self, url, token, secret_key, state, artifact_types=None, filter_string=None, allowed_sources=None, use_https=False):
         """ThreatKB operator."""
         self.state = state
-        self.api = threatkb.ThreatKB(url, token, secret_key, use_https=False)
+        self.api = threatkb.ThreatKB(url, token, secret_key, use_https=use_https)
 
         super(Plugin, self).__init__(artifact_types, filter_string, allowed_sources)
         self.artifact_types = artifact_types or [
