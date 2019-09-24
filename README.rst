@@ -33,7 +33,7 @@ ThreatIngestor can be configured to watch Twitter, RSS feeds, or other sources, 
     :target: https://inquest.readthedocs.io/projects/threatingestor/en/latest/workflows.html
     :alt: ThreatIngestor flowchart with several sources feeding into multiple operators.
 
-Try it out now with this `quick walkthrough`_, or see more `ThreatIngestor walkthroughs`_ on the InQuest blog.
+Try it out now with this `quick walkthrough`_, read more `ThreatIngestor walkthroughs`_ on the InQuest blog, and check out `labs.inquest.net/iocdb`_, an IOC aggregation and querying tool powered by ThreatIngestor.
 
 Installation
 ------------
@@ -124,3 +124,4 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _quick walkthrough: https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out
 .. _ThreatIngestor walkthroughs: https://inquest.net/taxonomy/term/42
 .. _RSS config file: https://github.com/InQuest/ThreatIngestor/blob/master/rss.example.yml
+.. _labs.inquest.net/iocdb: https://labs.inquest.net/iocdb
