@@ -12,7 +12,7 @@ requires = requirements.strip().split('\n')
 
 extra_requirements = open(os.path.join(os.path.dirname(__file__),
             'requirements-testing.txt')).read()
-extra_requires = requirements.strip().split('\n')
+extra_requires = extra_requirements.strip().split('\n')
 
 
 setup(
