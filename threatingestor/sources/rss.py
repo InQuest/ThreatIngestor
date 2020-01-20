@@ -23,7 +23,7 @@ class Plugin(Source):
         for item in list(reversed(feed['items'])):
             # Only new items.
             published_parsed = item.get('published_parsed') or item.get('updated_parsed')
-            if published_parsed and published_parsed <= feedparser._parse_date(saved_state or '0000-00-00'):
+            if published_parsed and published_parsed <= feedparser._parse_date(saved_state or '0001-01-01'):
                 continue
 
             try:
