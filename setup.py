@@ -23,7 +23,7 @@ setup(
     extras_require={
         'twitter': ['twitter'],
         'rss': ['feedparser'],
-        'misp': ['PyMISP'],
+        'misp': ['PyMISP>=2.4.0,<2.4.120'],
         'threatkb': ['threatkb'],
         'beanstalk': ['greenstalk'],
         'sqs': ['boto3'],
