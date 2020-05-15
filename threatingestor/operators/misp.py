@@ -27,7 +27,8 @@ class Plugin(Operator):
         self.event_info = 'ThreatIngestor Event: {source_name}'
 
         super(Plugin, self).__init__(
-            artifact_types, filter_string, allowed_sources)
+            artifact_types, filter_string, allowed_sources
+        )
         self.artifact_types = artifact_types or [
             threatingestor.artifacts.Domain,
             threatingestor.artifacts.Hash,
