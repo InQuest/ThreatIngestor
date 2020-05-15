@@ -20,6 +20,10 @@ class Plugin(Source):
         # Let the user decide whether to include non-obfuscated URLs or not.
         self.include_nonobfuscated = not defanged_only
 
+        # Support for full tweet
+        tweet_param = {'tweet_mode': 'extended'}
+        kwargs.update(tweet_param)
+
         # Forward kwargs.
         # NOTE: No validation is done here, so if the config is wrong, expect bad results.
         self.kwargs = kwargs
@@ -59,7 +63,7 @@ class Plugin(Source):
             tweet_list = response
 
         tweets = [{
-            'content': s['text'],
+            'content': s['full_text'],
             'id': s['id_str'],
             'user': s['user']['screen_name'],
             'entities': s.get('entities', {}),
