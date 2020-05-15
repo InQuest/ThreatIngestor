@@ -10,7 +10,8 @@ try:
     import pymisp
 except ImportError:
     raise DependencyError(
-        "Dependency PyMISP required for MISP operator is not installed")
+        "Dependency PyMISP required for MISP operator is not installed"
+    )
 
 
 class Plugin(Operator):
