@@ -105,7 +105,9 @@ class TestThreatKB(unittest.TestCase):
 
     @patch('pymisp.ExpandedPyMISP')
     def test_filter_string_and_allowed_sources_are_set_if_passed_in(self, ExpandedPyMISP):
-        self.assertEqual(threatingestor.operators.misp.Plugin(
-            'a', 'b', filter_string='test').filter_string, 'test')
+        self.assertEqual(
+            threatingestor.operators.misp.Plugin('a', 'b', filter_string='test').filter_string, 
+            'test',
+        )
         self.assertEqual(threatingestor.operators.misp.Plugin(
             'a', 'b', allowed_sources=['test-one']).allowed_sources, ['test-one'])
