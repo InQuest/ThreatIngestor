@@ -63,8 +63,7 @@ class TestThreatKB(unittest.TestCase):
         self.assertEqual(event.Attribute, [])
 
     def test_handle_ipaddress_creates_ipaddress(self):
-        ipaddress = threatingestor.artifacts.IPAddress(
-            '123.123.123.123', '', '')
+        ipaddress = threatingestor.artifacts.IPAddress('123.123.123.123', '', '')
         event = self.misp._create_event(ipaddress)
         event = self.misp.handle_ipaddress(event, ipaddress)
         self.assertEqual(event.Attribute[0].value, str(ipaddress))
