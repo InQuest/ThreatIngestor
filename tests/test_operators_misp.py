@@ -25,7 +25,7 @@ class TestThreatKB(unittest.TestCase):
                 'test.com',
                 'name',
                 reference_link='link',
-                reference_text='text'
+                reference_text='text',
             )
         )
         self.misp._update_or_create_event(event)
