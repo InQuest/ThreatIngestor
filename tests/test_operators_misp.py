@@ -109,5 +109,7 @@ class TestThreatKB(unittest.TestCase):
             threatingestor.operators.misp.Plugin('a', 'b', filter_string='test').filter_string, 
             'test',
         )
-        self.assertEqual(threatingestor.operators.misp.Plugin(
-            'a', 'b', allowed_sources=['test-one']).allowed_sources, ['test-one'])
+        self.assertEqual(
+            threatingestor.operators.misp.Plugin('a', 'b', allowed_sources=['test-one']).allowed_sources, 
+            ['test-one'],
+        )
