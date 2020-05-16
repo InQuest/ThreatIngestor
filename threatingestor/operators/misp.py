@@ -58,7 +58,7 @@ class Plugin(Operator):
         """Update or create an event for the artifact."""
         event_dict = event.to_dict()
         attributes = event_dict.get("Attribute", [])
-        if len(attributes) == 0:
+        if not attributes:
             return
 
         if event_dict.get("uuid") is None:
