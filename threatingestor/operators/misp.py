@@ -42,15 +42,15 @@ class Plugin(Operator):
         event = self._find_or_create_event(artifact)
 
         if isinstance(artifact, threatingestor.artifacts.Domain):
-            event = self.handle_domain(event, artifact)
+            event = self.handle_domain(artifact, event = event)
         if isinstance(artifact, threatingestor.artifacts.Hash):
-            event = self.handle_hash(event, artifact)
+            event = self.handle_hash(artifact, event = event)
         elif isinstance(artifact, threatingestor.artifacts.IPAddress):
-            event = self.handle_ipaddress(event, artifact)
+            event = self.handle_ipaddress(artifact, event = event)
         if isinstance(artifact, threatingestor.artifacts.URL):
-            event = self.handle_url(event, artifact)
+            event = self.handle_url(artifact, event = event)
         elif isinstance(artifact, threatingestor.artifacts.YARASignature):
-            event = self.handle_yarasignature(event, artifact)
+            event = self.handle_yarasignature(artifact, event = event)
 
         self._update_or_create_event(event)
 
@@ -60,8 +60,8 @@ class Plugin(Operator):
         attributes = event_dict.get("Attribute", [])
         if not attributes:
             return
-
-        if event_dict.get("uuid") is None:
+        # If an event doesn't have "date" field, it is not created int MISP
+        if event_dict.get("date") is None:
             self.api.add_event(event)
         else:
             self.api.update_event(event)
@@ -107,12 +107,12 @@ class Plugin(Operator):
 
         return event
 
-    def handle_domain(self, event, domain):
+    def handle_domain(self, domain, event: pymisp.MISPEvent):
         """Handle a single domain."""
         event.add_attribute("domain", str(domain))
         return event
 
-    def handle_hash(self, event, hash_):
+    def handle_hash(self, hash_, event: pymisp.MISPEvent):
         """Handle a single hash."""
         if hash_.hash_type() == hash_.MD5:
             event.add_attribute("md5", str(hash_))
@@ -122,17 +122,17 @@ class Plugin(Operator):
             event.add_attribute("sha256", str(hash_))
         return event
 
-    def handle_ipaddress(self, event, ipaddress):
+    def handle_ipaddress(self, ipaddress, event: pymisp.MISPEvent):
         """Handle a single IP address."""
         event.add_attribute("ip-dst", str(ipaddress))
         return event
 
-    def handle_url(self, event, url):
+    def handle_url(self, url, event: pymisp.MISPEvent):
         """Handle a single URL."""
         event.add_attribute("url", str(url))
         return event
 
-    def handle_yarasignature(self, event, yarasignature):
+    def handle_yarasignature(self, yarasignature, event: pymisp.MISPEvent):
         """Handle a single YARA signature."""
         event.add_attribute("yara", str(yarasignature))
         return event
