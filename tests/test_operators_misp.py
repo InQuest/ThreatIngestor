@@ -91,8 +91,10 @@ class TestThreatKB(unittest.TestCase):
             threatingestor.artifacts.IPAddress,
             threatingestor.artifacts.URL,
         ]
-        self.assertEqual(threatingestor.operators.misp.Plugin(
-            'a', 'b', artifact_types=artifact_types).artifact_types, artifact_types)
+        self.assertEqual(
+            threatingestor.operators.misp.Plugin( 'a', 'b', artifact_types=artifact_types).artifact_types, 
+            artifact_types,
+        )
         self.assertEqual(threatingestor.operators.misp.Plugin('a', 'b').artifact_types, [
             threatingestor.artifacts.Domain,
             threatingestor.artifacts.Hash,
