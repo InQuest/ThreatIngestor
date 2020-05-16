@@ -87,8 +87,10 @@ class TestThreatKB(unittest.TestCase):
 
     @patch('pymisp.ExpandedPyMISP')
     def test_artifact_types_are_set_if_passed_in_else_default(self, ExpandedPyMISP):
-        artifact_types = [threatingestor.artifacts.IPAddress,
-                          threatingestor.artifacts.URL]
+        artifact_types = [
+            threatingestor.artifacts.IPAddress,
+            threatingestor.artifacts.URL,
+        ]
         self.assertEqual(threatingestor.operators.misp.Plugin(
             'a', 'b', artifact_types=artifact_types).artifact_types, artifact_types)
         self.assertEqual(threatingestor.operators.misp.Plugin('a', 'b').artifact_types, [
