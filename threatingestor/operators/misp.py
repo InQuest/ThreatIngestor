@@ -48,7 +48,7 @@ class Plugin(Operator):
         elif isinstance(artifact, threatingestor.artifacts.IPAddress):
             event = self.handle_ipaddress(artifact, event=event)
         if isinstance(artifact, threatingestor.artifacts.URL):
-            event = self.handle_url(artifact, event = event)
+            event = self.handle_url(artifact, event=event)
         elif isinstance(artifact, threatingestor.artifacts.YARASignature):
             event = self.handle_yarasignature(artifact, event = event)
 
