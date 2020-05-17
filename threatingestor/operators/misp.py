@@ -50,7 +50,7 @@ class Plugin(Operator):
         if isinstance(artifact, threatingestor.artifacts.URL):
             event = self.handle_url(artifact, event=event)
         elif isinstance(artifact, threatingestor.artifacts.YARASignature):
-            event = self.handle_yarasignature(artifact, event = event)
+            event = self.handle_yarasignature(artifact, event=event)
 
         self._update_or_create_event(event)
 
