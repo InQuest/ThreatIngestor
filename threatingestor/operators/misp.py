@@ -42,7 +42,7 @@ class Plugin(Operator):
         event = self._find_or_create_event(artifact)
 
         if isinstance(artifact, threatingestor.artifacts.Domain):
-            event = self.handle_domain(artifact, event = event)
+            event = self.handle_domain(artifact, event=event)
         if isinstance(artifact, threatingestor.artifacts.Hash):
             event = self.handle_hash(artifact, event = event)
         elif isinstance(artifact, threatingestor.artifacts.IPAddress):
