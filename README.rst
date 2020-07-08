@@ -24,6 +24,8 @@ An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
 Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
 
+Currently used by InQuest Labs IOC-DB: https://labs.inquest.net/iocdb.
+
 Overview
 --------
 
