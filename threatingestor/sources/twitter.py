@@ -63,9 +63,9 @@ class Plugin(Source):
             tweet_list = response
 
         tweets = [{
-            'content': s['full_text'],
-            'id': s['id_str'],
-            'user': s['user']['screen_name'],
+            'content': s.get('full_text', ''),
+            'id': s.get('id_str', ''),
+            'user': s.get('user', {}).get('screen_name', ''),
             'entities': s.get('entities', {}),
         } for s in tweet_list]
 

@@ -41,7 +41,7 @@ class TestTwitter(unittest.TestCase):
 
     def test_run_respects_saved_state(self):
         self.twitter.run('12345')
-        self.twitter.endpoint.assert_called_once_with(since_id='12345')
+        self.twitter.endpoint.assert_called_once_with(tweet_mode='extended', since_id='12345')
 
     def test_run_returns_newest_tweet_id_as_saved_state(self):
         self.twitter.endpoint.return_value = [
@@ -91,7 +91,7 @@ class TestTwitter(unittest.TestCase):
     def test_run_returns_artifacts_correctly(self):
         self.twitter.endpoint.return_value = [
             {
-                'text': 'hxxp://someurl.com/test',
+                'full_text': 'hxxp://someurl.com/test',
                 'id_str': '12345',
                 'user': {'screen_name': 'test'},
             },
@@ -105,7 +105,7 @@ class TestTwitter(unittest.TestCase):
     def test_run_expands_tco_links_if_available(self):
         self.twitter.endpoint.return_value = [
             {
-                'text': 'https://t.co/t3s7',
+                'full_text': 'https://t.co/t3s7',
                 'id_str': '12345',
                 'user': {'screen_name': 'test'},
                 'entities': {
@@ -132,7 +132,7 @@ class TestTwitter(unittest.TestCase):
         # control
         self.twitter.endpoint.return_value = [
             {
-                'text': 'http://someurl.com/test',
+                'full_text': 'http://someurl.com/test',
                 'id_str': '12345',
                 'user': {'screen_name': 'test'},
             },
@@ -144,7 +144,7 @@ class TestTwitter(unittest.TestCase):
         new_twitter = threatingestor.sources.twitter.Plugin('a', 'b', 'c', 'd', 'e', defanged_only=False)
         new_twitter.endpoint.return_value = [
             {
-                'text': 'http://someurl.com/test',
+                'full_text': 'http://someurl.com/test',
                 'id_str': '12345',
                 'user': {'screen_name': 'test'},
             },
