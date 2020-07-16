@@ -41,7 +41,7 @@ class TestTwitter(unittest.TestCase):
 
     def test_run_respects_saved_state(self):
         self.twitter.run('12345')
-        self.twitter.endpoint.assert_called_once_with(since_id='12345')
+        self.twitter.endpoint.assert_called_once_with(tweet_mode='extended', since_id='12345')
 
     def test_run_returns_newest_tweet_id_as_saved_state(self):
         self.twitter.endpoint.return_value = [
