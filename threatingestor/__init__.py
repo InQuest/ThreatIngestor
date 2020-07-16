@@ -2,7 +2,6 @@ import sys
 import time
 import collections
 
-
 from loguru import logger
 import statsd
 try:
@@ -16,6 +15,7 @@ except ImportError:
 import threatingestor.config
 import threatingestor.state
 import threatingestor.exceptions
+import threatingestor.whitelist
 
 
 class Ingestor:
@@ -77,11 +77,21 @@ class Ingestor:
             self.operators = {name: operator(**kwargs)
                               for name, operator, kwargs in self.config.operators()}
 
+            logger.debug("Initializing whitelists")
+            self.whitelist = threatingestor.whitelist.Whitelist(self.config.whitelists())
+
         except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
             logger.warning("Twitter config format has recently changed. See https://github.com/InQuest/ThreatIngestor/releases/tag/v1.0.0b5")
             logger.exception("Error initializing plugins")
             sys.exit(1)
 
+    def _is_whitelisted(self, artifact) -> bool:
+        if self.whitelist.contains(str(artifact)):
+            logger.debug(
+                f"Reject {str(artifact)} from further processing because it is whitelisetd"
+            )
+            return True
+        return False
 
     def run(self):
         """Run once, or forever, depending on config."""
@@ -113,6 +123,13 @@ class Ingestor:
 
             # Save the source state.
             self.statedb.save_state(source, saved_state)
+
+            # Reject whitelisted artifacts
+            artifacts = [
+                artifact
+                for artifact in artifacts
+                if not self._is_whitelisted(artifact)
+            ]
 
             # Process artifacts with each operator.
             for operator in self.operators:

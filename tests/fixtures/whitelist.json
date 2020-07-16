@@ -1,0 +1,8 @@
+{
+  "name": "test",
+  "version": 20200203,
+  "description": "test",
+  "matching_attributes": ["hostname", "domain"],
+  "type": "hostname",
+  "list": ["00-tv.com", "000webhost.com", "000webhostapp.com"]
+}
