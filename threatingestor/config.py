@@ -162,3 +162,7 @@ class Config:
 
         logger.debug(f"Found {len(operators)} total operators")
         return operators
+
+    def whitelists(self):
+        """Returns whitelist list."""
+        return self.config.get("whitelists", [])
