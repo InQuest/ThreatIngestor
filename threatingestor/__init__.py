@@ -88,7 +88,7 @@ class Ingestor:
     def _is_whitelisted(self, artifact) -> bool:
         if self.whitelist.contains(str(artifact)):
             logger.debug(
-                f"Reject {str(artifact)} from further processing because it is whitelisetd"
+                f"Reject {str(artifact)} from further processing because it is whitelisted."
             )
             return True
         return False
