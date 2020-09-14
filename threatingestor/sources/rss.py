@@ -1,4 +1,11 @@
 import feedparser
+try:
+    # feedparser 5.x
+    from feedparser import _parse_date
+except ImportError:
+    # feedparser 6.x
+    from feedparser.datetimes import _parse_date
+
 import bs4
 
 
@@ -23,7 +30,7 @@ class Plugin(Source):
         for item in list(reversed(feed['items'])):
             # Only new items.
             published_parsed = item.get('published_parsed') or item.get('updated_parsed')
-            if published_parsed and published_parsed <= feedparser._parse_date(saved_state or '0001-01-01'):
+            if published_parsed and published_parsed <= _parse_date(saved_state or '0001-01-01'):
                 continue
 
             try:
