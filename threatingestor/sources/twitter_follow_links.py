@@ -40,12 +40,10 @@ class Plugin(Source):
         self.endpoint = self.api.statuses.mentions_timeline
         if (kwargs.get('slug') and kwargs.get('owner_screen_name')) or (kwargs.get('list_id') and kwargs.get('owner_screen_name')):
             self.endpoint = self.api.lists.statuses
-        # elif kwargs.get('slug') and kwargs.get('owner_screen_name')
         elif kwargs.get('screen_name') or kwargs.get('user_id'):
             self.endpoint = self.api.statuses.user_timeline
         elif kwargs.get('q'):
             self.endpoint = self.api.search.tweets
-
 
     def run(self, saved_state):
         # Modify kwargs to insert since_id.
@@ -85,7 +83,6 @@ class Plugin(Source):
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
                     if re.search(WHITELIST_DOMAINS, url['expanded_url']):
 
-
                         contains_raw = re.search(r"/raw/", url['expanded_url'])
                         if not contains_raw:
                             pastebin_id = re.search(r"pastebin.com/(.*?)$", url['expanded_url']).group(1)
@@ -97,8 +94,8 @@ class Plugin(Source):
 
                         logger.log('NOTIFY', f"Discovered paste: {location}")
 
-                    else:
-                        logger.info(f"Did not match paste: {url['expanded_url']}")
+                    # else:
+                        # logger.info(f"Did not match paste: {url['expanded_url']}")
                         # print(url['expanded_url'])
                 except KeyError:
                     # No url/expanded_url, continue without expanding.
