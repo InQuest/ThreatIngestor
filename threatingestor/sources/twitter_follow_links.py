@@ -6,9 +6,13 @@ from loguru import logger
 
 
 from threatingestor.sources import Source
+import requests
+import re
 
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
+
+WHITELIST_DOMAINS = r"pastebin\.com"
 
 
 class Plugin(Source):
@@ -36,6 +40,7 @@ class Plugin(Source):
         self.endpoint = self.api.statuses.mentions_timeline
         if (kwargs.get('slug') and kwargs.get('owner_screen_name')) or (kwargs.get('list_id') and kwargs.get('owner_screen_name')):
             self.endpoint = self.api.lists.statuses
+        # elif kwargs.get('slug') and kwargs.get('owner_screen_name')
         elif kwargs.get('screen_name') or kwargs.get('user_id'):
             self.endpoint = self.api.statuses.user_timeline
         elif kwargs.get('q'):
@@ -73,18 +78,34 @@ class Plugin(Source):
         # Traverse in reverse, old to new.
         tweets.reverse()
         for tweet in tweets:
+
             # Expand t.co links.
             for url in tweet['entities'].get('urls', []):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
+                    if re.search(WHITELIST_DOMAINS, url['expanded_url']):
+
+
+                        contains_raw = re.search(r"/raw/", url['expanded_url'])
+                        if not contains_raw:
+                            pastebin_id = re.search(r"pastebin.com/(.*?)$", url['expanded_url']).group(1)
+                            location = f"https://pastebin.com/raw/{pastebin_id}"
+                        else:
+                            location = url['expanded_url']
+                        req = requests.get(location)
+                        artifacts += self.process_element(req.text, location, include_nonobfuscated=True)
+
+                        logger.log('NOTIFY', f"Discovered paste: {location}")
+
+                    else:
+                        logger.info(f"Did not match paste: {url['expanded_url']}")
+                        # print(url['expanded_url'])
                 except KeyError:
                     # No url/expanded_url, continue without expanding.
                     pass
 
-            # Process tweet.
-            saved_state = tweet['id']
-            artifacts += self.process_element(tweet['content'],
-                                              TWEET_URL.format(user=tweet['user'], id=tweet['id']),
-                                              include_nonobfuscated=self.include_nonobfuscated)
-
         return saved_state, artifacts
+
+
+
+
