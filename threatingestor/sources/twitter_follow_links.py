@@ -83,8 +83,7 @@ class Plugin(Source):
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
                     if re.search(WHITELIST_DOMAINS, url['expanded_url']):
 
-                        contains_raw = re.search(r"/raw/", url['expanded_url'])
-                        if not contains_raw:
+                        if 'raw' not in url['expanded_url']:
                             pastebin_id = re.search(r"pastebin.com/(.*?)$", url['expanded_url']).group(1)
                             location = f"https://pastebin.com/raw/{pastebin_id}"
                         else:
