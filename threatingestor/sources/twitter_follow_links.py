@@ -81,21 +81,23 @@ class Plugin(Source):
             for url in tweet['entities'].get('urls', []):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
+
+                    # Check if pastebin.com in url
                     if re.search(WHITELIST_DOMAINS, url['expanded_url']):
 
+                        # Check if the url is already returning the 'raw' pastebin. If not, update the url
                         if 'raw' not in url['expanded_url']:
                             pastebin_id = re.search(r"pastebin.com/(.*?)$", url['expanded_url']).group(1)
                             location = f"https://pastebin.com/raw/{pastebin_id}"
                         else:
                             location = url['expanded_url']
+
                         req = requests.get(location)
+                        saved_state = tweet['id']
                         artifacts += self.process_element(req.text, location, include_nonobfuscated=True)
 
                         logger.log('NOTIFY', f"Discovered paste: {location}")
 
-                    # else:
-                        # logger.info(f"Did not match paste: {url['expanded_url']}")
-                        # print(url['expanded_url'])
                 except KeyError:
                     # No url/expanded_url, continue without expanding.
                     pass
