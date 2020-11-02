@@ -1,13 +1,11 @@
 from __future__ import absolute_import
 
 
+import re
+import requests
 import twitter
 from loguru import logger
-
-
 from threatingestor.sources import Source
-import requests
-import re
 
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
