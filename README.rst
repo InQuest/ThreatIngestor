@@ -103,7 +103,7 @@ For quicker setup, RSS feeds can be a great source of intelligence. Check out th
 Support
 -------
 
-If you need help getting set up, or run into any issues, feel free to open an Issue_. You can also reach out to `@InQuest`_ on Twitter.
+If you need help getting set up, or run into any issues, feel free to open an Issue_. You can also reach out to `@InQuest`_ on Twitter or read more about us on the web at https://www.inquest.net.
 
 We'd love to hear any feedback you have on ThreatIngestor, its documentation, or how you're putting it to work for you!
 
