@@ -83,7 +83,7 @@ Twitter user timeline:
 
 .. code-block:: yaml
 
-    - name:twitter-inquest-timeline
+    - name: twitter-inquest-timeline
       module: twitter
       credentials: twitter-auth
       screen_name: InQuest
