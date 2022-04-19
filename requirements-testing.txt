@@ -9,7 +9,7 @@ collective.checkdocs
 coverage
 hug
 pymisp
-greenstalk
+greenstalk==1.0.1
 watchdog
 twitter>=1.17.1
 feedparser>=5.2.1
