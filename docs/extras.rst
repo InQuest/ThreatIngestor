@@ -15,7 +15,7 @@ Queue Workers
 
 Included in the ``extras`` package is a base class for creating :ref:`Queue Workers <queue-worker-workflow>`. Two example workers are provided: ``FSWatcher`` and ``PasteProcessor``.
 
-Queue workers can use any supported queue system for input and/or output: currently, SQS and Beanstalk. They are expected to read from a YAML config file, which looks similar to ThreatIngestor's own YAML connfig.
+Queue workers can use any supported queue system for input and/or output: currently, SQS and Beanstalk. They are expected to read from a YAML config file, which looks similar to ThreatIngestor's own YAML config.
 
 See the :py:mod:`QueueWorker API docs <threatingestor.extras.queueworker>` for more information on creating custom Queue Workers.
 
