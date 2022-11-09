@@ -10,9 +10,10 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``github``
-* ``search`` (required): search term(s).
-* ``username``: Optional username for authentication.
-* ``token``: Optional token or password for authentication.
+* ``search`` (required): Search term(s).
+* ``username`` (optional): Username for authentication.
+* ``token`` (optional): Token or password for authentication.
+* ``num_of_days`` (optional): Search within a specific number of days since repository creation date.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -41,5 +42,6 @@ Inside the ``sources`` section of your configuration file:
       credentials: github-auth
       module: github
       search: CVE-2018-
+      num_of_days: 60
 
 .. _repository search API: https://developer.github.com/v3/search/#search-repositories
