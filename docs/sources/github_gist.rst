@@ -8,7 +8,7 @@ The **GitHub Gist** source plugin uses GitHub's `gist API`_ to find new gists cr
 Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
-* ``module`` (required): ``github-gist``
+* ``module`` (required): ``github_gist``
 * ``user`` (required): Username of the gist owner.
 * ``username`` (optional): Username for authentication.
 * ``token`` (optional): Token or password for authentication.
@@ -38,7 +38,7 @@ Inside the ``sources`` section of your configuration file:
 
     - name: github-gist-search
       credentials: github-auth
-      module: github-gist
-      user: Hifumi1337
+      module: github_gist
+      user: InQuest
 
 .. _github gist user API: https://docs.github.com/en/rest/gists/gists#list-gists-for-a-user

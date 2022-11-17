@@ -167,10 +167,10 @@ github
    :show-inheritance:
    :member-order: bysource
 
-github-gist
+github_gist
 ^^^^^^
 
-.. automodule:: threatingestor.sources.github-gist
+.. automodule:: threatingestor.sources.github_gist
    :members:
    :undoc-members:
    :show-inheritance:

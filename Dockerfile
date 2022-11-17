@@ -8,5 +8,7 @@ RUN apt-get install sqlite3
 RUN pip3 install threatingestor \
                  twitter \
                  feedparser
-
 COPY config.yml .
+
+# Run the ThreatIngestor without accessing /bin/bash container
+CMD ["threatingestor", "config.yml"]

@@ -74,7 +74,7 @@ Sources
 * `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/beanstalk.html>`__
 * `Git repositories <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/git.html>`__
 * `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`__
-* `Gists by username <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github-gist.html>`__
+* `Gists by username <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github_gist.html>`__
 * `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`__
 * `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`__
 * `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`__
