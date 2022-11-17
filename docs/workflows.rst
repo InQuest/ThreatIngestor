@@ -394,6 +394,11 @@ And the ThreatIngestor config file:
         credentials: github-auth
         search: CVE-2018-
 
+    - name: github-gist-search
+        module: github-gist
+        credentials: github-auth
+        user: Hifumi1337
+
       - name: git-yara-rules
         module: git
         url: https://github.com/InQuest/yara-rules.git

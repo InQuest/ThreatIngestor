@@ -167,6 +167,15 @@ github
    :show-inheritance:
    :member-order: bysource
 
+github-gist
+^^^^^^
+
+.. automodule:: threatingestor.sources.github-gist
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
 rss
 ^^^
 
