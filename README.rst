@@ -7,9 +7,12 @@ ThreatIngestor
 .. image:: https://travis-ci.org/InQuest/ThreatIngestor.svg?branch=master
     :target: https://travis-ci.org/InQuest/ThreatIngestor
     :alt: Build Status (Travis CI)
+
+.. Change ?branch=develop to ?branch=master when merging into master
 .. image:: https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg?branch=develop
     :target: https://github.com/InQuest/ThreatIngestor/actions
     :alt: Build Status (GitHub Workflow)
+
 .. image:: https://readthedocs.org/projects/threatingestor/badge/?version=latest
     :target: http://inquest.readthedocs.io/projects/threatingestor/en/latest/?badge=latest
     :alt: Documentation Status
