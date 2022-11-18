@@ -6,16 +6,19 @@ ThreatIngestor
     :alt: Developed by InQuest
 .. image:: https://travis-ci.org/InQuest/ThreatIngestor.svg?branch=master
     :target: https://travis-ci.org/InQuest/ThreatIngestor
-    :alt: Build Status
+    :alt: Build Status (Travis CI)
+.. image:: https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg
+    :target: https://github.com/InQuest/ThreatIngestor/actions
+    :alt: Build Status (GitHub Workflow)
 .. image:: https://readthedocs.org/projects/threatingestor/badge/?version=latest
     :target: http://inquest.readthedocs.io/projects/threatingestor/en/latest/?badge=latest
     :alt: Documentation Status
-.. image:: https://api.codacy.com/project/badge/Grade/a989bb12e9604d5a9577ce71848e7a2a
-    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
-    :alt: Code Health
-.. image:: https://api.codacy.com/project/badge/Coverage/a989bb12e9604d5a9577ce71848e7a2a
-    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
-    :alt: Test Coverage
+.. .. image:: https://api.codacy.com/project/badge/Grade/a989bb12e9604d5a9577ce71848e7a2a
+..     :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+..     :alt: Code Health
+.. .. image:: https://api.codacy.com/project/badge/Coverage/a989bb12e9604d5a9577ce71848e7a2a
+..     :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+..     :alt: Test Coverage
 .. image:: http://img.shields.io/pypi/v/ThreatIngestor.svg
     :target: https://pypi.python.org/pypi/ThreatIngestor
     :alt: PyPi Version

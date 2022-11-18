@@ -1,4 +1,4 @@
-name: ThreatIngestor Workflow
+name: threatingestor-workflow
 
 on: [push]
 
