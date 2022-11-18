@@ -7,7 +7,7 @@ ThreatIngestor
 .. image:: https://travis-ci.org/InQuest/ThreatIngestor.svg?branch=master
     :target: https://travis-ci.org/InQuest/ThreatIngestor
     :alt: Build Status (Travis CI)
-.. image:: https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg
+.. image:: https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg?branch=develop
     :target: https://github.com/InQuest/ThreatIngestor/actions
     :alt: Build Status (GitHub Workflow)
 .. image:: https://readthedocs.org/projects/threatingestor/badge/?version=latest
