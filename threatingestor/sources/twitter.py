@@ -62,12 +62,19 @@ class Plugin(Source):
         except TypeError:
             tweet_list = response
 
-        tweets = [{
-            'content': s.get('full_text', ''),
-            'id': s.get('id_str', ''),
-            'user': s.get('user', {}).get('screen_name', ''),
-            'entities': s.get('entities', {}),
-        } for s in tweet_list]
+        tweets = []
+        for tweet in tweet_list:
+            if "retweeted_status" in tweet:
+                content = tweet['retweeted_status'].get('full_text', '')
+            else:
+                content = tweet.get('full_text', '')
+
+            tweets.append({
+                'content': content,
+                'id': tweet.get('id_str', ''),
+                'user': tweet.get('user', {}).get('screen_name', ''),
+                'entities': tweet.get('entities', {}),
+            })
 
         artifacts = []
         # Traverse in reverse, old to new.
