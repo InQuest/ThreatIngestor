@@ -134,3 +134,24 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _ThreatIngestor walkthroughs: https://inquest.net/taxonomy/term/42
 .. _RSS config file: https://github.com/InQuest/ThreatIngestor/blob/master/rss.example.yml
 .. _labs.inquest.net/iocdb: https://labs.inquest.net/iocdb
+
+Docker Container
+------------
+
+A Dockerfile is now available for running ThreatIngestor within a Docker container.
+
+First, you'll need to build the container:
+
+```
+docker build . -t threat
+```
+
+After that, you can mount the container for use using this command:
+```
+docker run -it --mount type=bind,source=/,target=/dock threat /bin/bash
+```
+
+After you've mounted the container, and you're inside of the `/bin/bash` shell, you can run the threatingestor like normal:
+```
+threatingestor config.yml
+```
