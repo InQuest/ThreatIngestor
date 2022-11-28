@@ -140,18 +140,14 @@ Docker Container
 
 A Dockerfile is now available for running ThreatIngestor within a Docker container.
 
-First, you'll need to build the container:
+First, you'll need to build the container::
 
-```
-docker build . -t threat
-```
+    docker build . -t threat
 
-After that, you can mount the container for use using this command:
-```
-docker run -it --mount type=bind,source=/,target=/dock threat /bin/bash
-```
+After that, you can mount the container for use using this command::
 
-After you've mounted the container, and you're inside of the `/bin/bash` shell, you can run the threatingestor like normal:
-```
-threatingestor config.yml
-```
+    docker run -it --mount type=bind,source=/,target=/dock threat /bin/bash
+
+After you've mounted the container, and you're inside of the `/bin/bash` shell, you can run the threatingestor like normal::
+    
+    threatingestor config.yml
