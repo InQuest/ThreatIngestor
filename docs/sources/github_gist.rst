@@ -1,19 +1,17 @@
-.. _github-source:
+.. _github-gist-source:
 
-GitHub Repository Search
+GitHub Gist Username Search
 ------------------------
 
-The **GitHub** source plugin uses GitHub's `repository search API`_ to find new
-interesting repos, and create a :ref:`Task artifact <task-artifact>` for each.
+The **GitHub Gist** source plugin uses GitHub's `gist API`_ to find new gists created by a user, and create a :ref:`Task artifact <task-artifact>` for each.
 
 Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
-* ``module`` (required): ``github``
-* ``search`` (required): Search term(s).
+* ``module`` (required): ``github_gist``
+* ``user`` (required): Username of the gist owner.
 * ``username`` (optional): Username for authentication.
 * ``token`` (optional): Token or password for authentication.
-* ``num_of_days`` (optional): Search within a specific number of days since repository creation date.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -38,10 +36,9 @@ Inside the ``sources`` section of your configuration file:
 
 .. code-block:: yaml
 
-    - name: github-cve-repos
+    - name: github-gist-search
       credentials: github-auth
-      module: github
-      search: CVE-2018-
-      num_of_days: 60
+      module: github_gist
+      user: InQuest
 
-.. _repository search API: https://developer.github.com/v3/search/#search-repositories
+.. _github gist user API: https://docs.github.com/en/rest/gists/gists#list-gists-for-a-user

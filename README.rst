@@ -6,16 +6,22 @@ ThreatIngestor
     :alt: Developed by InQuest
 .. image:: https://travis-ci.org/InQuest/ThreatIngestor.svg?branch=master
     :target: https://travis-ci.org/InQuest/ThreatIngestor
-    :alt: Build Status
+    :alt: Build Status (Travis CI)
+
+.. Change ?branch=develop to ?branch=master when merging into master
+.. image:: https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg?branch=develop
+    :target: https://github.com/InQuest/ThreatIngestor/actions
+    :alt: Build Status (GitHub Workflow)
+
 .. image:: https://readthedocs.org/projects/threatingestor/badge/?version=latest
     :target: http://inquest.readthedocs.io/projects/threatingestor/en/latest/?badge=latest
     :alt: Documentation Status
-.. image:: https://api.codacy.com/project/badge/Grade/a989bb12e9604d5a9577ce71848e7a2a
-    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
-    :alt: Code Health
-.. image:: https://api.codacy.com/project/badge/Coverage/a989bb12e9604d5a9577ce71848e7a2a
-    :target: https://app.codacy.com/app/InQuest/ThreatIngestor
-    :alt: Test Coverage
+.. .. image:: https://api.codacy.com/project/badge/Grade/a989bb12e9604d5a9577ce71848e7a2a
+..     :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+..     :alt: Code Health
+.. .. image:: https://api.codacy.com/project/badge/Coverage/a989bb12e9604d5a9577ce71848e7a2a
+..     :target: https://app.codacy.com/app/InQuest/ThreatIngestor
+..     :alt: Test Coverage
 .. image:: http://img.shields.io/pypi/v/ThreatIngestor.svg
     :target: https://pypi.python.org/pypi/ThreatIngestor
     :alt: PyPi Version
@@ -74,6 +80,7 @@ Sources
 * `Beanstalk work queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/beanstalk.html>`__
 * `Git repositories <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/git.html>`__
 * `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`__
+* `Gists by username <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github_gist.html>`__
 * `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`__
 * `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`__
 * `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`__
@@ -127,3 +134,20 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _ThreatIngestor walkthroughs: https://inquest.net/taxonomy/term/42
 .. _RSS config file: https://github.com/InQuest/ThreatIngestor/blob/master/rss.example.yml
 .. _labs.inquest.net/iocdb: https://labs.inquest.net/iocdb
+
+Docker Container
+------------
+
+A Dockerfile is now available for running ThreatIngestor within a Docker container.
+
+First, you'll need to build the container::
+
+    docker build . -t threat
+
+After that, you can mount the container for use using this command::
+
+    docker run -it --mount type=bind,source=/,target=/dock threat /bin/bash
+
+After you've mounted the container, and you're inside of the `/bin/bash` shell, you can run the threatingestor like normal::
+    
+    threatingestor config.yml
