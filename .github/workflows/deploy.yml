@@ -7,23 +7,6 @@ on:
       - master
 
 jobs:
-  pre-deploy:
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Install dependencies
-        run: |
-          pip install setuptools build
-          pip install -r requirements.txt
-          pip install -r requirements-testing.txt
-      - name: Building package
-        run: python -m build
-      - name: Publishing package to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-
   deploy:
     runs-on: ubuntu-20.04
 
