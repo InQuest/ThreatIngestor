@@ -394,7 +394,7 @@ And the ThreatIngestor config file:
         credentials: github-auth
         search: CVE-2018-
 
-    - name: github-gist-search
+      - name: github-gist-search
         module: github_gist
         credentials: github-auth
         user: InQuest
@@ -435,6 +435,10 @@ And the ThreatIngestor config file:
       - name: attack-feed
         module: web
         url: http://example.com/attacks.txt
+
+      - name: sitemap-xml-parser
+        module: sitemap
+        url: https://inquest.net/sitemap.xml
 
     operators:
       - name: mythreatkb

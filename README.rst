@@ -82,6 +82,7 @@ Sources
 * `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`__
 * `Gists by username <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github_gist.html>`__
 * `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`__
+* `Sitemap Blogs <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sitemap.html>`__
 * `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`__
 * `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`__
 * `Generic web pages <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/web.html>`__

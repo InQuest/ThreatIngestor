@@ -75,6 +75,10 @@ sources:
     url: https://inquest.net/blog/rss
     feed_type: messy
 
+  - name: inquest-blog
+    module: sitemap
+    url: https://inquest.net/sitemap.xml
+
   - name: beanstalk-input
     module: beanstalk
     host: 127.0.0.1

@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get install python3-pip -y
 RUN apt-get install sqlite3
 RUN apt-get install tesseract-ocr -y
+RUN apt-get install python3-lxml -y
 
 RUN pip3 install --upgrade pip
 RUN pip3 install threatingestor \
@@ -14,5 +15,8 @@ RUN pip3 install threatingestor \
                  pytesseract \
                  numpy \
                  opencv-python
+
+COPY config.yml .
+                 lxml
 
 COPY config.yml .
