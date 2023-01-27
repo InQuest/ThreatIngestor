@@ -79,6 +79,10 @@ sources:
     module: sitemap
     url: https://inquest.net/sitemap.xml
 
+  - name: image-extraction
+    module: image
+    img: https://example.com/image.png
+
   - name: beanstalk-input
     module: beanstalk
     host: 127.0.0.1
