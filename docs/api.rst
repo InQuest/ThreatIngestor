@@ -194,6 +194,15 @@ sitemap
    :show-inheritance:
    :member-order: bysource
 
+image
+^^^
+
+.. automodule:: threatingestor.sources.image
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
 sqs
 ^^^
 

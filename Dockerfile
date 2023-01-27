@@ -17,6 +17,3 @@ RUN pip3 install threatingestor \
                  opencv-python
 
 COPY config.yml .
-                 lxml
-
-COPY config.yml .

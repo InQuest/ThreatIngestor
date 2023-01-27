@@ -440,6 +440,10 @@ And the ThreatIngestor config file:
         module: sitemap
         url: https://inquest.net/sitemap.xml
 
+      - name: image-ioc-extraction
+        module: image
+        url: local.jpg
+
     operators:
       - name: mythreatkb
         module: threatkb

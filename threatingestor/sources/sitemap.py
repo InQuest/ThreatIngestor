@@ -13,7 +13,8 @@ class Plugin(Source):
 
     def run(self, saved_state):
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + "Z"
-        
+
+        # Configures sitemap parsing
         response = urllib.request.urlopen(self.url)
         xml = BeautifulSoup(response, "lxml-xml", from_encoding=response.info().get_param("charset"))
 
@@ -24,9 +25,7 @@ class Plugin(Source):
             get_sitemap_type = "sitemapindex"
         elif sitemap:
             get_sitemap_type = "urlset"
-
-        sitemap_type = get_sitemap_type
-
+        
         sitemaps = xml.find_all("sitemap")
 
         get_child_sitemaps = []
@@ -34,7 +33,7 @@ class Plugin(Source):
         for sitemap in sitemaps:
             get_child_sitemaps.append(sitemap.findNext("loc").text)
 
-        if sitemap_type =="sitemapindex":
+        if get_sitemap_type == "sitemapindex":
             sitemaps = get_child_sitemaps
         else:
             sitemaps = [self.url]
@@ -45,6 +44,7 @@ class Plugin(Source):
         for sitemap in sitemaps:
             for url in urls:
 
+                # Extracts only the 'loc' tag from the xml
                 if xml.find("loc"):
                     loc = url.findNext("loc").text
                     parsed_uri = urlparse(loc)
@@ -58,6 +58,7 @@ class Plugin(Source):
                     "loc": loc
                 }
 
+                # Locates all blog links within the sitemap
                 if "blog" in row["loc"]:
                     print(row["loc"])
                     artifacts += self.process_element(row["loc"], self.url)
