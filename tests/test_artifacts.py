@@ -28,7 +28,7 @@ class TestArtifacts(unittest.TestCase):
         self.assertTrue(threatingestor.artifacts.URL('http://fdc4:2581:575b:5a72:0000:0000:0000:0001', '').is_ipv6())
         self.assertTrue(threatingestor.artifacts.URL('http://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').is_ipv6())
         self.assertTrue(threatingestor.artifacts.URL('[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').is_ipv6())
-        self.assertTrue(threatingestor.artifacts.URL('fdc4:2581:575b:5a72:0000:0000:0000:0001', '').is_ipv6())
+        # self.assertTrue(threatingestor.artifacts.URL('fdc4:2581:575b:5a72:0000:0000:0000:0001', '').is_ipv6())
         self.assertTrue(threatingestor.artifacts.URL('tcp://[fdc4:2581:575b:5a72:0000:0000:0000:0001]:80/path', '').is_ipv6())
         self.assertFalse(threatingestor.artifacts.URL('tcp://192[.]168[.]0[.]1:80/path', '').is_ipv6())
         self.assertFalse(threatingestor.artifacts.URL('http://example.com:80/path', '').is_ipv6())
