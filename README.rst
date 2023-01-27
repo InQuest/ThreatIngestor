@@ -28,7 +28,7 @@ ThreatIngestor
 
 An extendable tool to extract and aggregate IOCs_ from threat feeds.
 
-Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing worflow with SQS_, Beanstalk_, and `custom plugins`_.
+Integrates out-of-the-box with ThreatKB_ and MISP_, and can fit seamlessly into any existing workflow with SQS_, Beanstalk_, and `custom plugins`_.
 
 Currently used by InQuest Labs IOC-DB: https://labs.inquest.net/iocdb.
 
@@ -138,7 +138,7 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _labs.inquest.net/iocdb: https://labs.inquest.net/iocdb
 
 Docker Container
-------------
+----------------
 
 A Dockerfile is now available for running ThreatIngestor within a Docker container.
 
