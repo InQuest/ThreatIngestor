@@ -7,3 +7,6 @@ sgmllib3k
 loguru
 statsd
 requests
+pytesseract
+numpy
+opencv-python
