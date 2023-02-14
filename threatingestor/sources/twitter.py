@@ -5,7 +5,7 @@ import twitter
 from loguru import logger
 
 from threatingestor.sources import Source
-from utils.url_controller import UrlController
+from threatingestor.utils.url_controller import UrlController
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 
