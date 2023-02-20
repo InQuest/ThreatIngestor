@@ -75,9 +75,38 @@ sources:
     url: https://inquest.net/blog/rss
     feed_type: messy
 
-  - name: inquest-blog
+  # Sitemap exmaples
+
+  # Searches for "articles" keyword
+  - name: inquest-sitemap-articles
     module: sitemap
-    url: https://inquest.net/sitemap.xml
+    url: https://www.inquest.net/sitemap.xml
+    filter: articles
+
+  # Defaults to "blog" keyword
+  - name: inquest-sitemap-blog
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+
+  # Searches for "articles or security" keywords
+  - name: inquest-sitemap-blog-articles-security
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    filter: articles|security
+
+  # Specify directories in the filter
+  - name: inquest-sitemap-blog-category
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    path: /blog/category/
+
+  # Specify filtering for paths
+  # Only returns results under /blog/category/release|solutions
+  - name: inquest-sitemap-release-solutions
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    path: /blog/category/
+    filter: release|solutions
 
   - name: image-extraction
     module: image

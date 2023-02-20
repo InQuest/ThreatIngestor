@@ -10,3 +10,4 @@ requests
 pytesseract
 numpy
 opencv-python
+pyshorteners

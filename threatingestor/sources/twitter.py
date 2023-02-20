@@ -4,12 +4,10 @@ from __future__ import absolute_import
 import twitter
 from loguru import logger
 
-
 from threatingestor.sources import Source
-
+from threatingestor.utils.url_controller import UrlController
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
-
 
 class Plugin(Source):
 
@@ -85,8 +83,8 @@ class Plugin(Source):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
                 except KeyError:
-                    # No url/expanded_url, continue without expanding.
-                    pass
+                    # Attempts to expand the URL if not available through Twitter
+                    tweet['content'] = tweet['content'].replace(url['url'], UrlController.expand_url(url['url']))
 
             # Process tweet.
             saved_state = tweet['id']

@@ -1,17 +1,15 @@
 from __future__ import absolute_import
 
-
 import re
 import requests
 import twitter
 from loguru import logger
-from threatingestor.sources import Source
 
+from threatingestor.sources import Source
+from threatingestor.utils.url_controller import UrlController
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
-
 WHITELIST_DOMAINS = r"pastebin\.com"
-
 
 class Plugin(Source):
 
@@ -97,8 +95,8 @@ class Plugin(Source):
                         logger.log('NOTIFY', f"Discovered paste: {location}")
 
                 except KeyError:
-                    # No url/expanded_url, continue without expanding.
-                    pass
+                    # Attempts to expand the URL if not available through Twitter
+                    tweet['content'] = tweet['content'].replace(url['url'], UrlController.expand_url(url['url']))
 
         return saved_state, artifacts
 

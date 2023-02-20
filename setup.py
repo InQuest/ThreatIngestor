@@ -20,7 +20,7 @@ if not isinstance(extra_requires, list):
 
 setup(
     name='threatingestor',
-    version='1.0.2',
+    version='1.0.3',
     include_package_data=True,
     install_requires=requires,
     extras_require={
