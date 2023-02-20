@@ -11,7 +11,7 @@ class UrlController:
         """
         Expand ingested URLs with this method.
 
-        If a URL is unknown or cannot be expanded, you'll get a "None" response.
+        If a URL is unknown or cannot be expanded, you'll get the original URL back.
 
         @param: url (Example: https://inquest.net)
 
@@ -23,4 +23,4 @@ class UrlController:
             return str(expanded_link)
         # If unable to expand the URL, this exception is thrown
         except exceptions.ExpandingErrorException:
-            return "None"
+            return str(url)

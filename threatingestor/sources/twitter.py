@@ -83,7 +83,7 @@ class Plugin(Source):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
                 except KeyError:
-                    # Attempts to expand the URL using custom script
+                    # Attempts to expand the URL if not available through Twitter
                     tweet['content'] = tweet['content'].replace(url['url'], UrlController.expand_url(url['url']))
 
             # Process tweet.
