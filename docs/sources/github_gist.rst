@@ -3,7 +3,7 @@
 GitHub Gist Username Search
 ---------------------------
 
-The **GitHub Gist** source plugin uses GitHub's `gist API` to find new gists created by a user, and create a :ref:`Task artifact <task-artifact>` for each.
+The **GitHub Gist** source plugin uses GitHub's gist API to find new gists created by a user, and create a :ref:`Task artifact <task-artifact>` for each.
 
 Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
