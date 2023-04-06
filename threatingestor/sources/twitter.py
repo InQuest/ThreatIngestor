@@ -1,13 +1,26 @@
 from __future__ import absolute_import
 
-
+import os
+import cv2
+import random
+import string
 import twitter
+import requests
+import pytesseract
+import numpy as np
+
 from loguru import logger
+from pyshorteners import Shortener, exceptions
 
 from threatingestor.sources import Source
-from threatingestor.utils.url_controller import UrlController
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
+
+s = Shortener()
+
+# Creates a random string with a length of 5
+def rand_bundle_name():
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(5))
 
 class Plugin(Source):
 
@@ -32,13 +45,13 @@ class Plugin(Source):
         # If q is set, use Search API.
         # Otherwise, default to mentions API.
         self.endpoint = self.api.statuses.mentions_timeline
+
         if (kwargs.get('slug') and kwargs.get('owner_screen_name')) or (kwargs.get('list_id') and kwargs.get('owner_screen_name')):
             self.endpoint = self.api.lists.statuses
         elif kwargs.get('screen_name') or kwargs.get('user_id'):
             self.endpoint = self.api.statuses.user_timeline
         elif kwargs.get('q'):
             self.endpoint = self.api.search.tweets
-
 
     def run(self, saved_state):
         # Modify kwargs to insert since_id.
@@ -75,21 +88,63 @@ class Plugin(Source):
             })
 
         artifacts = []
+
         # Traverse in reverse, old to new.
         tweets.reverse()
+
+        tmp_file = str(rand_bundle_name())
+
         for tweet in tweets:
+
             # Expand t.co links.
             for url in tweet['entities'].get('urls', []):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
                 except KeyError:
+                    
                     # Attempts to expand the URL if not available through Twitter
-                    tweet['content'] = tweet['content'].replace(url['url'], UrlController.expand_url(url['url']))
+                    try:
+                        tweet['content'] = tweet['content'].replace(url['url'], str(s.tinyurl.expand(url['url'])))
+                    except exceptions.ExpandingErrorException:
+                        # If unable to expand the URL, this exception is thrown
+                        pass
 
-            # Process tweet.
+            # Process tweet
             saved_state = tweet['id']
-            artifacts += self.process_element(tweet['content'],
-                                              TWEET_URL.format(user=tweet['user'], id=tweet['id']),
-                                              include_nonobfuscated=self.include_nonobfuscated)
+            artifacts += self.process_element(tweet['content'], TWEET_URL.format(user=tweet['user'], id=tweet['id']), include_nonobfuscated=self.include_nonobfuscated)
+
+            for media_url in tweet['entities'].get('media', []):
+                img = media_url["media_url_https"]
+
+                if "http" in img:
+                    with open(f"/tmp/{tmp_file}", "wb") as i:
+                        i.write(requests.get(str(img)).content)
+
+                if os.path.exists(f"/tmp/{tmp_file}"):
+                    data = cv2.imread(f"/tmp/{tmp_file}")
+                else:
+                    # No image is present
+                    try:
+                        data = cv2.imread(img)
+                    except TypeError:
+                        pass
+
+                try:
+                    # Creates a binary image by using the proper threshold from cv + converts to grayscale
+                    # Inverts the binary
+                    invert_img = cv2.bitwise_not(cv2.threshold(cv2.cvtColor(data, cv2.COLOR_BGR2GRAY), 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1])
+
+                    # Helps with cleanup
+                    process_iter = cv2.dilate(cv2.erode(invert_img, np.ones((2,2), np.uint8), iterations=1), np.ones((2,2), np.uint8), iterations=1)
+
+                    # Converts image data to a string
+                    img_data = pytesseract.image_to_string(process_iter)
+
+                    # Process media
+                    saved_state = tweet['id']
+                    artifacts += self.process_element(img_data, img, include_nonobfuscated=self.include_nonobfuscated)
+                        
+                except cv2.error:
+                    raise FileNotFoundError
 
         return saved_state, artifacts
