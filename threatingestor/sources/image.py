@@ -28,22 +28,21 @@ class Plugin(Source):
         if os.path.exists("/tmp/data.png"):
             data = cv2.imread("/tmp/data.png")
         else:
-            data = cv2.imread(self.img)
+            # No image is present
+            try:
+                data = cv2.imread(self.img)
+            except TypeError:
+                pass
 
         try:
             # Helps with preprocessing by converting to a grayscale
             grayscale_img = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
 
-            # Creates a binary image by using the proper threshold from cv
-            binary_img = cv2.threshold(grayscale_img, 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
-            # Inverts the binary
-            invert_img = cv2.bitwise_not(binary_img)
+            # Creates a binary image by using the proper threshold from cv and inverts the binary
+            invert_img = cv2.bitwise_not(cv2.threshold(grayscale_img, 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1])
 
             # Helps with cleanup
-            noise_reduction = np.ones((2,2), np.uint8)
-            process_iter = cv2.erode(invert_img, noise_reduction, iterations = 1)
-            process_iter = cv2.dilate(process_iter, noise_reduction, iterations = 1)
+            process_iter = cv2.dilate(cv2.erode(invert_img, np.ones((2,2), np.uint8), iterations=1), np.ones((2,2), np.uint8), iterations=1)
 
             # Converts image data to a string
             img_data = pytesseract.image_to_string(process_iter)
