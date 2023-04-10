@@ -137,6 +137,9 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 .. _RSS config file: https://github.com/InQuest/ThreatIngestor/blob/master/rss.example.yml
 .. _labs.inquest.net/iocdb: https://labs.inquest.net/iocdb
 
+If you'd like to run the image extraction source or include the image extraction functionality for other sources, you will need to be running Python 3.7 >= due to the dependencies::
+    pip install opencv-python pytesseract numpy
+
 Docker Container
 ----------------
 
