@@ -1,16 +1,30 @@
 from __future__ import absolute_import
 
 import os
-import cv2
 import random
 import string
 import twitter
 import requests
-import pytesseract
-import numpy as np
-
 from loguru import logger
 from pyshorteners import Shortener, exceptions
+
+try:
+    import numpy as np
+except ImportError:
+    logger.info("Missing the following package(s): numpy")
+    installed_np = False
+
+try:
+    import cv2
+except ImportError:
+    logger.info("Missing the following package(s): opencv-python")
+    installed_cv = False
+
+try:
+    import pytesseract
+except ImportError:
+    logger.info("Missing the following package(s): pytesseract")
+    installed_tesseract = False
 
 from threatingestor.sources import Source
 
@@ -113,38 +127,43 @@ class Plugin(Source):
             saved_state = tweet['id']
             artifacts += self.process_element(tweet['content'], TWEET_URL.format(user=tweet['user'], id=tweet['id']), include_nonobfuscated=self.include_nonobfuscated)
 
-            for media_url in tweet['entities'].get('media', []):
-                img = media_url["media_url_https"]
+            if installed_cv and installed_np:
 
-                if "http" in img:
-                    with open(f"/tmp/{tmp_file}", "wb") as i:
-                        i.write(requests.get(str(img)).content)
+                for media_url in tweet['entities'].get('media', []):
+                    img = media_url["media_url_https"]
 
-                if os.path.exists(f"/tmp/{tmp_file}"):
-                    data = cv2.imread(f"/tmp/{tmp_file}")
-                else:
-                    # No image is present
-                    try:
-                        data = cv2.imread(img)
-                    except TypeError:
-                        pass
+                    if "http" in img:
+                        with open(f"/tmp/{tmp_file}", "wb") as i:
+                            i.write(requests.get(str(img)).content)
 
-                try:
-                    # Creates a binary image by using the proper threshold from cv + converts to grayscale
-                    # Inverts the binary
-                    invert_img = cv2.bitwise_not(cv2.threshold(cv2.cvtColor(data, cv2.COLOR_BGR2GRAY), 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1])
-
-                    # Helps with cleanup
-                    process_iter = cv2.dilate(cv2.erode(invert_img, np.ones((2,2), np.uint8), iterations=1), np.ones((2,2), np.uint8), iterations=1)
-
-                    # Converts image data to a string
-                    img_data = pytesseract.image_to_string(process_iter)
-
-                    # Process media
-                    saved_state = tweet['id']
-                    artifacts += self.process_element(img_data, img, include_nonobfuscated=self.include_nonobfuscated)
+                    if os.path.exists(f"/tmp/{tmp_file}"):
+                        data = cv2.imread(f"/tmp/{tmp_file}")
+                    else:
+                        # No image is present
+                        try:
+                            data = cv2.imread(img)
+                        except TypeError:
+                            pass
                         
-                except cv2.error:
-                    raise FileNotFoundError
+                    try:
+                        # Creates a binary image by using the proper threshold from cv + converts to grayscale
+                        # Inverts the binary
+                        invert_img = cv2.bitwise_not(cv2.threshold(cv2.cvtColor(data, cv2.COLOR_BGR2GRAY), 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1])
+
+                        # Helps with cleanup
+                        process_iter = cv2.dilate(cv2.erode(invert_img, np.ones((2,2), np.uint8), iterations=1), np.ones((2,2), np.uint8), iterations=1)
+
+                        if installed_tesseract:
+                            # Converts image data to a string
+                            img_data = pytesseract.image_to_string(process_iter)
+                        else:
+                            img_data = ""
+
+                        # Process media
+                        saved_state = tweet['id']
+                        artifacts += self.process_element(img_data, img, include_nonobfuscated=self.include_nonobfuscated)
+                            
+                    except cv2.error:
+                        raise FileNotFoundError
 
         return saved_state, artifacts

@@ -1,5 +1,5 @@
+import requests
 import datetime
-import urllib.request
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 import regex as re
@@ -18,8 +18,8 @@ class Plugin(Source):
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + "Z"
 
         # Configures sitemap parsing
-        response = urllib.request.urlopen(self.url)
-        xml = BeautifulSoup(response, "lxml-xml", from_encoding=response.info().get_param("charset"))
+        response = requests.get(self.url)
+        xml = BeautifulSoup(response.text, "lxml-xml")
 
         sitemapindex = xml.find_all("sitemapindex")
         sitemap = xml.find_all("urlset")

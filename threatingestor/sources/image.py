@@ -1,10 +1,28 @@
-import cv2
-import pytesseract
-import iocextract
+import os
+import sys
 import requests
 import datetime
-import os
+import iocextract
 import numpy as np
+from loguru import logger
+
+try:
+    import numpy as np
+except ImportError:
+    logger.info("Missing the following package(s): numpy")
+    sys.exit()
+
+try:
+    import cv2
+except ImportError:
+    logger.info("Missing the following package(s): opencv-python")
+    sys.exit()
+
+try:
+    import pytesseract
+except ImportError:
+    logger.info("Missing the following package(s): pytesseract")
+    sys.exit()
 
 from threatingestor.sources import Source
 import threatingestor.artifacts

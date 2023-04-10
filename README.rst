@@ -67,6 +67,10 @@ Create a new ``config.yml`` file, and configure each source and operator module 
 
 By default, it will run forever, polling each configured source every 15 minutes.
 
+If you'd like to run the image extraction source or include the image extraction functionality for other sources, you will need to be running Python 3.7 >= due to the dependencies::
+    
+    pip install opencv-python pytesseract numpy
+
 View the `full ThreatIngestor documentation`_ for more information.
 
 Plugins
