@@ -304,6 +304,22 @@ class YARASignature(Artifact):
         return super(YARASignature, self).format_message(message,
                                                          yarasignature=str(self))
 
+class Email(Artifact):
+    """
+    Email artifact abstraction.
+    """
+
+    def format_message(self, message, **kwargs):
+        """
+        Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {email}
+        * All supported variables from Artifact.format_message
+        """
+
+        return super(Email, self).format_message(message, email=str(self))
 
 class Task(Artifact):
     """Generic Task artifact abstraction."""
@@ -326,5 +342,6 @@ STRING_MAP = {
     'domain': Domain,
     'hash': Hash,
     'yarasignature': YARASignature,
+    'email': Email,
     'task': Task,
 }

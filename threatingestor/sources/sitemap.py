@@ -31,14 +31,16 @@ class Plugin(Source):
         
         sitemaps = xml.find_all("sitemap")
 
-        get_child_sitemaps = []
+        try:
+            get_child_sitemaps = []
 
-        for sitemap in sitemaps:
-            get_child_sitemaps.append(sitemap.findNext("loc").text)
+            for sitemap in sitemaps:
+                get_child_sitemaps.append(sitemap.findNext("loc").text)
 
-        if get_sitemap_type == "sitemapindex":
-            sitemaps = get_child_sitemaps
-        else:
+            if get_sitemap_type == "sitemapindex":
+                sitemaps = get_child_sitemaps
+        
+        except UnboundLocalError:
             sitemaps = [self.url]
 
         urls = xml.find_all("url")
