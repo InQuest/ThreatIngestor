@@ -1,14 +1,11 @@
 import io
 import importlib
-
-
 import yaml
-from loguru import logger
 
+from loguru import logger
 
 from threatingestor.exceptions import IngestorError, PluginError
 import threatingestor.artifacts
-
 
 SOURCE = 'threatingestor.sources'
 OPERATOR = 'threatingestor.operators'

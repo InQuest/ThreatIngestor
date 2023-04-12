@@ -1,10 +1,8 @@
 import re
 import ipaddress
-from urllib.parse import urlparse
-
-
 import iocextract
 
+from urllib.parse import urlparse
 
 class Artifact(object):
     """Artifact base class."""

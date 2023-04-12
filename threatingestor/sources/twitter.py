@@ -91,6 +91,7 @@ class Plugin(Source):
             tweet_list = response
 
         tweets = []
+        
         for tweet in tweet_list:
             if "retweeted_status" in tweet:
                 content = tweet['retweeted_status'].get('full_text', '')

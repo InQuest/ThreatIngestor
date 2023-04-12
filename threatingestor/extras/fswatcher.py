@@ -1,14 +1,10 @@
 import io
 import sys
 import time
-
-
 import watchdog.events
 import watchdog.observers
 
-
 import threatingestor.extras.queueworker
-
 
 class FSWatcher(
         watchdog.events.PatternMatchingEventHandler,

@@ -1,16 +1,13 @@
 from __future__ import absolute_import
 
-
 import threatingestor.artifacts
 from threatingestor.operators import Operator
 from threatingestor.exceptions import DependencyError
-
 
 try:
     import threatkb
 except ImportError:
     raise DependencyError("Dependency threatkb required for ThreatKB operator is not installed")
-
 
 class Plugin(Operator):
     """Operator for InQuest ThreatKB."""

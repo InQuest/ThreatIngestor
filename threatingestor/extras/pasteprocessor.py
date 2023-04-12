@@ -1,20 +1,19 @@
 import sys
-
-
 import requests
-
-
 import threatingestor.extras.queueworker
 
-
 class PasteProcessor(threatingestor.extras.queueworker.QueueWorker):
-    """Read pastebin URLs from a queue, write raw content to a queue."""
+    """
+    Read pastebin URLs from a queue, write raw content to a queue.
+    """
 
     def do_work(self, job):
-        """From a paste URL, get the raw contents."""
+        """
+        From a paste URL, get the raw contents.
+        """
+        
         try:
             url = job['url']
-
         except KeyError:
             print(f"Bad job: {job}")
             return
@@ -31,13 +30,13 @@ class PasteProcessor(threatingestor.extras.queueworker.QueueWorker):
         elif url.startswith("https://gist.github.com/") and not 'raw' in url:
             url = url + '/raw'
 
-        # Fetch and return.
+        # Fetch and return
         response = requests.get(url)
+
         return {
             'content': response.content,
             'reference': response.url,
         }
-
 
 if __name__ == "__main__":
     worker = PasteProcessor()

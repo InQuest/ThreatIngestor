@@ -1,15 +1,11 @@
 import io
-import json
 import yaml
-
-
-import greenstalk
+import json
 import boto3
-
+import greenstalk
 
 import threatingestor.config
 import threatingestor.exceptions
-
 
 class QueueWorker:
     """Abstract base class for Queue Workers.

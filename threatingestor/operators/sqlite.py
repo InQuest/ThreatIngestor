@@ -1,10 +1,9 @@
 from __future__ import absolute_import
-import sqlite3
 
+import sqlite3
 
 import threatingestor.artifacts
 from threatingestor.operators import Operator
-
 
 class Plugin(Operator):
     """Operator for SQLite3."""

@@ -1,17 +1,12 @@
 import re
 from urllib.parse import urlparse
 import itertools
-
-
 import iocextract
 from loguru import logger
 
-
 import threatingestor.artifacts
 
-
 TRUNCATE_LENGTH = 140
-
 
 class Source:
     """Base class for all Source plugins.

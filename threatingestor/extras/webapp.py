@@ -1,8 +1,5 @@
 import sqlite3
-
-
 import hug
-
 
 DATABASE = 'artifacts.db'
 
