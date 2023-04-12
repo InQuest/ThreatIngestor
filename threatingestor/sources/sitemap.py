@@ -20,33 +20,22 @@ class Plugin(Source):
         # Configures sitemap parsing
         response = requests.get(self.url)
         xml = BeautifulSoup(response.text, "lxml-xml")
-
-        sitemapindex = xml.find_all("sitemapindex")
+        
         sitemap = xml.find_all("urlset")
 
-        if sitemapindex:
-            get_sitemap_type = "sitemapindex"
-        elif sitemap:
-            get_sitemap_type = "urlset"
-        
-        sitemaps = xml.find_all("sitemap")
-
         try:
-            get_child_sitemaps = []
+            sitemap_db = []
 
-            for sitemap in sitemaps:
-                get_child_sitemaps.append(sitemap.findNext("loc").text)
-
-            if get_sitemap_type == "sitemapindex":
-                sitemaps = get_child_sitemaps
+            for s in sitemap:
+                sitemap_db.append(s.findNext("loc").text)
         
         except UnboundLocalError:
-            sitemaps = [self.url]
+            sitemap_db = [self.url]
 
         urls = xml.find_all("url")
         artifacts = []
 
-        for sitemap in sitemaps:
+        for sitemap in sitemap_db:
             for url in urls:
 
                 # Extracts only the 'loc' tag from the xml

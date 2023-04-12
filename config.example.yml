@@ -81,7 +81,7 @@ sources:
   - name: inquest-sitemap-articles
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
-    filter: articles
+    filter: tesla
 
   # Defaults to "blog" keyword
   - name: inquest-sitemap-blog
