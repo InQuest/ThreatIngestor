@@ -1,14 +1,10 @@
 import os
 import io
 import subprocess
-
-
 from loguru import logger
-
 
 from threatingestor.sources import Source
 from threatingestor.exceptions import DependencyError
-
 
 try:
     subprocess.check_output('git')
@@ -18,14 +14,12 @@ except subprocess.CalledProcessError:
     # Non-zero exit codes are fine.
     pass
 
-
 YARA_FILE_EXTS = [
     '.rule',
     '.yar',
     '.yara',
     '.rules',
 ]
-
 
 class Plugin(Source):
 

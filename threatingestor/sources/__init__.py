@@ -1,17 +1,12 @@
 import re
 from urllib.parse import urlparse
 import itertools
-
-
 import iocextract
 from loguru import logger
 
-
 import threatingestor.artifacts
 
-
 TRUNCATE_LENGTH = 140
-
 
 class Source:
     """Base class for all Source plugins.
@@ -72,6 +67,7 @@ class Source:
             'task': 0,
             'url': 0,
             'yarasignature': 0,
+            'email': 0,
         }
 
         # Collect URLs and domains.
@@ -151,6 +147,14 @@ class Source:
 
             artifact_list.append(artifact)
             artifact_type_count['hash'] += 1
+
+        # Collect emails.
+        scraped = itertools.chain(iocextract.extract_emails(content))
+
+        for email in scraped:
+            artifact_list.append(threatingestor.artifacts.Email(email, self.name, reference_link=reference_link, reference_text=reference_text))
+            
+            artifact_type_count['email'] += 1
 
         # Generate generic task.
         title = f"Manual Task: {reference_link}"

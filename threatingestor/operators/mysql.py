@@ -2,12 +2,10 @@ import threatingestor.artifacts
 from threatingestor.operators import Operator
 from threatingestor.exceptions import DependencyError
 
-
 try:
     import pymysql
 except ImportError:
     raise DependencyError("Dependency pymysql required for MySQL operator is not installed")
-
 
 class Plugin(Operator):
     """Operator for MySQL."""

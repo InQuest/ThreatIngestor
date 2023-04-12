@@ -1,7 +1,7 @@
 import json
+
 from pathlib import Path
 from typing import List, Set
-
 from loguru import logger
 
 class Whitelist:

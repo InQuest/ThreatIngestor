@@ -1,8 +1,8 @@
 import requests
 import datetime
-from urllib.parse import urlparse
-from bs4 import BeautifulSoup
 import regex as re
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 from threatingestor.sources import Source
 
@@ -20,31 +20,22 @@ class Plugin(Source):
         # Configures sitemap parsing
         response = requests.get(self.url)
         xml = BeautifulSoup(response.text, "lxml-xml")
-
-        sitemapindex = xml.find_all("sitemapindex")
+        
         sitemap = xml.find_all("urlset")
 
-        if sitemapindex:
-            get_sitemap_type = "sitemapindex"
-        elif sitemap:
-            get_sitemap_type = "urlset"
+        try:
+            sitemap_db = []
+
+            for s in sitemap:
+                sitemap_db.append(s.findNext("loc").text)
         
-        sitemaps = xml.find_all("sitemap")
-
-        get_child_sitemaps = []
-
-        for sitemap in sitemaps:
-            get_child_sitemaps.append(sitemap.findNext("loc").text)
-
-        if get_sitemap_type == "sitemapindex":
-            sitemaps = get_child_sitemaps
-        else:
-            sitemaps = [self.url]
+        except UnboundLocalError:
+            sitemap_db = [self.url]
 
         urls = xml.find_all("url")
         artifacts = []
 
-        for sitemap in sitemaps:
+        for sitemap in sitemap_db:
             for url in urls:
 
                 # Extracts only the 'loc' tag from the xml

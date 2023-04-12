@@ -4,6 +4,7 @@ import collections
 
 from loguru import logger
 import statsd
+
 try:
     import notifiers
     from notifiers.logging import NotificationHandler
@@ -11,12 +12,10 @@ except ImportError:
     logger.info("Notifiers is not installed.")
     notifiers = None
 
-
 import threatingestor.config
 import threatingestor.state
 import threatingestor.exceptions
 import threatingestor.whitelist
-
 
 class Ingestor:
     """ThreatIngestor main work logic.

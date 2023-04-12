@@ -1,8 +1,6 @@
 import requests
 
-
 from threatingestor.sources import Source
-
 
 class Plugin(Source):
 

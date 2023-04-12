@@ -10,18 +10,21 @@ from pyshorteners import Shortener, exceptions
 
 try:
     import numpy as np
+    installed_np = True
 except ImportError:
     logger.info("Missing the following package(s): numpy")
     installed_np = False
 
 try:
     import cv2
+    installed_cv = True
 except ImportError:
     logger.info("Missing the following package(s): opencv-python")
     installed_cv = False
 
 try:
     import pytesseract
+    installed_tesseract = True
 except ImportError:
     logger.info("Missing the following package(s): pytesseract")
     installed_tesseract = False
@@ -88,6 +91,7 @@ class Plugin(Source):
             tweet_list = response
 
         tweets = []
+        
         for tweet in tweet_list:
             if "retweeted_status" in tweet:
                 content = tweet['retweeted_status'].get('full_text', '')
