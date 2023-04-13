@@ -1,4 +1,7 @@
 import feedparser
+import requests
+import iocextract
+
 try:
     # feedparser 5.x
     from feedparser import _parse_date
@@ -8,12 +11,7 @@ except ImportError:
 
 import bs4
 
-
 from threatingestor.sources import Source
-
-
-AFTERIOC = 'Indicators of Compromise'
-
 
 class Plugin(Source):
 
@@ -27,9 +25,11 @@ class Plugin(Source):
         feed = feedparser.parse(self.url)
 
         artifacts = []
+
         for item in list(reversed(feed['items'])):
-            # Only new items.
+            # Only new items
             published_parsed = item.get('published_parsed') or item.get('updated_parsed')
+
             if published_parsed and published_parsed <= _parse_date(saved_state or '0001-01-01'):
                 continue
 
@@ -39,7 +39,7 @@ class Plugin(Source):
                 try:
                     soup = bs4.BeautifulSoup(item['summary'], 'html.parser')
                 except KeyError:
-                    # Can't find any feed content, just skip this entry.
+                    # Can't find any feed content, just skip this entry
                     continue
 
             # do some preprocessing to remove common obfuscation methods
@@ -50,16 +50,19 @@ class Plugin(Source):
             soup = bs4.BeautifulSoup(soup.decode(), 'html.parser')
 
             text = ''
+
             if self.feed_type == 'afterioc':
-                text = soup.get_text(separator=' ').split(AFTERIOC)[-1]
+                text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                 artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
             elif self.feed_type == 'clean':
                 text = soup.get_text(separator=' ')
                 artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
             else:
                 # Default: self.feed_type == 'messy'.
-                text = soup.get_text(separator=' ')
-                artifacts += self.process_element(text, item.get('link') or self.url)
+                data = requests.get(item.get('link')).text
+                # Extract IOCs from HTML page content
+                payload = str(list(iocextract.extract_iocs(str(data))))
+                artifacts += self.process_element(payload, item.get('link') or self.url)
 
             saved_state = item.get('published') or item.get('updated')
 
