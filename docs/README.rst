@@ -86,7 +86,7 @@ Sources
 * `GitHub repository search <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github.html>`__
 * `Gists by username <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/github_gist.html>`__
 * `RSS feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/rss.html>`__
-* `Sitemap blogs <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sitemap.html>`__
+* `Sitemap feeds <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sitemap.html>`__
 * `Image extraction <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/image.html>`__
 * `Amazon SQS queues <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/sqs.html>`__
 * `Twitter <https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources/twitter.html>`__
@@ -126,7 +126,7 @@ Contributing
 Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. By submitting a pull request you agree to release your submissions under the terms of the LICENSE_.
 
 .. _ThreatKB: https://github.com/InQuest/ThreatKB
-.. _LICENSE: https://github.com/InQuest/threat-ingestors/blob/master/LICENSE
+.. _LICENSE: https://github.com/InQuest/ThreatIngestor/blob/master/LICENSE
 .. _full ThreatIngestor Documentation: https://inquest.readthedocs.io/projects/threatingestor/
 .. _SQS: https://aws.amazon.com/sqs/
 .. _Beanstalk: https://beanstalkd.github.io/
