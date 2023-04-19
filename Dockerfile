@@ -7,13 +7,11 @@ RUN apt-get install sqlite3
 RUN apt-get install tesseract-ocr -y
 RUN apt-get install python3-lxml -y
 
+COPY requirements.txt .
+
 RUN pip3 install --upgrade pip
-RUN pip3 install threatingestor \
-                 twitter \
-                 feedparser \
-                 iocextract \
-                 pytesseract \
-                 numpy \
-                 opencv-python
+RUN pip3 install -r requirements.txt
+RUN pip3 install opencv-python pytesseract numpy
+RUN pip3 install threatingestor
 
 COPY config.yml .
