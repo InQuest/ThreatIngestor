@@ -1,6 +1,7 @@
 import feedparser
 import requests
 import iocextract
+import regex as re
 
 try:
     # feedparser 5.x
@@ -15,11 +16,11 @@ from threatingestor.sources import Source
 
 class Plugin(Source):
 
-    def __init__(self, name, url, feed_type):
+    def __init__(self, name, url, feed_type, filter=None):
         self.name = name
         self.url = url
         self.feed_type = feed_type
-
+        self.filter = filter
 
     def run(self, saved_state):
         feed = feedparser.parse(self.url)
@@ -51,18 +52,44 @@ class Plugin(Source):
 
             text = ''
 
-            if self.feed_type == 'afterioc':
-                text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
-            elif self.feed_type == 'clean':
-                text = soup.get_text(separator=' ')
-                artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
+            if self.filter is not None:
+
+                rss_query = re.compile(r"{0}".format(self.filter)).findall(str(self.filter.split('|')))
+
+                for r in rss_query:
+                    if self.feed_type == 'afterioc':
+                        text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+
+                        if r in text:
+                            artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
+                    elif self.feed_type == 'clean':
+                        text = soup.get_text(separator=' ')
+
+                        if r in text:
+                            artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
+                    else:
+                        # Default: self.feed_type == 'messy'.
+                        data = requests.get(item.get('link')).text
+
+                        if r in data:
+                            # Extract IOCs from HTML page content
+                            payload = str(list(iocextract.extract_iocs(str(data))))
+                            artifacts += self.process_element(payload, item.get('link') or self.url)
+
             else:
-                # Default: self.feed_type == 'messy'.
-                data = requests.get(item.get('link')).text
-                # Extract IOCs from HTML page content
-                payload = str(list(iocextract.extract_iocs(str(data))))
-                artifacts += self.process_element(payload, item.get('link') or self.url)
+
+                if self.feed_type == 'afterioc':
+                    text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                    artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
+                elif self.feed_type == 'clean':
+                    text = soup.get_text(separator=' ')
+                    artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
+                else:
+                    # Default: self.feed_type == 'messy'.
+                    data = requests.get(item.get('link')).text
+                    # Extract IOCs from HTML page content
+                    payload = str(list(iocextract.extract_iocs(str(data))))
+                    artifacts += self.process_element(payload, item.get('link') or self.url)
 
             saved_state = item.get('published') or item.get('updated')
 
