@@ -27,7 +27,9 @@ Configure ThreatIngestor to run continuously or manually. If you set ``daemon`` 
 
 .. _source:
 
-Next, create the ``sources`` section, and add your sources. To configure the source, you should give it a unique name like ``inquest-rss``. Each source also uses a module like twitter, rss, or sqs. Choose the module for the expected format of the source data. For easy testing, we'll use an :ref:`RSS <rss-source>` source and a :ref:`CSV <csv-operator>` operator for this example:
+Next, create the ``sources`` section, and add your sources. To configure the source, you should give it a unique name like ``inquest-rss``. Each source also uses a module like twitter, rss, or sqs. Choose the module for the expected format of the source data. For easy testing, we'll use an :ref:`RSS <rss-source>` source and a :ref:`CSV <csv-operator>` operator for this example.
+
+You can also include a ``filter`` to parse ingested artifacts using regex. The filter uses a pipe (|) character as the delimeter.
 
 .. code-block:: yaml
 
@@ -36,6 +38,12 @@ Next, create the ``sources`` section, and add your sources. To configure the sou
         module: rss
         url: http://blog.inquest.net/atom.xml
         feed_type: messy
+
+      - name: inquest-rss
+        module: rss
+        url: http://blog.inquest.net/atom.xml
+        feed_type: messy
+        filter: security|threat
 
 Note the dash before the ``name`` key, signifying this and the following keys are part of a single list element. We'll circle back to this distinction below in the "Standard Case" walkthrough. For this source, we assign a name ``inquest-rss``, tell it to use the ``rss`` module, and fill in the required options for the ``rss`` module, which are ``url`` and ``feed_type``.
 
@@ -70,6 +78,12 @@ Putting it all together, here's our completed ``config.yml`` file:
         module: rss
         url: http://blog.inquest.net/atom.xml
         feed_type: messy
+
+      - name: inquest-rss
+        module: rss
+        url: http://blog.inquest.net/atom.xml
+        feed_type: messy
+        filter: security|threat
 
     operators:
       - name: csv

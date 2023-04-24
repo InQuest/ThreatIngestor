@@ -65,22 +65,22 @@ class TestSources(unittest.TestCase):
         self.assertEqual(str(artifact_list[0]), content)
         self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.IPAddress))
 
-    # def test_yara_sigs_are_extracted(self):
-    #     content = 'rule testRule { condition: true }'
+    def test_yara_sigs_are_extracted(self):
+        content = 'rule testRule { condition: true }'
 
-    #     artifact_list = self.source.process_element(content, 'link')
-    #     self.assertEqual(str(artifact_list[0]), content)
-    #     self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.YARASignature))
+        artifact_list = self.source.process_element(content, 'link')
+        self.assertEqual(str(artifact_list[0]), content)
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.YARASignature))
 
     def test_urls_matching_reference_link_are_discarded(self):
         content = 'hxxp://someurl.com/test hxxp://noturl.com/test'
 
         artifact_list = self.source.process_element(content, 'http://someurl.com')
-        # self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
-        # self.assertIn('noturl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('noturl.com', [str(x) for x in artifact_list])
         self.assertNotIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('someurl.com', [str(x) for x in artifact_list])
-        # self.assertEqual(len(artifact_list), 3)
+        self.assertEqual(len(artifact_list), 3)
 
     def test_nonobfuscated_urls_are_discarded(self):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
@@ -88,7 +88,7 @@ class TestSources(unittest.TestCase):
         artifact_list = self.source.process_element(content, 'link')
         self.assertNotIn('http://noturl.com/test', [str(x) for x in artifact_list])
         self.assertNotIn('noturl.com', [str(x) for x in artifact_list])
-        # self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
         self.assertEqual(len(artifact_list), 3)
 
@@ -96,11 +96,11 @@ class TestSources(unittest.TestCase):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
 
         artifact_list = self.source.process_element(content, 'link', include_nonobfuscated=True)
-        # self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
-        # self.assertIn('noturl.com', [str(x) for x in artifact_list])
-        # self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('http://noturl.com/test', [str(x) for x in artifact_list])
+        self.assertIn('noturl.com', [str(x) for x in artifact_list])
+        self.assertIn('http://someurl.com/test', [str(x) for x in artifact_list])
         self.assertIn('someurl.com', [str(x) for x in artifact_list])
-        # self.assertEqual(len(artifact_list), 5)
+        self.assertEqual(len(artifact_list), 5)
 
     def test_source_name_is_included_in_artifacts(self):
         content = 'hxxp://someurl.com/test http://noturl.com/test'
@@ -125,7 +125,7 @@ class TestSources(unittest.TestCase):
         self.assertIn('01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b', [str(h) for h in artifact_list])
         self.assertIn('be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09',
                       [str(h) for h in artifact_list])
-        # self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.Hash))
+        self.assertTrue(isinstance(artifact_list[0], threatingestor.artifacts.Hash))
 
     def test_tasks_are_added(self):
         artifact_list = self.source.process_element('', 'test')
