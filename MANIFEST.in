@@ -1,4 +1,3 @@
 include LICENSE
-include docs/README.rst
 include requirements.txt
 include requirements-testing.txt
