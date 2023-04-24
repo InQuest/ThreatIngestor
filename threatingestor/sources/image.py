@@ -11,19 +11,19 @@ from loguru import logger
 try:
     import numpy as np
 except ImportError:
-    logger.info("Missing the following package(s): numpy")
+    logger.error("Missing the following package(s): numpy")
     sys.exit()
 
 try:
     import cv2
 except ImportError:
-    logger.info("Missing the following package(s): opencv-python")
+    logger.error("Missing the following package(s): opencv-python")
     sys.exit()
 
 try:
     import pytesseract
 except ImportError:
-    logger.info("Missing the following package(s): pytesseract")
+    logger.error("Missing the following package(s): pytesseract")
     sys.exit()
 
 from threatingestor.sources import Source

@@ -36,7 +36,7 @@ TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 s = Shortener()
 
 # Creates a random string with a length of 5
-def rand_bundle_name():
+def tmp_name():
     return "".join(random.choice(string.ascii_lowercase) for _ in range(5))
 
 class Plugin(Source):
@@ -110,7 +110,7 @@ class Plugin(Source):
         # Traverse in reverse, old to new.
         tweets.reverse()
 
-        tmp_file = str(rand_bundle_name())
+        tmp_file = str(tmp_name())
 
         for tweet in tweets:
 
