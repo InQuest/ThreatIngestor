@@ -1,5 +1,7 @@
 import os
 import sys
+import string
+import random
 import requests
 import datetime
 import iocextract
@@ -27,6 +29,12 @@ except ImportError:
 from threatingestor.sources import Source
 import threatingestor.artifacts
 
+# Creates a random string with a length of 5
+def tmp_name():
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(5))
+
+tmp_file = str(tmp_name())
+
 class Plugin(Source):
     """
     Image text extraction using Google's OCR Tesseract engine and computer vision
@@ -37,14 +45,14 @@ class Plugin(Source):
         self.img = img
 
         if "http" in img:
-            with open("/tmp/data.png", "wb") as i:
+            with open(f"/tmp/{tmp_file}", "wb") as i:
                 i.write(requests.get(str(self.img)).content)
 
     def run(self, saved_state):
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + "Z"
 
-        if os.path.exists("/tmp/data.png"):
-            data = cv2.imread("/tmp/data.png")
+        if os.path.exists(f"/tmp/{tmp_file}"):
+            data = cv2.imread(f"/tmp/{tmp_file}")
         else:
             # No image is present
             try:
@@ -72,6 +80,8 @@ class Plugin(Source):
             description = description.format(s=self.name, u=list(iocextract.extract_urls(img_data)))
             artifact = threatingestor.artifacts.Task(title, self.name, reference_link=str(list(iocextract.extract_urls(img_data))), reference_text=description)
             artifact_list.append(artifact)
+
+            os.remove(f"/tmp/{tmp_file}")
                 
         except cv2.error:
             raise FileNotFoundError

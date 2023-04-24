@@ -166,6 +166,8 @@ class Plugin(Source):
                         # Process media
                         saved_state = tweet['id']
                         artifacts += self.process_element(img_data, img, include_nonobfuscated=self.include_nonobfuscated)
+
+                        os.remove(f"/tmp/{tmp_file}")
                             
                     except cv2.error:
                         raise FileNotFoundError
