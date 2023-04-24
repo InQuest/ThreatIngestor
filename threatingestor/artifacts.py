@@ -299,8 +299,7 @@ class YARASignature(Artifact):
         * {yarasignature}
         * All supported variables from Artifact.format_message
         """
-        return super(YARASignature, self).format_message(message,
-                                                         yarasignature=str(self))
+        return super(YARASignature, self).format_message(message, yarasignature=str(self))
 
 class Email(Artifact):
     """

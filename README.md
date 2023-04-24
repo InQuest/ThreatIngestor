@@ -102,6 +102,9 @@ Issues and pull requests are welcomed. Please keep Python code PEP8 compliant. B
 
 ## Docker
 
+
+### Production
+
 A `Dockerfile` is available for running ThreatIngestor within a Docker container.
 
 First, you'll need to build the container:
@@ -122,8 +125,16 @@ After you've mounted the container and you're inside the `/bin/bash` shell, you 
 threatingestor config.yml
 ```
 
+### Development
+
 There is also a Dockerfile.dev for building a development version of ThreatIngestor. All you need is an available .whl file, which can be generated with the following command:
 
 ```bash
 python3 -m build 
+```
+
+After you've built the project, you can build the container:
+
+```bash
+docker build . -t threatingestor -f Dockerfile.dev
 ```
