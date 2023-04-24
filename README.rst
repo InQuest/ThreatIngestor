@@ -157,3 +157,6 @@ After that, you can mount the container for use using this command::
 After you've mounted the container, and you're inside of the `/bin/bash` shell, you can run the threatingestor like normal::
     
     threatingestor config.yml
+
+There is also a `Dockerfile.dev` for building a development version of ThreatIngestor. All you need is an available `.whl` file, which can be generated with the following command::
+    python3 -m build
