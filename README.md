@@ -20,8 +20,7 @@ ThreatIngestor can be configured to watch Twitter, RSS feeds, sitemap (XML) feed
 
 Try it out now with this [quick walkthrough](https://inquest.readthedocs.io/projects/threatingestor/en/latest/welcome.html#try-it-out), read more [ThreatIngestor walkthroughs](https://inquest.net/taxonomy/term/42) on the InQuest blog, and check out [labs.inquest.net/iocdb](https://labs.inquest.net/iocdb), an IOC aggregation and querying tool powered by ThreatIngestor.
 
-Installation
-------------
+## Installation
 
 ThreatIngestor requires Python 3.6+, with development headers.
 
@@ -39,8 +38,7 @@ pip install threatingestor[all]
 
 View the [full installation instructions](https://inquest.readthedocs.io/projects/threatingestor/en/latest/installation.html) for more information.
 
-Usage
------
+## Usage
 
 Create a new ``config.yml`` file, and configure each source and operator module you want to use. (See ``config.example.yml`` for layout.) Then run the script:
 
@@ -122,4 +120,10 @@ After you've mounted the container and you're inside the `/bin/bash` shell, you 
 
 ```bash
 threatingestor config.yml
+```
+
+There is also a Dockerfile.dev for building a development version of ThreatIngestor. All you need is an available .whl file, which can be generated with the following command:
+
+```bash
+python3 -m build 
 ```
