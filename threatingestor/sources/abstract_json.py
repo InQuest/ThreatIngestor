@@ -1,8 +1,6 @@
 import jsonpath_rw
 
-
 from threatingestor.sources import Source
-
 
 class AbstractPlugin(Source):
 

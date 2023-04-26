@@ -1,18 +1,14 @@
 from __future__ import absolute_import
+
 import re
-
-
 import twitter
 from loguru import logger
-
 
 from threatingestor.operators import Operator
 import threatingestor.artifacts
 import threatingestor.exceptions
 
-
 TWEET_URL = re.compile(r'https://twitter\.com/\w{1,15}/status/\d+')
-
 
 class Plugin(Operator):
     """Operator for Twitter."""

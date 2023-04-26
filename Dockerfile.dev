@@ -6,12 +6,18 @@ RUN apt-get install python3-pip -y
 RUN apt-get install sqlite3
 RUN apt-get install tesseract-ocr -y
 RUN apt-get install python3-lxml -y
+RUN apt-get install git -y
 
 COPY requirements.txt .
+COPY requirements-testing.txt .
+COPY dist/threatingestor-*.whl .
+COPY tests/* tests/
+COPY tests/fixtures/whitelist.json tests/fixtures/
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements-testing.txt
 RUN pip3 install opencv-python pytesseract numpy
-RUN pip3 install threatingestor
+RUN pip3 install feedparser threatingestor-*.whl
 
 COPY config.yml .

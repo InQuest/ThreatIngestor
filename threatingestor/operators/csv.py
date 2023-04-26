@@ -1,10 +1,9 @@
 from __future__ import absolute_import
-import csv
 
+import csv
 
 import threatingestor.artifacts
 from threatingestor.operators import Operator
-
 
 class Plugin(Operator):
     """Operator for output to flat CSV file."""

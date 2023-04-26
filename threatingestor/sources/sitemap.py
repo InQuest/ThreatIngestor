@@ -1,8 +1,9 @@
+import requests
 import datetime
-import urllib.request
-from urllib.parse import urlparse
-from bs4 import BeautifulSoup
+import iocextract
 import regex as re
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
 
 from threatingestor.sources import Source
 
@@ -18,33 +19,24 @@ class Plugin(Source):
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + "Z"
 
         # Configures sitemap parsing
-        response = urllib.request.urlopen(self.url)
-        xml = BeautifulSoup(response, "lxml-xml", from_encoding=response.info().get_param("charset"))
-
-        sitemapindex = xml.find_all("sitemapindex")
+        response = requests.get(self.url)
+        xml = BeautifulSoup(response.text, "lxml-xml")
+        
         sitemap = xml.find_all("urlset")
 
-        if sitemapindex:
-            get_sitemap_type = "sitemapindex"
-        elif sitemap:
-            get_sitemap_type = "urlset"
+        try:
+            sitemap_db = []
+
+            for s in sitemap:
+                sitemap_db.append(s.findNext("loc").text)
         
-        sitemaps = xml.find_all("sitemap")
-
-        get_child_sitemaps = []
-
-        for sitemap in sitemaps:
-            get_child_sitemaps.append(sitemap.findNext("loc").text)
-
-        if get_sitemap_type == "sitemapindex":
-            sitemaps = get_child_sitemaps
-        else:
-            sitemaps = [self.url]
+        except UnboundLocalError:
+            sitemap_db = [self.url]
 
         urls = xml.find_all("url")
         artifacts = []
 
-        for sitemap in sitemaps:
+        for sitemap in sitemap_db:
             for url in urls:
 
                 # Extracts only the 'loc' tag from the xml
@@ -63,33 +55,44 @@ class Plugin(Source):
 
                 if self.filter is not None:
                     # Regex input via config.yml
+                    # Example: security|threat|malware
                     xml_query = re.compile(r"{0}".format(self.filter)).findall(str(self.filter.split('|')))
 
                     # Iterates over the regex output to locate all provided keywords
                     for x in xml_query:
                         # Uses a path instead of a keyword
                         if self.path is not None:
-                            provided_path = f"{self.path}{x}"
 
-                            if provided_path in row["loc"]:
-                                artifacts += self.process_element(row["loc"], self.url)
+                            if self.path in row["loc"]:
+                                data = requests.get(row["loc"]).text
+                                # Extract IOCs from HTML page content
+                                payload = str(list(iocextract.extract_iocs(str(data))))
+                                artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
                         
                         # Only filters using a keyword
                         if self.path is None:
                             if x in row["loc"]:
-                                artifacts += self.process_element(row["loc"], self.url)
+                                data = requests.get(row["loc"]).text
+                                # Extract IOCs from HTML page content
+                                payload = str(list(iocextract.extract_iocs(str(data))))
+                                artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
                 
                 elif self.filter is None and self.path is not None:
                     # Filters only by path in XML loc, no set filter
                     # Default: /path/name/*
-                    provided_path = f"{self.path}"
 
-                    if provided_path in row["loc"]:
-                        artifacts += self.process_element(row["loc"], self.url)
+                    if self.path in row["loc"]:
+                        data = requests.get(row["loc"]).text
+                        # Extract IOCs from HTML page content
+                        payload = str(list(iocextract.extract_iocs(str(data))))
+                        artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
                 
                 else:
                     # Locates all blog links within the sitemap
                     if "blog" in row["loc"]:
-                        artifacts += self.process_element(row["loc"], self.url)
+                        data = requests.get(row["loc"]).text
+                        # Extract IOCs from HTML page content
+                        payload = str(list(iocextract.extract_iocs(str(data))))
+                        artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
         
         return saved_state, artifacts

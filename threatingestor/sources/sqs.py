@@ -1,9 +1,7 @@
 import json
 
-
 from threatingestor.exceptions import DependencyError
 from threatingestor.sources import abstract_json
-
 
 try:
     import boto3

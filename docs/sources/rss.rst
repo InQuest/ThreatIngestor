@@ -19,8 +19,9 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``rss``
-* ``feed_type`` (required): see above; if unsure, use ``messy``.
 * ``url`` (required): URL to the RSS or Atom feed.
+* ``feed_type`` (required): see above; if unsure, use ``messy``.
+* ``filter`` (optional): Regex filtering for RSS feed.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +34,7 @@ Inside the ``sources`` section of your configuration file:
       module: rss
       url: https://example.com/rss.xml
       feed_type: messy
+      filter: security|threat
 
 .. _sqs-source:
 

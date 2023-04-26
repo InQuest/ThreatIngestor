@@ -70,18 +70,27 @@ sources:
     credentials: github-auth
     search: CVE-2018-
 
+  # Without regex filter
   - name: rss-inquest-blog
     module: rss
     url: https://inquest.net/blog/rss
     feed_type: messy
 
+  # With regex filter
+  # Keywords are seperated by '|'
+  - name: rss-inquest-blog
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+    filter: security|threat|research
+
   # Sitemap exmaples
 
-  # Searches for "articles" keyword
+  # Keywords are seperated by '|' when using the filter option
   - name: inquest-sitemap-articles
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
-    filter: articles
+    filter: security|threat|research
 
   # Defaults to "blog" keyword
   - name: inquest-sitemap-blog

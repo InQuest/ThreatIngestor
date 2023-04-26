@@ -1,13 +1,39 @@
-import cv2
-import pytesseract
-import iocextract
+import os
+import sys
+import string
+import random
 import requests
 import datetime
-import os
+import iocextract
 import numpy as np
+from loguru import logger
+
+try:
+    import numpy as np
+except ImportError:
+    logger.error("Missing the following package(s): numpy")
+    sys.exit()
+
+try:
+    import cv2
+except ImportError:
+    logger.error("Missing the following package(s): opencv-python")
+    sys.exit()
+
+try:
+    import pytesseract
+except ImportError:
+    logger.error("Missing the following package(s): pytesseract")
+    sys.exit()
 
 from threatingestor.sources import Source
 import threatingestor.artifacts
+
+# Creates a random string with a length of 5
+def tmp_name():
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(5))
+
+tmp_file = str(tmp_name())
 
 class Plugin(Source):
     """
@@ -19,31 +45,30 @@ class Plugin(Source):
         self.img = img
 
         if "http" in img:
-            with open("/tmp/data.png", "wb") as i:
+            with open(f"/tmp/{tmp_file}", "wb") as i:
                 i.write(requests.get(str(self.img)).content)
 
     def run(self, saved_state):
         saved_state = datetime.datetime.utcnow().isoformat()[:-7] + "Z"
 
-        if os.path.exists("/tmp/data.png"):
-            data = cv2.imread("/tmp/data.png")
+        if os.path.exists(f"/tmp/{tmp_file}"):
+            data = cv2.imread(f"/tmp/{tmp_file}")
         else:
-            data = cv2.imread(self.img)
+            # No image is present
+            try:
+                data = cv2.imread(self.img)
+            except TypeError:
+                pass
 
         try:
             # Helps with preprocessing by converting to a grayscale
             grayscale_img = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
 
-            # Creates a binary image by using the proper threshold from cv
-            binary_img = cv2.threshold(grayscale_img, 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
-            # Inverts the binary
-            invert_img = cv2.bitwise_not(binary_img)
+            # Creates a binary image by using the proper threshold from cv and inverts the binary
+            invert_img = cv2.bitwise_not(cv2.threshold(grayscale_img, 130, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1])
 
             # Helps with cleanup
-            noise_reduction = np.ones((2,2), np.uint8)
-            process_iter = cv2.erode(invert_img, noise_reduction, iterations = 1)
-            process_iter = cv2.dilate(process_iter, noise_reduction, iterations = 1)
+            process_iter = cv2.dilate(cv2.erode(invert_img, np.ones((2,2), np.uint8), iterations=1), np.ones((2,2), np.uint8), iterations=1)
 
             # Converts image data to a string
             img_data = pytesseract.image_to_string(process_iter)
@@ -55,6 +80,8 @@ class Plugin(Source):
             description = description.format(s=self.name, u=list(iocextract.extract_urls(img_data)))
             artifact = threatingestor.artifacts.Task(title, self.name, reference_link=str(list(iocextract.extract_urls(img_data))), reference_text=description)
             artifact_list.append(artifact)
+
+            os.remove(f"/tmp/{tmp_file}")
                 
         except cv2.error:
             raise FileNotFoundError

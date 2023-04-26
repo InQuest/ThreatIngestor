@@ -23,3 +23,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# Local
+.DS_Store
+.vscode/

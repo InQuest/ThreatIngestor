@@ -1,10 +1,8 @@
 from __future__ import absolute_import
 
-
 import threatingestor.artifacts
 from threatingestor.operators import Operator
 from threatingestor.exceptions import DependencyError
-
 
 try:
     import pymisp

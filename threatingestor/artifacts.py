@@ -1,10 +1,8 @@
 import re
 import ipaddress
-from urllib.parse import urlparse
-
-
 import iocextract
 
+from urllib.parse import urlparse
 
 class Artifact(object):
     """Artifact base class."""
@@ -118,12 +116,12 @@ class URL(Artifact):
         """
         return super(URL, self).format_message(message, url=str(self),
                                                domain=self.domain(),
-                                               defanged=iocextract.defang(str(self)))
+                                               defanged=iocextract.defang_data(str(self)))
 
 
     def _stringify(self):
         """Always returns deobfuscated URL."""
-        return iocextract.refang_url(self.artifact)
+        return iocextract.refang_data(self.artifact)
 
 
     def is_obfuscated(self):
@@ -138,7 +136,7 @@ class URL(Artifact):
 
     def is_ipv4(self):
         """Boolean: URL network location is an IPv4 address, not a domain?"""
-        parsed = urlparse(iocextract.refang_url(self.artifact))
+        parsed = urlparse(iocextract.refang_data(self.artifact))
 
         try:
             ipaddress.IPv4Address(parsed.netloc.split(':')[0].replace('[', '').replace(']', '').replace(',', '.'))
@@ -151,7 +149,7 @@ class URL(Artifact):
     def is_ipv6(self):
         """Boolean: URL network location is an IPv6 address, not a domain?"""
         # fix urlparse exception
-        parsed = urlparse(iocextract.refang_url(self.artifact))
+        parsed = urlparse(iocextract.refang_data(self.artifact))
 
         # Handle RFC 2732 IPv6 URLs with and without port, as well as non-RFC IPv6 URLs
         if ']:' in parsed.netloc:
@@ -209,7 +207,7 @@ class IPAddress(Artifact):
         * All supported variables from Artifact.format_message
         """
         return super(IPAddress, self).format_message(message, ipaddress=str(self),
-                                                     defanged=iocextract.defang(str(self)))
+                                                     defanged=iocextract.defang_data(str(self)))
 
 
     def _stringify(self):
@@ -252,7 +250,7 @@ class Domain(Artifact):
         * All supported variables from Artifact.format_message
         """
         return super(Domain, self).format_message(message, domain=str(self),
-                                                  defanged=iocextract.defang(str(self)))
+                                                  defanged=iocextract.defang_data(str(self)))
 
 
 class Hash(Artifact):
@@ -301,9 +299,24 @@ class YARASignature(Artifact):
         * {yarasignature}
         * All supported variables from Artifact.format_message
         """
-        return super(YARASignature, self).format_message(message,
-                                                         yarasignature=str(self))
+        return super(YARASignature, self).format_message(message, yarasignature=str(self))
 
+class Email(Artifact):
+    """
+    Email artifact abstraction.
+    """
+
+    def format_message(self, message, **kwargs):
+        """
+        Allow string interpolation with artifact contents.
+
+        Supported variables:
+
+        * {email}
+        * All supported variables from Artifact.format_message
+        """
+
+        return super(Email, self).format_message(message, email=str(self))
 
 class Task(Artifact):
     """Generic Task artifact abstraction."""
@@ -326,5 +339,6 @@ STRING_MAP = {
     'domain': Domain,
     'hash': Hash,
     'yarasignature': YARASignature,
+    'email': Email,
     'task': Task,
 }
