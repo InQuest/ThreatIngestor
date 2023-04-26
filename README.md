@@ -138,3 +138,14 @@ After you've built the project, you can build the container:
 ```bash
 docker build . -t threatingestor -f Dockerfile.dev
 ```
+
+NOTE: If you run into any issues while building the development environment or running ThreatIngestor within the container, you may need to comment out the following lines in `Dockerfile.dev` to work properly:
+
+```Dockerfile
+FROM ubuntu:18.04
+...
+# RUN apt-get install tesseract-ocr -y
+...
+# RUN pip3 install opencv-python pytesseract numpy
+...
+```
