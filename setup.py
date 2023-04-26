@@ -1,7 +1,8 @@
 import os
 from setuptools import setup, find_packages
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
+with open("README.md", "r") as fh:
+    README = fh.read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -20,7 +21,7 @@ if not isinstance(extra_requires, list):
 
 setup(
     name='threatingestor',
-    version='1.0.3',
+    version='1.1.0',
     include_package_data=True,
     install_requires=requires,
     extras_require={
@@ -42,6 +43,7 @@ setup(
     license='GPL',
     description='Extract and aggregate IOCs from threat feeds.',
     long_description=README,
+    long_description_content_type='text/markdown',
     url='https://github.com/InQuest/ThreatIngestor',
     author='InQuest Labs',
     author_email='labs@inquest.net',
