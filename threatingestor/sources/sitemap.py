@@ -1,6 +1,5 @@
 import requests
 import datetime
-import iocextract
 import regex as re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -64,35 +63,23 @@ class Plugin(Source):
                         if self.path is not None:
 
                             if self.path in row["loc"]:
-                                data = requests.get(row["loc"]).text
-                                # Extract IOCs from HTML page content
-                                payload = str(list(iocextract.extract_iocs(str(data))))
-                                artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
+                                artifacts += self.process_element(row["loc"], self.url)
                         
                         # Only filters using a keyword
                         if self.path is None:
                             if x in row["loc"]:
-                                data = requests.get(row["loc"]).text
-                                # Extract IOCs from HTML page content
-                                payload = str(list(iocextract.extract_iocs(str(data))))
-                                artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
+                                artifacts += self.process_element(row["loc"], self.url)
                 
                 elif self.filter is None and self.path is not None:
                     # Filters only by path in XML loc, no set filter
                     # Default: /path/name/*
 
                     if self.path in row["loc"]:
-                        data = requests.get(row["loc"]).text
-                        # Extract IOCs from HTML page content
-                        payload = str(list(iocextract.extract_iocs(str(data))))
-                        artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
+                        artifacts += self.process_element(row["loc"], self.url)
                 
                 else:
                     # Locates all blog links within the sitemap
                     if "blog" in row["loc"]:
-                        data = requests.get(row["loc"]).text
-                        # Extract IOCs from HTML page content
-                        payload = str(list(iocextract.extract_iocs(str(data))))
-                        artifacts += self.process_element(payload, reference_link=row["loc"] or self.url)
+                        artifacts += self.process_element(row["loc"], self.url)
         
         return saved_state, artifacts

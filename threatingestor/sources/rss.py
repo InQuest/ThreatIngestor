@@ -1,6 +1,4 @@
 import feedparser
-import requests
-import iocextract
 import regex as re
 
 try:
@@ -69,12 +67,8 @@ class Plugin(Source):
                             artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
                     else:
                         # Default: self.feed_type == 'messy'.
-                        data = requests.get(item.get('link')).text
-
-                        if r in data:
-                            # Extract IOCs from HTML page content
-                            payload = str(list(iocextract.extract_iocs(str(data))))
-                            artifacts += self.process_element(payload, item.get('link') or self.url)
+                        text = soup.get_text(separator=' ')
+                        artifacts += self.process_element(text, item.get('link') or self.url)
 
             else:
 
@@ -86,10 +80,8 @@ class Plugin(Source):
                     artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
                 else:
                     # Default: self.feed_type == 'messy'.
-                    data = requests.get(item.get('link')).text
-                    # Extract IOCs from HTML page content
-                    payload = str(list(iocextract.extract_iocs(str(data))))
-                    artifacts += self.process_element(payload, item.get('link') or self.url)
+                    text = soup.get_text(separator=' ')
+                    artifacts += self.process_element(text, item.get('link') or self.url)
 
             saved_state = item.get('published') or item.get('updated')
 
