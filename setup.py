@@ -29,6 +29,7 @@ setup(
         'rss': ['feedparser'],
         'misp': ['PyMISP'],
         'threatkb': ['threatkb'],
+        'telegram': ['telethon'],
         'beanstalk': ['greenstalk'],
         'sqs': ['boto3'],
         'mysql': ['pymysql'],
