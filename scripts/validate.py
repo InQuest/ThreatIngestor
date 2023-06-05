@@ -6,9 +6,6 @@ from subprocess import getoutput
 config_file = sys.argv[1]
 verbose = sys.argv
 
-def is_command_available(exe):
-    return which(exe) is not None
-
 def verbose_mode():
     if "v" in verbose:
         verbosity = True
@@ -18,7 +15,7 @@ def verbose_mode():
     return verbosity
 
 def validate_config():
-    if is_command_available("yamllint"):
+    if which("yamllint") is not None:
 
         if verbose_mode():
             lint = getoutput(f"yamllint {config_file}")
@@ -29,7 +26,7 @@ def validate_config():
             print(f"\nYaml config errors:\n{lint}")
             return False
         else:
-            if verbose_mode():
+            if verbose_mode() and lint:
                 print(f"\nYaml config warnings:\n{lint}")
             
             return True
@@ -42,29 +39,35 @@ def main():
         with open(config_file) as f:
             yaml_file = yaml.safe_load(f)
 
-            for _ in yaml_file:
-
+            for sources in yaml_file['sources']:
                 try:
-                    sources = yaml_file['sources'][0]
-                    data = f"[Source] Name: {sources['name']}, Module: {sources['module']}"
+                    _ = sources['name'],  sources['module']
+
+                    if "rss" in sources['module']:
+                        try:
+                            _ = sources['feed_type']
+                        except KeyError:
+                            print(f"\nValidation failed. Location: {sources}")
+                            print(f"Missing the `feed_type` key for one or more of your rss module(s).")
+                            continue
 
                     if verbose_mode():
-                        print(data)
+                        print(f"Name: {sources['name']}, Module: {sources['module']}")
                 except KeyError:
-                    print(f"[Source] Validation failed. Error: {sources}")
-                    sys.exit(1)
-                
+                    print(f"\nValidation failed. Location: {sources}")
+                    print(f"Missing the `module` key for one or more of your sources.")
+                    continue
+
+            for operators in yaml_file['operators']:
                 try:
-                    operators = yaml_file['operators'][0]
-                    data = f"[Operator] Name: {operators['name']}, Module: {operators['module']}"
+                    _ = operators['name'], operators['module']
 
                     if verbose_mode():
-                        print(data)
+                        print(f"Name: {operators['name']}, Module: {operators['module']}")
                 except KeyError:
-                    print(f"[Operator] Validation failed. Error: {operators}")
-                    sys.exit(1)
-
-        print("\nValidation complete. Looks good.\n")
+                    print(f"\nValidation failed. Location: {operators}")
+                    print(f"Missing the `module` key for one or more of your operators.")
+                    continue
 
 if __name__ == '__main__':
     main()
