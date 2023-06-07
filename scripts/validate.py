@@ -2,33 +2,22 @@ import sys, yaml
 
 from shutil import which
 from subprocess import getoutput
+from rich.console import Console
+from time import sleep
 
 config_file = sys.argv[1]
-verbose = sys.argv
-
-def verbose_mode():
-    if "v" in verbose:
-        verbosity = True
-    else:
-        verbosity = False
-
-    return verbosity
 
 def validate_config():
     if which("yamllint") is not None:
-
-        if verbose_mode():
-            lint = getoutput(f"yamllint {config_file}")
-        else:
-            lint = getoutput(f"yamllint {config_file} --no-warnings")
+        lint = getoutput(f"yamllint {config_file}")
 
         if "error" in lint:
             print(f"\nYaml config errors:\n{lint}")
             return False
+        elif "warning" in lint:
+            print(f"\nYaml config warnings:\n{lint}")
+            return True
         else:
-            if verbose_mode() and lint:
-                print(f"\nYaml config warnings:\n{lint}")
-            
             return True
     else:
         print("Missing yamllint")
@@ -36,38 +25,71 @@ def validate_config():
 
 def main():
     if validate_config():
-        with open(config_file) as f:
-            yaml_file = yaml.safe_load(f)
+        console = Console()
 
-            for sources in yaml_file['sources']:
+        with console.status("[bold green]Validating config", spinner="aesthetic"):
+            with open(config_file) as f:
+                yaml_file = yaml.safe_load(f)
+
                 try:
-                    _ = sources['name'],  sources['module']
+                    console.log(f"[green]Validating sources...[/green]")
 
-                    if "rss" in sources['module']:
+                    for source in yaml_file['sources']:
+                        sleep(0.2)
+
                         try:
-                            _ = sources['feed_type']
+                            console.log(f"[green]Validating[/green] {source['name']}")
                         except KeyError:
-                            print(f"\nValidation failed. Location: {sources}")
-                            print(f"Missing the `feed_type` key for one or more of your rss module(s).")
+                            console.log(f"[red]Validation Failed[/red] {source}")
+                            console.log(f"Missing the 'name' key for {source}")
                             continue
 
-                    if verbose_mode():
-                        print(f"Name: {sources['name']}, Module: {sources['module']}")
-                except KeyError:
-                    print(f"\nValidation failed. Location: {sources}")
-                    print(f"Missing the `module` key for one or more of your sources.")
-                    continue
+                        try:
+                            source_module = source['module']
 
-            for operators in yaml_file['operators']:
+                            if "rss" in source_module:
+                                try:
+                                    _ = source['feed_type']
+                                except KeyError:
+                                    console.log(f"[red]Validation Failed[/red] {source}")
+                                    console.log(f"Missing the 'feed_type' key for one or more of your rss modules")
+                                    continue
+
+                        except KeyError:
+                            console.log(f"[red]Validation Failed[/red] {source}")
+                            console.log(f"Missing the 'module' key for one or more of your sources")
+                            continue
+                except KeyError:
+                    console.log(f"'sources' is required. Refer to the ThreatIngestor documentation here: https://inquest.readthedocs.io/projects/threatingestor/en/latest/sources.html")
+                    sys.exit(1)
+
                 try:
-                    _ = operators['name'], operators['module']
+                    console.log(f"[green]Validating operators...[/green]")
 
-                    if verbose_mode():
-                        print(f"Name: {operators['name']}, Module: {operators['module']}")
+                    for operator in yaml_file['operators']:
+                        try:
+                            console.log(f"[green]Validating[/green] {operator['name']}")
+                        except KeyError:
+                            console.log(f"[red]Validation Failed[/red] {operator}")
+                            console.log(f"Missing the 'name' key for {operator}")
+                            continue
+
+                        try:
+                            _ = operator['module']
+                        except KeyError:
+                            console.log(f"[[red]Validation Failed[/red]] {operator}")
+                            console.log(f"Missing the 'module' key for one or more of your operators")
+                            continue
+
+                        try:
+                            _ = operator['filename']
+                        except KeyError:
+                            console.log(f"[[red]Validation Failed[/red]] {operator}")
+                            console.log(f"Missing the 'filename' key for one or more of your operators")
+                            continue
                 except KeyError:
-                    print(f"\nValidation failed. Location: {operators}")
-                    print(f"Missing the `module` key for one or more of your operators.")
-                    continue
+                    console.log(f"[red]Validation Failed[/red] 'operators' is required. Refer to the ThreatIngestor documentation here: https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators.html")
+                    sys.exit(1)
 
 if __name__ == '__main__':
     main()
