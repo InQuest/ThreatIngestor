@@ -157,11 +157,3 @@ Some scripts are now provided to help with your local configuration of ThreatIng
 | Script                | Description                                                                                                 | Example                          |
 |-----------------------|-------------------------------------------------------------------------------------------------------------|----------------------------------|
 | `scripts/validate.py` | This script validates your YAML syntax and checks that you have the bare minimum required by ThreatIngestor | `python3 validate.py config.yml` |
-
-All scripts will have the ability to run in a verbose mode.
-
-Example:
-
-```bash
-python3 <FILE>.py v
-```
