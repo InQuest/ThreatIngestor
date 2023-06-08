@@ -1,4 +1,4 @@
-import datetime, requests
+import requests
 
 from threatingestor.sources import Source
 
@@ -19,12 +19,16 @@ class Plugin(Source):
             "accept": "application/json"
         }
 
+        # Collects the 10 most recent comments from a specific user on VT
         response = requests.get(f"https://www.virustotal.com/api/v3/users/{self.user}/comments?limit=10", headers=headers)
-        saved_state = datetime.datetime.utcnow()
 
         artifacts = []
         
         for comment in response.json()['data']:
+            if saved_state and int(saved_state) <= int(comment['attributes']['date']):
+                continue
+
+            saved_state = comment['attributes']['date']
             artifacts += self.process_element(content=comment['attributes']['text'], reference_link=comment['links']['self'])
 
         return saved_state, artifacts
