@@ -14,7 +14,7 @@ Currently used by InQuest Labs IOC-DB: https://labs.inquest.net/iocdb
 
 ## Overview
 
-ThreatIngestor can be configured to watch Twitter, RSS feeds, sitemap (XML) feeds, or other sources, extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
+ThreatIngestor can be configured to watch Twitter, RSS feeds, sitemap (XML) feeds, or other sources, and extract meaningful information such as malicious IPs/domains and YARA signatures, and send that information to another system for analysis.
 
 ![ThreatIngestor flowchart with several sources feeding into multiple operators](https://inquest.readthedocs.io/projects/threatingestor/en/latest/_images/mermaid-multiple-operators.png)
 

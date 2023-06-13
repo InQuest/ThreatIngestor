@@ -335,6 +335,9 @@ And the ThreatIngestor config file:
         access_token:
         access_token_secret:
 
+      - name: virustotal-auth
+        api_key: API_KEY
+
       - name: github-auth
         username: user
         # Could also use password instead https://github.blog/2013-05-16-personal-api-tokens/
@@ -443,6 +446,12 @@ And the ThreatIngestor config file:
       - name: image-ioc-extraction
         module: image
         url: local.jpg
+
+      - name: vt-comments-inquest
+        module: virustotal
+        user: 'inquest.labs'
+        credentials: virustotal-auth
+        limit: 10
 
     operators:
       - name: mythreatkb

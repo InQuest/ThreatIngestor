@@ -21,6 +21,9 @@ credentials:
     access_token:
     access_token_secret:
 
+  - name: virustotal-auth
+    api_key: API_KEY
+
   - name: github-auth
     username: user
     # Could also use password instead https://github.blog/2013-05-16-personal-api-tokens/
@@ -116,6 +119,12 @@ sources:
     url: https://www.inquest.net/sitemap.xml
     path: /blog/category/
     filter: release|solutions
+
+  - name: vt-comments-inquest
+    module: virustotal
+    user: 'inquest.labs'
+    credentials: virustotal-auth
+    limit: 10
 
   - name: image-extraction
     module: image

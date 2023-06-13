@@ -9,12 +9,12 @@ Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``module`` (required): ``image``
-* ``img`` (required): URL of the website with the sitemap path.
+* ``img`` (required): Local path or image URL.
 
 Example Configuration
 ~~~~~~~~~~~~~~~~~~~~~
 
-You can extract a local image or an external image:
+You can extract a local image or image URL:
 
 .. code-block:: yaml
 

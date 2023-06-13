@@ -194,6 +194,15 @@ sitemap
    :show-inheritance:
    :member-order: bysource
 
+virustotal
+^^^
+
+.. automodule:: threatingestor.sources.virustotal
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
 image
 ^^^
 
