@@ -1,9 +1,7 @@
 import unittest
-
 import httpretty
 
 import threatingestor.sources.web
-
 
 class TestWeb(unittest.TestCase):
 
@@ -22,7 +20,7 @@ class TestWeb(unittest.TestCase):
 
         saved_state, artifacts = self.web.run(None)
         self.assertIn('http://example.com/test', [str(x) for x in artifacts])
-        self.assertEqual(saved_state, 'test;"test"')
+        self.assertEqual(saved_state, 'test;"test";200')
 
     @httpretty.activate
     def test_run_with_304(self):
@@ -56,7 +54,7 @@ class TestWeb(unittest.TestCase):
 
         saved_state, artifacts = self.web.run(None)
         self.assertIn('http://example.com/test', [str(x) for x in artifacts])
-        self.assertEqual(saved_state, 'None;"test"')
+        self.assertEqual(saved_state, 'None;"test";200')
 
     @httpretty.activate
     def test_run_with_200_and_no_state_headers(self):

@@ -12,6 +12,7 @@ class Plugin(Source):
     def run(self, saved_state):
         # Read saved state and set HTTP headers.
         headers = {}
+        
         if saved_state:
             # If both last modified and etag, set both.
             # Otherwise just interpret the whole field as last modified.
@@ -22,12 +23,16 @@ class Plugin(Source):
                 headers['If-None-Match'] = etag
 
             headers['If-Modified-Since'] = last_modified
+        
+        if not saved_state:
+            saved_state = ""
 
         # Send head first to check 304.
         response = requests.head(self.url, headers=headers)
 
-        # If not modified, return immediately.
-        if response.status_code == 304:
+        # If not modified, return immediately
+        if "304" in saved_state or response.status_code == 304:
+            saved_state = ';'.join([str(response.headers.get('Last-Modified')), 'N/A', str(response.status_code)])
             return saved_state, []
 
         # Otherwise, do the full request.
@@ -38,7 +43,7 @@ class Plugin(Source):
         etag = response.headers.get('Etag')
 
         if etag:
-            saved_state = ';'.join([str(last_modified), etag])
+            saved_state = ';'.join([str(last_modified), etag, str(response.status_code)])
         else:
             saved_state = last_modified
 
