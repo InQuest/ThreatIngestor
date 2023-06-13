@@ -4,10 +4,11 @@ from threatingestor.sources import Source
 
 class Plugin(Source):
     """VirusTotal Comments Source Plugin"""
-    def __init__(self, name, user, api_key):
+    def __init__(self, name, user, api_key, limit=10):
         self.name = name
         self.user = user
         self.api_key = api_key
+        self.limit = limit
 
     def run(self, saved_state):
         """
@@ -20,7 +21,7 @@ class Plugin(Source):
         }
 
         # Collects the 10 most recent comments from a specific user on VT
-        response = requests.get(f"https://www.virustotal.com/api/v3/users/{self.user}/comments?limit=10", headers=headers)
+        response = requests.get(f"https://www.virustotal.com/api/v3/users/{self.user}/comments?limit={self.limit}", headers=headers)
 
         artifacts = []
         
