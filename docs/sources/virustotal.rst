@@ -1,7 +1,7 @@
 .. _virustotal-source:
 
 VirusTotal
----
+----------
 
 Configuration Options
 ~~~~~~~~~~~~~~~~~~~~~
