@@ -195,7 +195,7 @@ sitemap
    :member-order: bysource
 
 virustotal
-^^^
+^^^^^^^^^^
 
 .. automodule:: threatingestor.sources.virustotal
    :members:
