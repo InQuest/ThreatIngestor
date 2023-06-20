@@ -12,6 +12,7 @@ def validate_config():
         lint = getoutput(f"yamllint {config_file}")
 
         if "error" in lint:
+            # If you get get a line-length error, add this line to the yaml config on the same line: '# yamllint disable-line'
             print(f"\nYaml config errors:\n{lint}")
             return False
         elif "warning" in lint:
@@ -84,9 +85,13 @@ def main():
                         try:
                             _ = operator['filename']
                         except KeyError:
-                            console.log(f"[[red]Validation Failed[/red]] {operator}")
-                            console.log(f"Missing the 'filename' key for one or more of your operators")
-                            continue
+
+                            if operator['module'] not in ["threatkb", "sqs", "mysql"]:
+                                console.log(f"[[red]Validation Failed[/red]] {operator}")
+                                console.log(f"Missing the 'filename' key for one or more of your operators")
+                                continue
+                            else:
+                                pass
                 except KeyError:
                     console.log(f"[red]Validation Failed[/red] 'operators' is required. Refer to the ThreatIngestor documentation here: https://inquest.readthedocs.io/projects/threatingestor/en/latest/operators.html")
                     sys.exit(1)
