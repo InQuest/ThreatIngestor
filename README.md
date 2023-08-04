@@ -154,6 +154,4 @@ FROM ubuntu:18.04
 
 Some scripts are now provided to help with your local configuration of ThreatIngestor.
 
-| Script                | Description                                                                                                 | Example                          |
-|-----------------------|-------------------------------------------------------------------------------------------------------------|----------------------------------|
-| `scripts/validate.py` | This script validates your YAML syntax and checks that you have the bare minimum required by ThreatIngestor | `python3 validate.py config.yml` |
+A README.md with additional information is available [here](https://github.com/InQuest/ThreatIngestor/tree/master/scripts/README.md).

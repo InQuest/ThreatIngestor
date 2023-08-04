@@ -1,11 +1,19 @@
+"""
+This script validates your YAML syntax and checks that you have the minimum required (`config.yml`) by ThreatIngestor to operate properly.
+"""
+
 import sys, yaml
 
 from shutil import which
 from subprocess import getoutput
 from rich.console import Console
-from time import sleep
 
-config_file = sys.argv[1]
+try:
+    config_file = sys.argv[1]
+except IndexError:
+   print("Missing config.yml file location")
+   print("Usage: python3 scripts/validate.py config.yml")
+   sys.exit(1)
 
 def validate_config():
     if which("yamllint") is not None:
@@ -16,10 +24,10 @@ def validate_config():
             print(f"\nYaml config errors:\n{lint}")
             return False
         elif "warning" in lint:
-            print(f"\nYaml config warnings:\n{lint}")
-            return True
-        else:
-            return True
+            if "-v" in sys.argv:
+                print(f"\nYaml config warnings:\n{lint}")
+
+        return True
     else:
         print("Missing yamllint")
         sys.exit(1)
@@ -36,7 +44,11 @@ def main():
                     console.log(f"[green]Validating sources...[/green]")
 
                     for source in yaml_file['sources']:
-                        sleep(0.2)
+
+                        # Slow down the output
+                        if "-v" in sys.argv:
+                            from time import sleep
+                            sleep(0.2)
 
                         try:
                             console.log(f"[green]Validating[/green] {source['name']}")
