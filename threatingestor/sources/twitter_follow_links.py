@@ -16,8 +16,14 @@ s = Shortener()
 
 class Plugin(Source):
 
-    def __init__(self, name, api_key, api_secret_key, access_token, access_token_secret, defanged_only=True, **kwargs):
+    def __init__(self, name, api_key, api_secret_key, access_token, access_token_secret, bearer_token=None, defanged_only=True, **kwargs):
         self.name = name
+
+        self.auth = {
+            "OAuth": twitter.Twitter(auth=twitter.OAuth(access_token, access_token_secret, api_key, api_secret_key), api_version="1.1"),
+            "OAuth2": twitter.Twitter(auth=twitter.OAuth2(bearer_token=bearer_token), api_version="2", format="")
+        }
+
         self.api = twitter.Twitter(auth=twitter.OAuth(access_token, access_token_secret, api_key, api_secret_key))
 
         # Let the user decide whether to include non-obfuscated URLs or not.
@@ -38,11 +44,11 @@ class Plugin(Source):
         # Otherwise, default to mentions API.
         self.endpoint = self.api.statuses.mentions_timeline
         if (kwargs.get('slug') and kwargs.get('owner_screen_name')) or (kwargs.get('list_id') and kwargs.get('owner_screen_name')):
-            self.endpoint = self.api.lists.statuses
+            self.endpoint = self.auth['OAuth'].lists.statuses
         elif kwargs.get('screen_name') or kwargs.get('user_id'):
-            self.endpoint = self.api.statuses.user_timeline
-        elif kwargs.get('q'):
-            self.endpoint = self.api.search.tweets
+            self.endpoint = self.auth['OAuth'].statuses.user_timeline
+        elif kwargs.get('query'):
+            self.endpoint = self.auth['OAuth2'].tweets.search.recent
 
     def run(self, saved_state):
         # Modify kwargs to insert since_id.
