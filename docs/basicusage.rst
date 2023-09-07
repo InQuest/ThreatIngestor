@@ -137,11 +137,11 @@ Once you have all the secrets you need, create a new section in your config file
 
     credentials:
       - name: twitter-auth
-        # https://dev.twitter.com/oauth/overview/application-owner-access-tokens
         api_key:
         api_secret_key:
         access_token:
         access_token_secret:
+        bearer_token:
 
       - name: threatkb-auth
         url: https://mythreatkb
@@ -155,18 +155,16 @@ Fill out the rest of the ThreatIngestor configuration file with the sources and 
 .. code-block:: yaml
 
     sources:
-      - name: twitter-inquest-c2-list
+      - name: twitter-inquest-ioc-feed
         module: twitter
         credentials: twitter-auth
-        # https://dev.twitter.com/rest/reference/get/lists/statuses
-        owner_screen_name: InQuest
-        slug: c2-feed
+        username: InQuest
+        list_id: 917864294053752832
 
       - name: twitter-hxxp-no-opendir
         module: twitter
         credentials: twitter-auth
-        # https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
-        q: hxxp -open
+        query: hxxp -open
 
       - name: rss-vendor-x
         module: rss

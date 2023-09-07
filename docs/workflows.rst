@@ -46,18 +46,17 @@ We want artifacts from "Twitter C2 List" and "Vendor X Blog" to go directly to T
       - name: twitter-feed-c2
         module: twitter
         credentials: twitter-auth
-        owner_screen_name: InQuest
-        slug: c2-feed
+        username: InQuest
 
       - name: twitter-search-opendir
         module: twitter
         credentials: twitter-auth
-        q: '#opendir'
+        query: '#opendir'
 
       - name: twitter-search-vt
         module: twitter
         credentials: twitter-auth
-        q: virustotal.com
+        query: virustotal.com
 
       - name: vendor-x
         module: rss
@@ -138,13 +137,12 @@ Here, we have two Twitter sources: our C2 list and a search for "pastebin.com io
       - name: twitter-feed-c2
         module: twitter
         credentials: twitter-auth
-        owner_screen_name: InQuest
-        slug: c2-feed
+        username: InQuest
 
       - name: twitter-search-pastebin
         module: twitter
         credentials: twitter-auth
-        q: pastebin.com ioc
+        query: pastebin.com ioc
 
       - name: sqs-input
         module: sqs
@@ -363,34 +361,33 @@ And the ThreatIngestor config file:
       - name: twitter-feed-c2
         module: twitter
         credentials: twitter-auth
-        owner_screen_name: InQuest
-        slug: c2-feed
+        username: InQuest
 
       - name: twitter-open-directory
         module: twitter
         credentials: twitter-auth
         # https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
-        q: '"open directory" #malware'
+        query: '"open directory" #malware'
 
       - name: twitter-search-opendir
         module: twitter
         credentials: twitter-auth
-        q: '#opendir'
+        query: '#opendir'
 
       - name: twitter-masq
         module: twitter
         credentials: twitter-auth
-        q: "domain masquerade"
+        query: "domain masquerade"
 
       - name: twitter-search-vt
         module: twitter
         credentials: twitter-auth
-        q: virustotal.com
+        query: virustotal.com
 
       - name: twitter-search-pastebin
         module: twitter
         credentials: twitter-auth
-        q: pastebin.com ioc
+        query: pastebin.com ioc
 
       - name: github-cve18
         module: github

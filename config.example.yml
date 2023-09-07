@@ -20,6 +20,7 @@ credentials:
     api_secret_key:
     access_token:
     access_token_secret:
+    bearer_token:
 
   - name: virustotal-auth
     api_key: API_KEY
@@ -52,21 +53,17 @@ sources:
   - name: twitter-inquest-c2-list
     module: twitter
     credentials: twitter-auth
-    # https://dev.twitter.com/rest/reference/get/lists/statuses
-    owner_screen_name: InQuest
-    slug: c2-feed
+    list_id: 917864294053752832
 
   - name: twitter-open-directory
     module: twitter
     credentials: twitter-auth
-    # https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
-    q: '"open directory" #malware'
+    query: '"open directory" #malware'
 
   - name: twitter-inquest-timeline
     module: twitter
     credentials: twitter-auth
-    # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
-    screen_name: InQuest
+    username: InQuest
 
   - name: github-query
     module: github
