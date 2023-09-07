@@ -49,7 +49,7 @@ class Plugin(Source):
             self.endpoint = requests.get(url=list_url, auth=bearer_oauth2, params="tweet.fields=lang,author_id")
 
             for tweet in self.endpoint.json()['data']:
-                artifacts += self.process_element(content=tweet['text'], reference_link=tweet['id'], include_nonobfuscated=self.include_nonobfuscated)
+                artifacts += self.process_element(content=tweet['text'], reference_link=f"https://twitter.com/InQuest/status/{tweet['id']}", include_nonobfuscated=self.include_nonobfuscated)
 
         if self.kwargs.get('username') or self.kwargs.get('user_id'):
             try:
@@ -63,7 +63,7 @@ class Plugin(Source):
 
             for tweet in self.endpoint['data']:
                 saved_state = tweet['id']
-                artifacts += self.process_element(content=tweet['text'], reference_link=tweet['id'], include_nonobfuscated=self.include_nonobfuscated)
+                artifacts += self.process_element(content=tweet['text'], reference_link=f"https://twitter.com/InQuest/status/{tweet['id']}", include_nonobfuscated=self.include_nonobfuscated)
         
         if self.kwargs.get('query'):
             try:
@@ -75,7 +75,7 @@ class Plugin(Source):
 
             for tweet in self.endpoint['data']:
                 saved_state = tweet['id']
-                artifacts += self.process_element(content=tweet['text'], reference_link=tweet['id'], include_nonobfuscated=self.include_nonobfuscated)
+                artifacts += self.process_element(content=tweet['text'], reference_link=f"https://twitter.com/InQuest/status/{tweet['id']}", include_nonobfuscated=self.include_nonobfuscated)
 
         # No endpoint specified, return early
         if not self.endpoint:
