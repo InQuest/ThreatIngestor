@@ -8,4 +8,4 @@ loguru
 statsd
 requests
 pyshorteners
-twitter
+twitter>=2.0a2
