@@ -55,13 +55,13 @@ class Plugin(Source):
                     if self.path is not None:
                         if self.path in loc:
                             text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                            artifacts += self.process_element(content=text, reference_link=self.url, include_nonobfuscated=True)
+                            artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
                     # Only filters using a keyword
                     if self.path is None:
                         if x in loc:
                             text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                            artifacts += self.process_element(content=text, reference_link=self.url, include_nonobfuscated=True)
+                            artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
             elif self.filter is None and self.path is not None:
                 # Filters only by path in XML loc, no set filter
@@ -69,13 +69,13 @@ class Plugin(Source):
 
                 if self.path in loc:
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                    artifacts += self.process_element(content=text, reference_link=self.url, include_nonobfuscated=True)
+                    artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
             
             else:
                 # Locates all blog links within the sitemap
                 if "blog" in loc:
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                    artifacts += self.process_element(content=text, reference_link=self.url, include_nonobfuscated=True)
+                    artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
             if xml.find("lastmod"):
                 saved_state = str(u.findNext("lastmod").text).split("T", 1)[0]
