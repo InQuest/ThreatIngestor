@@ -56,7 +56,7 @@ div.footer {
   width: auto;
   padding: 20px 20px 30px 20px;
   margin: 0;
-  background: #23272d;
+  background: #171717;
 }
 
 @media screen and (max-width: 875px) {
@@ -194,7 +194,7 @@ pre {
 /* SOCIAL ICONS ------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 svg.icon {
-    height: 15px;
-    width: 15px;
-    vertical-align: middle;
-
+  height: 15px;
+  width: 15px;
+  vertical-align: middle;
+}

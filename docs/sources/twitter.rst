@@ -25,10 +25,6 @@ Configuration Options
 
 After the above general options, you may include valid options for one of the supported Twitter endpoints, as described below. Any extra options defined in the config will be passed in directly to the Twitter endpoint, so you can configure some extra options not shown here. See the relevant Twitter documentation for more information on supported parameters.
 
-`Mentions`_:
-
-This is the default behavior.
-
 `Twitter list`_:
 
 * ``list_id``: Id of the list you want to ingest.
