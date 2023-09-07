@@ -1,7 +1,7 @@
 .. _sitemap-source:
 
-Sitemap Blog Parser
-------------------------
+Sitemap Parser
+--------------
 
 The **Sitemap** source plugin parses the ``/sitemap.xml`` file to locate all blogs associated with that specific domain.
 
