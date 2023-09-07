@@ -1,8 +1,8 @@
-# ThreatIngestor
+<div align="center">
+  <h1>ThreatIngestor</h1>
+</div>
 
 ![Build Status](https://github.com/InQuest/ThreatIngestor/workflows/threatingestor-workflow/badge.svg?branch=master)
-![Developed by InQuest](https://inquest.net/images/inquest-badge.svg)
-
 ![Documentation Status](https://readthedocs.org/projects/threatingestor/badge/?version=latest)
 ![PyPI Version](http://img.shields.io/pypi/v/ThreatIngestor.svg)
 
