@@ -77,6 +77,11 @@ class Config:
         return self.config.get('logging', {})
 
 
+    def error_reporting(self):
+        """Returns error_reporting config dictionary."""
+        return self.config['error_reporting']
+
+
     def credentials(self, credential_name):
         """Return a dictionary with the specified credentials."""
         for credential in self.config['credentials']:

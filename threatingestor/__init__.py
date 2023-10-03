@@ -17,6 +17,8 @@ import threatingestor.state
 import threatingestor.exceptions
 import threatingestor.whitelist
 
+from threatingestor.bugsnagmonitor import configure_bugsnag, send_notification
+
 class Ingestor:
     """ThreatIngestor main work logic.
 
@@ -35,6 +37,7 @@ class Ingestor:
 
         # Configure logging with optional notifiers.
         logger.configure(**self.config.logging())
+
         try:
             logger.level("NOTIFY", no=35, color="<yellow>", icon="\U0001F514")
         except TypeError:
@@ -60,6 +63,12 @@ class Ingestor:
         except TypeError:
             logger.exception("Couldn't initialize statsd client; bad config?")
             sys.exit(1)
+        
+        # Configure BugSnag
+        for service in self.config.error_reporting():
+            if service['name'] == "bugsnag":
+                configure_bugsnag(service['api_key'])
+                break
 
         # Load state DB.
         try:
@@ -68,6 +77,7 @@ class Ingestor:
         except (OSError, IOError, threatingestor.exceptions.IngestorError):
             # Error loading state DB.
             logger.exception("Error reading state database")
+            send_notification("Error reading state database")
             sys.exit(1)
 
         # Instantiate plugins.
@@ -84,8 +94,8 @@ class Ingestor:
             self.whitelist = threatingestor.whitelist.Whitelist(self.config.whitelists())
 
         except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
-            logger.warning("Twitter config format has recently changed. See https://github.com/InQuest/ThreatIngestor/releases/tag/v1.0.0b5")
             logger.exception("Error initializing plugins")
+            send_notification("Error initializing plugins")
             sys.exit(1)
 
     def _is_whitelisted(self, artifact) -> bool:
@@ -122,6 +132,7 @@ class Ingestor:
             except Exception:
                 self.statsd.incr(f'error.source.{source}')
                 logger.exception(f"Unknown error in source '{source}'")
+                send_notification(f"Unknown error in source '{source}'")
                 continue
 
             # Save the source state.
@@ -144,6 +155,7 @@ class Ingestor:
                 except Exception:
                     self.statsd.incr(f'error.operator.{operator}')
                     logger.exception(f"Unknown error in operator '{operator}'")
+                    send_notification(f"Unknown error in operator '{operator}'")
                     continue
 
             # Record stats and update the summary.
