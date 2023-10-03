@@ -3,6 +3,19 @@ Extras
 
 There are a few extra tools included alongside ThreatIngestor, that didn't quite make sense as sources or operators.
 
+BugSnag
+-------
+
+BugSnag monitoring is a valuable tool to have when running in daemon mode. Adding it is extremely simple and the only requirement is to have an API key.
+
+Here's an example to include in your ``config.yml``:
+
+.. code-block:: yaml
+
+    error_reporting:
+      - name: bugsnag
+        api_key: API_KEY
+
 Quick Webapp
 ------------
 

@@ -12,12 +12,29 @@ except ImportError:
     logger.info("Notifiers is not installed.")
     notifiers = None
 
+try:
+    import bugsnag
+    bugsnag_imported = True
+except ImportError:
+    logger.info("BugSnag is not installed.")
+    bugsnag_imported = False
+
 import threatingestor.config
 import threatingestor.state
 import threatingestor.exceptions
 import threatingestor.whitelist
 
-from threatingestor.bugsnagmonitor import configure_bugsnag, send_notification
+BUGSNAG_ACTIVE = False
+
+def bugsnag_notification(msg=None, metadata=None) -> None:
+    """
+    Monitor your code with BugSnag
+
+    You can include a additional information with the `metadata` paramater.
+    """
+
+    if bugsnag_imported:
+        bugsnag.notify(Exception(msg), metadata={"ThreatIngestor" : metadata})
 
 class Ingestor:
     """ThreatIngestor main work logic.
@@ -63,12 +80,17 @@ class Ingestor:
         except TypeError:
             logger.exception("Couldn't initialize statsd client; bad config?")
             sys.exit(1)
-        
+
         # Configure BugSnag
-        for service in self.config.error_reporting():
-            if service['name'] == "bugsnag":
-                configure_bugsnag(service['api_key'])
-                break
+        if bugsnag_imported:
+            for service in self.config.error_reporting():
+                if service['name'] == "bugsnag":
+                    if service['api_key']:
+                        bugsnag.configure(api_key=service['api_key'])
+                        logger.debug("BugSnag configured")
+                        BUGSNAG_ACTIVE = True
+                    
+                    break
 
         # Load state DB.
         try:
@@ -77,7 +99,10 @@ class Ingestor:
         except (OSError, IOError, threatingestor.exceptions.IngestorError):
             # Error loading state DB.
             logger.exception("Error reading state database")
-            send_notification("Error reading state database")
+
+            if BUGSNAG_ACTIVE:
+                bugsnag_notification("Error reading state database")
+            
             sys.exit(1)
 
         # Instantiate plugins.
@@ -95,7 +120,10 @@ class Ingestor:
 
         except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
             logger.exception("Error initializing plugins")
-            send_notification("Error initializing plugins")
+
+            if BUGSNAG_ACTIVE:
+                bugsnag_notification("Error initializing plugins")
+
             sys.exit(1)
 
     def _is_whitelisted(self, artifact) -> bool:
@@ -132,7 +160,10 @@ class Ingestor:
             except Exception:
                 self.statsd.incr(f'error.source.{source}')
                 logger.exception(f"Unknown error in source '{source}'")
-                send_notification(f"Unknown error in source '{source}'")
+
+                if BUGSNAG_ACTIVE:
+                    bugsnag_notification(f"Unknown error in source '{source}'")
+
                 continue
 
             # Save the source state.
@@ -155,7 +186,10 @@ class Ingestor:
                 except Exception:
                     self.statsd.incr(f'error.operator.{operator}')
                     logger.exception(f"Unknown error in operator '{operator}'")
-                    send_notification(f"Unknown error in operator '{operator}'")
+
+                    if BUGSNAG_ACTIVE:
+                        bugsnag_notification(f"Unknown error in operator '{operator}'")
+
                     continue
 
             # Record stats and update the summary.

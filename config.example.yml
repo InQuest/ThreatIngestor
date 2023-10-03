@@ -46,6 +46,10 @@ credentials:
     key: MY_API_KEY
     ssl: False
 
+error_reporting:
+  - name: bugsnag
+    api_key: API_KEY
+
 sources:
     # This section defines each of the input sources for ThreatIngestor.
     # Define as many as you want. ThreatIngestor maintains a "state" for each of
