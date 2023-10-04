@@ -12,10 +12,29 @@ except ImportError:
     logger.info("Notifiers is not installed.")
     notifiers = None
 
+try:
+    import bugsnag
+    bugsnag_imported = True
+except ImportError:
+    logger.info("BugSnag is not installed.")
+    bugsnag_imported = False
+
 import threatingestor.config
 import threatingestor.state
 import threatingestor.exceptions
 import threatingestor.whitelist
+
+BUGSNAG_ACTIVE = False
+
+def bugsnag_notification(msg=None, metadata=None) -> None:
+    """
+    Monitor your code with BugSnag
+
+    You can include a additional information with the `metadata` paramater.
+    """
+
+    if bugsnag_imported:
+        bugsnag.notify(Exception(msg), metadata={"ThreatIngestor" : metadata})
 
 class Ingestor:
     """ThreatIngestor main work logic.
@@ -35,6 +54,7 @@ class Ingestor:
 
         # Configure logging with optional notifiers.
         logger.configure(**self.config.logging())
+
         try:
             logger.level("NOTIFY", no=35, color="<yellow>", icon="\U0001F514")
         except TypeError:
@@ -61,6 +81,17 @@ class Ingestor:
             logger.exception("Couldn't initialize statsd client; bad config?")
             sys.exit(1)
 
+        # Configure BugSnag
+        if bugsnag_imported:
+            for service in self.config.error_reporting():
+                if service['name'] == "bugsnag":
+                    if service['api_key']:
+                        bugsnag.configure(api_key=service['api_key'])
+                        logger.debug("BugSnag configured")
+                        BUGSNAG_ACTIVE = True
+                    
+                    break
+
         # Load state DB.
         try:
             logger.debug(f"Opening state database '{self.config.state_path()}'")
@@ -68,6 +99,10 @@ class Ingestor:
         except (OSError, IOError, threatingestor.exceptions.IngestorError):
             # Error loading state DB.
             logger.exception("Error reading state database")
+
+            if BUGSNAG_ACTIVE:
+                bugsnag_notification("Error reading state database")
+            
             sys.exit(1)
 
         # Instantiate plugins.
@@ -84,8 +119,11 @@ class Ingestor:
             self.whitelist = threatingestor.whitelist.Whitelist(self.config.whitelists())
 
         except (TypeError, ConnectionError, threatingestor.exceptions.PluginError):
-            logger.warning("Twitter config format has recently changed. See https://github.com/InQuest/ThreatIngestor/releases/tag/v1.0.0b5")
             logger.exception("Error initializing plugins")
+
+            if BUGSNAG_ACTIVE:
+                bugsnag_notification("Error initializing plugins")
+
             sys.exit(1)
 
     def _is_whitelisted(self, artifact) -> bool:
@@ -122,6 +160,10 @@ class Ingestor:
             except Exception:
                 self.statsd.incr(f'error.source.{source}')
                 logger.exception(f"Unknown error in source '{source}'")
+
+                if BUGSNAG_ACTIVE:
+                    bugsnag_notification(f"Unknown error in source '{source}'")
+
                 continue
 
             # Save the source state.
@@ -144,6 +186,10 @@ class Ingestor:
                 except Exception:
                     self.statsd.incr(f'error.operator.{operator}')
                     logger.exception(f"Unknown error in operator '{operator}'")
+
+                    if BUGSNAG_ACTIVE:
+                        bugsnag_notification(f"Unknown error in operator '{operator}'")
+
                     continue
 
             # Record stats and update the summary.
