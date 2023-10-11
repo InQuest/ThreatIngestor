@@ -79,7 +79,7 @@ class Config:
 
     def error_reporting(self):
         """Returns error_reporting config dictionary."""
-        return self.config['error_reporting']
+        return self.config.get('error_reporting', {})
 
 
     def credentials(self, credential_name):

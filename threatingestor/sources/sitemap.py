@@ -30,8 +30,11 @@ class Plugin(Source):
             # Extracts only the 'loc' tag from the xml
             if xml.find("loc"):
                 loc = u.findNext("loc").text
-                response = requests.get(loc)
-                soup = BeautifulSoup(response.text, 'html.parser')
+                try:
+                    response = requests.get(loc)
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                except requests.exceptions.ConnectTimeout:
+                    continue
             else:
                 continue
 
