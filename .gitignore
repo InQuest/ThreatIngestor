@@ -27,3 +27,4 @@ docs/_build/
 # Local
 .DS_Store
 .vscode/
+build.sh
