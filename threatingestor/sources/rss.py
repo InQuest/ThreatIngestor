@@ -51,20 +51,19 @@ class Plugin(Source):
             text = ""
 
             if self.exclude is not None:
-                rss_exclude = re.compile(r"{0}".format(self.exclude)).findall(str(self.exclude.split('|')))
+                rss_exclude = re.sub(re.compile(fr"{self.exclude}", re.IGNORECASE), "", str(item.get('link')))
 
-                for rss_e in rss_exclude:
-                    if rss_e not in item.get('link'):
-                        if self.feed_type == "afterioc":
-                            text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                            artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
-                        elif self.feed_type == "clean":
-                            text = soup.get_text(separator=' ')
-                            artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
-                        else:
-                            # Default: self.feed_type == 'messy'.
-                            text = soup.get_text(separator=' ')
-                            artifacts += self.process_element(text, item.get('link'))
+                if rss_exclude:
+                    if self.feed_type == "afterioc":
+                        text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                        artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
+                    elif self.feed_type == "clean":
+                        text = soup.get_text(separator=' ')
+                        artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
+                    else:
+                        # Default: self.feed_type == 'messy'.
+                        text = soup.get_text(separator=' ')
+                        artifacts += self.process_element(text, item.get('link'))
 
             if self.include is not None:
                 rss_include = re.compile(r"{0}".format(self.include)).findall(str(self.include.split('|')))

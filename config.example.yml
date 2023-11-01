@@ -94,7 +94,7 @@ sources:
     module: rss
     url: https://inquest.net/blog/rss
     feed_type: messy
-    exclude: security|threat|research
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
 
   # Sitemap exmaples
 
@@ -108,7 +108,7 @@ sources:
   - name: inquest-sitemap-articles
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
-    exclude: security|threat|research
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
 
   # Defaults to "blog" keyword
   - name: inquest-sitemap-blog

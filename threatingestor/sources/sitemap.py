@@ -50,20 +50,16 @@ class Plugin(Source):
 
             if self.exclude is not None:
                 # Regex input via config.yml
-                # Example: security|threat|malware
-                xml_exclude = re.compile(r"{0}".format(self.exclude)).findall(str(self.exclude.split('|')))
+                xml_exclude = re.sub(re.compile(fr"{self.exclude}", re.IGNORECASE), "", str(loc))
 
-                # Iterates over the regex output to locate all provided keywords
-                for xe in xml_exclude:
+                if xml_exclude:
+                    if self.path is None and "http" in xml_exclude:
+                        text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                        artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
+
                     # Uses a path instead of a keyword
                     if self.path is not None:
-                        if self.path in loc:
-                            text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
-                            artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
-
-                    # Only filters using a keyword
-                    if self.path is None:
-                        if xe not in loc:
+                        if self.path in xml_exclude:
                             text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                             artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
@@ -86,7 +82,7 @@ class Plugin(Source):
                             text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                             artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
-            if self.include is None or self.exclude is None and self.path is not None:
+            if self.include is None and self.exclude is None and self.path is not None:
                 # Filters only by path in XML loc, no set include
                 # Default: /path/name/*
 
@@ -94,7 +90,7 @@ class Plugin(Source):
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                     artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
             
-            if self.include is None and self.path is None and self.exclude is None:
+            if self.include is None and self.exclude is None and self.path is None:
                 # Locates all blog links within the sitemap
                 if "blog" in loc:
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
