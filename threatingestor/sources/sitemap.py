@@ -8,10 +8,11 @@ from threatingestor.sources import Source
 
 class Plugin(Source):
 
-    def __init__(self, name, url, filter=None, path=None):
+    def __init__(self, name, url, include=None, exclude=None, path=None):
         self.name = name
         self.url = url
-        self.filter = filter
+        self.include = include
+        self.exclude = exclude
         self.path = path
 
     def run(self, saved_state):
@@ -47,13 +48,28 @@ class Plugin(Source):
             [x.unwrap() for x in soup.find_all('i')]
             soup = BeautifulSoup(soup.decode(), 'html.parser')
 
-            if self.filter is not None:
+            if self.exclude is not None:
+                # Regex input via config.yml
+                xml_exclude = re.sub(re.compile(fr"{self.exclude}", re.IGNORECASE), "", str(loc))
+
+                if xml_exclude:
+                    if self.path is None and "http" in xml_exclude:
+                        text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                        artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
+
+                    # Uses a path instead of a keyword
+                    if self.path is not None:
+                        if self.path in xml_exclude:
+                            text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                            artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
+
+            if self.include is not None:
                 # Regex input via config.yml
                 # Example: security|threat|malware
-                xml_query = re.compile(r"{0}".format(self.filter)).findall(str(self.filter.split('|')))
+                xml_include = re.compile(r"{0}".format(self.include)).findall(str(self.include.split('|')))
 
                 # Iterates over the regex output to locate all provided keywords
-                for x in xml_query:
+                for xi in xml_include:
                     # Uses a path instead of a keyword
                     if self.path is not None:
                         if self.path in loc:
@@ -62,19 +78,19 @@ class Plugin(Source):
 
                     # Only filters using a keyword
                     if self.path is None:
-                        if x in loc:
+                        if xi in loc:
                             text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                             artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
 
-            elif self.filter is None and self.path is not None:
-                # Filters only by path in XML loc, no set filter
+            if self.include is None and self.exclude is None and self.path is not None:
+                # Filters only by path in XML loc, no set include
                 # Default: /path/name/*
 
                 if self.path in loc:
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                     artifacts += self.process_element(content=text, reference_link=str(loc), include_nonobfuscated=True)
             
-            else:
+            if self.include is None and self.exclude is None and self.path is None:
                 # Locates all blog links within the sitemap
                 if "blog" in loc:
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]

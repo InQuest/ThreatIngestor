@@ -74,27 +74,41 @@ sources:
     credentials: github-auth
     search: CVE-2018-
 
-  # Without regex filter
+  # Without regex include
   - name: rss-inquest-blog
     module: rss
     url: https://inquest.net/blog/rss
     feed_type: messy
 
-  # With regex filter
+  # With regex include
   # Keywords are seperated by '|'
   - name: rss-inquest-blog
     module: rss
     url: https://inquest.net/blog/rss
     feed_type: messy
-    filter: security|threat|research
+    include: security|threat|research
+
+  # With regex exclude
+  # Keywords are seperated by '|'
+  - name: rss-inquest-blog
+    module: rss
+    url: https://inquest.net/blog/rss
+    feed_type: messy
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
 
   # Sitemap exmaples
 
-  # Keywords are seperated by '|' when using the filter option
+  # Keywords are seperated by '|' when using the include option
   - name: inquest-sitemap-articles
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
-    filter: security|threat|research
+    include: security|threat|research
+
+  # Keywords are seperated by '|' when using the exclude option
+  - name: inquest-sitemap-articles
+    module: sitemap
+    url: https://www.inquest.net/sitemap.xml
+    exclude: https:\/.inquest\.net\/blog[\/]?inquest-[\/]?
 
   # Defaults to "blog" keyword
   - name: inquest-sitemap-blog
@@ -105,9 +119,9 @@ sources:
   - name: inquest-sitemap-blog-articles-security
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
-    filter: articles|security
+    include: articles|security
 
-  # Specify directories in the filter
+  # Only ingest from specific directories
   - name: inquest-sitemap-blog-category
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
@@ -119,7 +133,7 @@ sources:
     module: sitemap
     url: https://www.inquest.net/sitemap.xml
     path: /blog/category/
-    filter: release|solutions
+    include: release|solutions
 
   - name: vt-comments-inquest
     module: virustotal

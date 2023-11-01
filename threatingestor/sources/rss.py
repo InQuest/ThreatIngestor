@@ -1,3 +1,4 @@
+import bs4
 import feedparser
 import regex as re
 
@@ -8,17 +9,16 @@ except ImportError:
     # feedparser 6.x
     from feedparser.datetimes import _parse_date
 
-import bs4
-
 from threatingestor.sources import Source
 
 class Plugin(Source):
 
-    def __init__(self, name, url, feed_type, filter=None):
+    def __init__(self, name, url, feed_type, include=None, exclude=None):
         self.name = name
         self.url = url
         self.feed_type = feed_type
-        self.filter = filter
+        self.include = include
+        self.exclude = exclude
 
     def run(self, saved_state):
         feed = feedparser.parse(self.url)
@@ -48,34 +48,45 @@ class Plugin(Source):
             [x.unwrap() for x in soup.find_all('i')]
             soup = bs4.BeautifulSoup(soup.decode(), 'html.parser')
 
-            text = ''
+            text = ""
 
-            if self.filter is not None:
+            if self.exclude is not None:
+                rss_exclude = re.sub(re.compile(fr"{self.exclude}", re.IGNORECASE), "", str(item.get('link')))
 
-                rss_query = re.compile(r"{0}".format(self.filter)).findall(str(self.filter.split('|')))
+                if rss_exclude:
+                    if "http" in rss_exclude:
+                        if self.feed_type == "afterioc":
+                            text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+                            artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
+                        elif self.feed_type == "clean":
+                            text = soup.get_text(separator=' ')
+                            artifacts += self.process_element(text, item.get('link'), include_nonobfuscated=True)
+                        else:
+                            # Default: self.feed_type == 'messy'.
+                            text = soup.get_text(separator=' ')
+                            artifacts += self.process_element(text, item.get('link'))
 
-                for r in rss_query:
-                    if self.feed_type == 'afterioc':
-                        text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
+            if self.include is not None:
+                rss_include = re.compile(r"{0}".format(self.include)).findall(str(self.include.split('|')))
 
-                        if r in text:
+                for rss_f in rss_include:
+                    if rss_f in item.get('link'):
+                        if self.feed_type == "afterioc":
+                            text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                             artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
-                    elif self.feed_type == 'clean':
-                        text = soup.get_text(separator=' ')
-
-                        if r in text:
+                        elif self.feed_type == "clean":
+                            text = soup.get_text(separator=' ')
                             artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
-                    else:
-                        # Default: self.feed_type == 'messy'.
-                        text = soup.get_text(separator=' ')
-                        artifacts += self.process_element(text, item.get('link') or self.url)
+                        else:
+                            # Default: self.feed_type == 'messy'.
+                            text = soup.get_text(separator=' ')
+                            artifacts += self.process_element(text, item.get('link') or self.url)
 
-            else:
-
-                if self.feed_type == 'afterioc':
+            if self.include is None and self.exclude is None:
+                if self.feed_type == "afterioc":
                     text = soup.get_text(separator=' ').split('Indicators of Compromise')[-1]
                     artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
-                elif self.feed_type == 'clean':
+                elif self.feed_type == "clean":
                     text = soup.get_text(separator=' ')
                     artifacts += self.process_element(text, item.get('link') or self.url, include_nonobfuscated=True)
                 else:
