@@ -10,6 +10,7 @@ python3 scripts/<script> -v
 
 A quick list of all available scripts:
 
-| Script                | Example                          | Description                                                                                                                                |
-|-----------------------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `scripts/validate.py` | `python3 validate.py config.yml` | This script validates your YAML syntax and checks that you have the minimum required (`config.yml`) by ThreatIngestor to operate properly. |
+| Script                | Example                           | Description                                                                                                                                |
+|-----------------------|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `scripts/validate.py` | `python3 validate.py config.yml`  | This script validates your YAML syntax and checks that you have the minimum required (`config.yml`) by ThreatIngestor to operate properly. |
+| `scripts/build.sh`    | `chmod +x build.sh && ./build.sh` | Basic script to build a fresh installation of ThreatIngestor locally.                                                                      |
