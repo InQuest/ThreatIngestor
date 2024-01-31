@@ -9,3 +9,4 @@ statsd
 requests
 pyshorteners
 twitter
+ddtrace

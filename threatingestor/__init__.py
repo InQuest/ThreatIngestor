@@ -12,6 +12,8 @@ except ImportError:
     logger.info("Notifiers is not installed.")
     notifiers = None
 
+# import ddtrace.profiling.auto
+
 import threatingestor.config
 import threatingestor.state
 import threatingestor.exceptions

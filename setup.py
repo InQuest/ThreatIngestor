@@ -32,6 +32,7 @@ setup(
         'beanstalk': ['greenstalk'],
         'sqs': ['boto3'],
         'mysql': ['pymysql'],
+        'datadog': ['ddtrace'],
         'extras': ['hug', 'boto3', 'greenstalk', 'watchdog'],
         'all': extra_requires,
     },
